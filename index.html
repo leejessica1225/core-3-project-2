@@ -39,35 +39,34 @@
       flex-direction: column;
       width: 100vw;
       height: 100vh;
-      border: 3px solid #000;
+      position: relative;
     }
 
     .header {
-      padding: 18px 24px;
-      border-bottom: 3px solid #000;
+      padding: 16px 20px;
+      border-bottom: 1px solid #000;
     }
 
     .header h1 {
-      font-size: 7.5vw;
-      line-height: 0.9;
+      font-size: 7vw;
+      line-height: 0.95;
       font-weight: 500;
       letter-spacing: -0.02em;
     }
 
     .map-container {
       flex: 1;
-      background-color: #d8d8d8;
+      background-color: #d3d3d3;
       position: relative;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 10;
+      transition: opacity 0.3s ease;
     }
 
     .click-text {
-      font-size: 3.5rem;
+      font-size: 1.5rem;
       color: #333;
       opacity: 0;
       transition: opacity 0.3s ease;
@@ -83,28 +82,34 @@
       opacity: 1;
     }
 
-    .map-container.expanding {
+    .footer {
+      padding: 16px 20px;
+      border-top: 1px solid #000;
+    }
+
+    .footer p {
+      font-size: 4.5vw;
+      line-height: 1;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .gray-transition-screen {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
+      background-color: #d3d3d3;
       z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease-in-out;
+    }
+
+    .gray-transition-screen.active {
       opacity: 1;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      transform: scale(1);
-    }
-
-    .footer {
-      padding: 18px 24px;
-      border-top: 3px solid #000;
-    }
-
-    .footer p {
-      font-size: 4.8vw;
-      line-height: 1;
-      font-weight: 400;
-      letter-spacing: -0.01em;
+      pointer-events: auto;
     }
   </style>
 </head>
@@ -124,29 +129,18 @@
     </div>
   </div>
 
+  <div class="gray-transition-screen" id="transitionScreen"></div>
+
   <script>
     const mapBox = document.getElementById('mapBox');
+    const transitionScreen = document.getElementById('transitionScreen');
 
     mapBox.addEventListener('click', function() {
-      const rect = mapBox.getBoundingClientRect();
+      transitionScreen.classList.add('active');
       
-      mapBox.style.position = 'fixed';
-      mapBox.style.top = rect.top + 'px';
-      mapBox.style.left = rect.left + 'px';
-      mapBox.style.width = rect.width + 'px';
-      mapBox.style.height = rect.height + 'px';
-
-      requestAnimationFrame(() => {
-        mapBox.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-        mapBox.style.top = '0px';
-        mapBox.style.left = '0px';
-        mapBox.style.width = '100vw';
-        mapBox.style.height = '100vh';
-      });
-
-      setTimeout(() => {
+      setTimeout(function() {
         window.location.href = 'page2.html';
-      }, 500);
+      }, 400);
     });
   </script>
 
