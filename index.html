@@ -43,12 +43,12 @@
     }
 
     .header {
-      padding: 16px 20px;
+      padding: 18px 24px;
       border-bottom: 2px solid #000;
     }
 
     .header h1 {
-      font-size: 7vw;
+      font-size: 7.5vw;
       line-height: 0.95;
       font-weight: 500;
       letter-spacing: -0.02em;
@@ -80,6 +80,18 @@
 
     .map-container:hover .click-text {
       opacity: 1;
+    }
+
+    .footer {
+      padding: 18px 24px;
+      border-top: 2px solid #000;
+    }
+
+    .footer p {
+      font-size: 5.8vw;
+      line-height: 1;
+      font-weight: 400;
+      letter-spacing: -0.01em;
     }
 
     /* 회색 박스 확장 오버레이 레이어 */
@@ -129,24 +141,20 @@
       const winW = window.innerWidth;
       const winH = window.innerHeight;
 
-      // 회색 상자의 현재 위치와 여백 좌표 계산
       const top = rect.top;
       const right = winW - rect.right;
       const bottom = winH - rect.bottom;
       const left = rect.left;
 
-      // 1. 초기 위치를 중앙 회색 상자의 좌표로 고정
       expandOverlay.style.transition = 'none';
       expandOverlay.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
       expandOverlay.classList.add('active');
 
-      // 2. 화면 전체로 퍼지는 트랜지션 실행
       setTimeout(() => {
         expandOverlay.style.transition = 'clip-path 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
         expandOverlay.style.clipPath = 'inset(0px 0px 0px 0px)';
       }, 20);
 
-      // 3. 확장 완료 후 page2.html 이동
       setTimeout(() => {
         window.location.href = 'page2.html';
       }, 520);
