@@ -94,7 +94,7 @@
       letter-spacing: -0.01em;
     }
 
-    .gray-transition-screen {
+    .gray-expand-overlay {
       position: fixed;
       top: 0;
       left: 0;
@@ -102,12 +102,13 @@
       height: 100vh;
       background-color: #d3d3d3;
       z-index: 9999;
-      opacity: 0;
       pointer-events: none;
-      transition: opacity 0.4s ease-in-out;
+      clip-path: inset(0 0 0 0);
+      opacity: 0;
+      transition: clip-path 0.55s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.1s ease;
     }
 
-    .gray-transition-screen.active {
+    .gray-expand-overlay.active {
       opacity: 1;
       pointer-events: auto;
     }
@@ -129,18 +130,35 @@
     </div>
   </div>
 
-  <div class="gray-transition-screen" id="transitionScreen"></div>
+  <div class="gray-expand-overlay" id="expandOverlay"></div>
 
   <script>
     const mapBox = document.getElementById('mapBox');
-    const transitionScreen = document.getElementById('transitionScreen');
+    const expandOverlay = document.getElementById('expandOverlay');
 
     mapBox.addEventListener('click', function() {
-      transitionScreen.classList.add('active');
-      
+      const rect = mapBox.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      const topMargin = (rect.top / windowHeight) * 100;
+      const bottomMargin = ((windowHeight - rect.bottom) / windowHeight) * 100;
+      const leftMargin = (rect.left / windowWidth) * 100;
+      const rightMargin = ((windowWidth - rect.right) / windowWidth) * 100;
+
+      expandOverlay.style.clipPath = `inset(${topMargin}% ${rightMargin}% ${bottomMargin}% ${leftMargin}%)`;
+
+      requestAnimationFrame(() => {
+        expandOverlay.classList.add('active');
+        
+        requestAnimationFrame(() => {
+          expandOverlay.style.clipPath = 'inset(0% 0% 0% 0%)';
+        });
+      });
+
       setTimeout(function() {
         window.location.href = 'page2.html';
-      }, 400);
+      }, 550);
     });
   </script>
 
