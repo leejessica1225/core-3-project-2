@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Urban Mess: - 메인</title>
+  <style>
+    @font-face {
+      font-family: 'Lay Grotesk';
+      src: url('LayGrotesk-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Lay Grotesk';
+      src: url('LayGrotesk-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Lay Grotesk', sans-serif;
+      font-weight: 400;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+      border: 2px solid #000;
+      background-color: #fff;
+    }
+
+    .header {
+      padding: 20px 30px;
+      border-bottom: 2px solid #000;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      font-weight: 500;
+    }
+
+    .map-container {
+      flex: 1;
+      background-color: #d3d3d3;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.3s ease;
+      text-decoration: none;
+    }
+
+    .click-text {
+      font-size: 2rem;
+      color: #333;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      user-select: none;
+      font-weight: 400;
+    }
+
+    .map-container:hover {
+      opacity: 0.7;
+    }
+
+    .map-container:hover .click-text {
+      opacity: 1;
+    }
+
+    .footer {
+      padding: 20px 30px;
+      border-top: 2px solid #000;
+    }
+
+    .footer p {
+      font-size: 1.8rem;
+      font-weight: 400;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>Urban Mess:</h1>
+    </div>
+
+    <a href="page2.html" class="map-container">
+      <span class="click-text">click</span>
+    </a>
+
+    <div class="footer">
+      <p>An Exhibition of Things We Throw Away</p>
+    </div>
+  </div>
+
+</body>
+</html>
