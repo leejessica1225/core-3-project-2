@@ -82,18 +82,7 @@
       opacity: 1;
     }
 
-    .footer {
-      padding: 16px 20px;
-      border-top: 2px solid #000;
-    }
-
-    .footer p {
-      font-size: 4.5vw;
-      line-height: 1;
-      font-weight: 400;
-      letter-spacing: -0.01em;
-    }
-
+    /* 회색 박스 확장 오버레이 레이어 */
     .gray-expand-overlay {
       position: fixed;
       top: 0;
@@ -103,9 +92,8 @@
       background-color: #d3d3d3;
       z-index: 9999;
       pointer-events: none;
-      clip-path: inset(0 0 0 0);
       opacity: 0;
-      transition: clip-path 0.55s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.1s ease;
+      transition: clip-path 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .gray-expand-overlay.active {
@@ -138,27 +126,30 @@
 
     mapBox.addEventListener('click', function() {
       const rect = mapBox.getBoundingClientRect();
-      const windowWidth = window.innerWidth;
-      const windowHeight = window.innerHeight;
+      const winW = window.innerWidth;
+      const winH = window.innerHeight;
 
-      const topMargin = (rect.top / windowHeight) * 100;
-      const bottomMargin = ((windowHeight - rect.bottom) / windowHeight) * 100;
-      const leftMargin = (rect.left / windowWidth) * 100;
-      const rightMargin = ((windowWidth - rect.right) / windowWidth) * 100;
+      // 회색 상자의 현재 위치와 여백 좌표 계산
+      const top = rect.top;
+      const right = winW - rect.right;
+      const bottom = winH - rect.bottom;
+      const left = rect.left;
 
-      expandOverlay.style.clipPath = `inset(${topMargin}% ${rightMargin}% ${bottomMargin}% ${leftMargin}%)`;
+      // 1. 초기 위치를 중앙 회색 상자의 좌표로 고정
+      expandOverlay.style.transition = 'none';
+      expandOverlay.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+      expandOverlay.classList.add('active');
 
-      requestAnimationFrame(() => {
-        expandOverlay.classList.add('active');
-        
-        requestAnimationFrame(() => {
-          expandOverlay.style.clipPath = 'inset(0% 0% 0% 0%)';
-        });
-      });
+      // 2. 화면 전체로 퍼지는 트랜지션 실행
+      setTimeout(() => {
+        expandOverlay.style.transition = 'clip-path 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+        expandOverlay.style.clipPath = 'inset(0px 0px 0px 0px)';
+      }, 20);
 
-      setTimeout(function() {
+      // 3. 확장 완료 후 page2.html 이동
+      setTimeout(() => {
         window.location.href = 'page2.html';
-      }, 550);
+      }, 520);
     });
   </script>
 
