@@ -24,7 +24,7 @@
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      background-color: #d3d3d3;
+      background-color: #d8d8d8;
     }
 
     .full-gray-screen {
@@ -34,15 +34,15 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      animation: expandAnimation 0.5s ease-out forwards;
+      animation: fadeIn 0.4s ease-out;
     }
 
-    @keyframes expandAnimation {
+    @keyframes fadeIn {
       from {
-        clip-path: circle(0% at 50% 50%);
+        opacity: 0;
       }
       to {
-        clip-path: circle(150% at 50% 50%);
+        opacity: 1;
       }
     }
 
@@ -52,8 +52,8 @@
 
     .back-btn {
       margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 1rem;
+      padding: 12px 28px;
+      font-size: 1.2rem;
       background-color: #000;
       color: #fff;
       border: none;
@@ -62,6 +62,7 @@
       text-decoration: none;
       display: inline-block;
       font-weight: 400;
+      transition: background-color 0.2s ease;
     }
 
     .back-btn:hover {
@@ -77,6 +78,9 @@
       <a href="page1.html" class="back-btn">돌아가기</a>
     </div>
   </div>
+
+</body>
+</html>
 
 </body>
 </html>
