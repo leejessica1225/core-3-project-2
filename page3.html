@@ -35,7 +35,7 @@
       background-color: #000;
     }
 
-    /* 전체 스트릿 뷰 컨테이너 */
+    /* 전체 컨테이너 */
     .streetview-wrapper {
       position: relative;
       width: 100vw;
@@ -43,14 +43,14 @@
       height: 100dvh;
     }
 
-    /* 구글 스트릿 뷰 iframe 전체 화면 적용 */
+    /* 구글 스트릿 뷰 iframe 전체 화면 */
     #streetview-iframe {
       width: 100%;
       height: 100%;
       border: 0;
     }
 
-    /* 상단 HOME 이동 버튼 */
+    /* 상단 HOME 버튼 */
     .home-btn {
       position: fixed;
       top: 30px;
@@ -69,15 +69,34 @@
       background: #000000;
       color: #ffffff;
     }
+
+    /* --------------------------------------------------
+       랜덤 스티커 오버레이 레이어
+    -------------------------------------------------- */
+    #sticker-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none; /* 드래그 및 회전이 뒤의 스트릿 뷰로 통과됨 */
+    }
+
+    .sticker {
+      position: absolute;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+      user-select: none;
+    }
   </style>
 </head>
 <body>
 
   <div class="streetview-wrapper">
-    <!-- 랜딩 페이지(index.html)로 이동하는 HOME 버튼 -->
+    <!-- HOME 이동 버튼 -->
     <a href="index.html" class="home-btn">HOME</a>
 
-    <!-- NYU Langone Orthopedic Hospital 앞 360도 스트릿 뷰 -->
+    <!-- 구글 스트릿 뷰 -->
     <iframe 
       id="streetview-iframe"
       src="https://www.google.com/maps/embed?pb=!4v1791904094783!6m8!1m7!1s7aRErwnfiFdqFyJERbfROw!2m2!1d40.73408914393735!2d-73.98313883562084!3f6.437480614722146!4f-39.04986442395682!5f0.7820865974627469" 
@@ -85,7 +104,99 @@
       loading="lazy" 
       referrerpolicy="strict-origin-when-cross-origin">
     </iframe>
+
+    <!-- 스티커들이 배치될 컨테이너 -->
+    <div id="sticker-container"></div>
   </div>
+
+  <script>
+    // GitHub images 폴더 내의 이미지 파일명 리스트 (24개)
+    const imageFiles = [
+      "3_$9_trash.png", "melon_trash.png", "snapple_trash.png", "pigeon_trash.png", 
+      "gloves_trash.png", "cone_trash.png", "flour_trash.png", "paperbag_trash.png", 
+      "redbag_trash.png", "orangebox_trash.png", "can_trash.png", "sweater_trash.png", 
+      "cvs_trash.png", "scrapwood_trash.png", "fence_trash.png", "waterpipe_trash.png", 
+      "boxes_trash.png", "trashcan_trash.png", "yellowbag_trash.png", "newspaper_trash.png", 
+      "blackbags_trash.png", "matcha_trash.png", "umbrella_trash.png", "ruler_trash.png"
+    ];
+
+    const container = document.getElementById('sticker-container');
+
+    // 화면에 배치할 스티커 개수 (6개)
+    const STICKER_COUNT = 6;
+    const placedBoxes = []; // 배치된 영역 데이터 저장용
+
+    // 배열 무작위 셔플 (중복 방지)
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    // 사각형 겹침 탐지 함수
+    function isOverlapping(newBox) {
+      const padding = 20; // 스티커 간 최소 간격 (20px)
+      for (let box of placedBoxes) {
+        if (
+          !(newBox.right + padding < box.left ||
+            newBox.left - padding > box.right ||
+            newBox.bottom + padding < box.top ||
+            newBox.top - padding > box.bottom)
+        ) {
+          return true; // 겹침 발생
+        }
+      }
+      return false; // 안 겹침
+    }
+
+    function generateStickers() {
+      const selectedImages = shuffle([...imageFiles]).slice(0, STICKER_COUNT);
+
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      const margin = 80; // 화면 테두리 및 버튼과의 여백
+
+      selectedImages.forEach((filename) => {
+        const img = document.createElement('img');
+        img.src = `images/${filename}`;
+        img.classList.add('sticker');
+
+        // 크기 랜덤 지정 (80px ~ 170px)
+        const size = Math.floor(Math.random() * 90) + 80;
+        img.style.width = `${size}px`;
+
+        let left, top, newBox;
+        let attempts = 0;
+        let placed = false;
+
+        // 겹치지 않는 위치 찾기 (최대 100회 시도)
+        while (attempts < 100 && !placed) {
+          attempts++;
+          left = Math.floor(Math.random() * (screenWidth - size - margin * 2)) + margin;
+          top = Math.floor(Math.random() * (screenHeight - size - margin * 2)) + margin;
+
+          newBox = {
+            left: left,
+            top: top,
+            right: left + size,
+            bottom: top + size
+          };
+
+          if (!isOverlapping(newBox)) {
+            placedBoxes.push(newBox);
+            placed = true;
+          }
+        }
+
+        // 스티커 최종 위치 적용
+        img.style.left = `${left}px`;
+        img.style.top = `${top}px`;
+
+        container.appendChild(img);
+      });
+    }
+
+    // 실행
+    generateStickers();
+  </script>
 
 </body>
 </html>
