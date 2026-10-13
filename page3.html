@@ -44,7 +44,7 @@
     }
   </style>
 
-  <!-- 발급받으신 Google Maps API Key 적용 -->
+  <!-- Google Maps JavaScript API (발급 키) -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAM5AYPSJ3qDDdhUjPpZg4RqiaM-2en7y4"></script>
 </head>
 <body>
@@ -80,14 +80,14 @@
         }
       );
 
-      // 3개 이미지 무작위 선택
+      // 무작위 3개 이미지 선택
       const selectedImages = shuffle([...imageFiles]).slice(0, 3);
 
-      // 301 Residence Hall 앞 실제 위치 좌표 및 거대한 크기 설정
+      // 건물 앞 길거리 실제 3D 좌표 및 무작위 큰 사이즈 지정
       const stickerLocations = [
-        { lat: 40.734120, lng: -73.983100, size: 320 },
-        { lat: 40.734050, lng: -73.983180, size: 380 },
-        { lat: 40.734180, lng: -73.983050, size: 280 }
+        { lat: 40.734120, lng: -73.983100, size: Math.floor(Math.random() * 100) + 280 },
+        { lat: 40.734050, lng: -73.983180, size: Math.floor(Math.random() * 120) + 320 },
+        { lat: 40.734180, lng: -73.983050, size: Math.floor(Math.random() * 100) + 250 }
       ];
 
       selectedImages.forEach((imgFile, index) => {
