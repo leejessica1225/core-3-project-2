@@ -100,7 +100,7 @@
       transition: filter 0.3s ease;
     }
 
-    /* 마우스를 올렸을 때 흐림 없이 지도가 깔끔하게 살짝 어두워짐 */
+    /* 마우스를 올렸을 때 지도가 살짝 어두워짐 */
     .map-container:hover #map {
       filter: brightness(0.65);
     }
@@ -112,26 +112,6 @@
     .mapboxgl-ctrl-top-right,
     .mapboxgl-ctrl-top-left {
       display: none !important;
-    }
-
-    .click-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1.1rem; /* 폰트 크기 축소 */
-      color: #fff;
-      text-shadow: 0 0 6px rgba(0,0,0,0.7);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      user-select: none;
-      font-weight: 400;
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    .map-container:hover .click-text {
-      opacity: 1;
     }
 
     .footer {
@@ -187,7 +167,6 @@
 
     <div class="map-container" id="mapBox">
       <div id="map"></div>
-      <span class="click-text">click</span>
     </div>
 
     <div class="footer">
