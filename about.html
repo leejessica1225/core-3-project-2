@@ -96,7 +96,7 @@
       gap: 32px;
     }
 
-    /* 텍스트 크기 1.8rem 고정 복원 */
+    /* 텍스트 크기 1.8rem 고정 */
     .about-subtitle,
     .about-caption,
     .about-text,
@@ -109,7 +109,7 @@
       color: #000;
     }
 
-    /* 불필요한 라인 및 기호 완벽 제거 */
+    /* 불필요한 라인 및 기호 제거 */
     .questions-list {
       list-style: none;
       margin-top: 16px;
@@ -123,9 +123,9 @@
       border-left: none;
     }
 
-    /* 크레딧 상단 공간 여유 있게 배치 */
+    /* 크레딧 상단 공간을 2배(120px)로 띄움 */
     .credits {
-      margin-top: 60px;
+      margin-top: 120px;
       padding-top: 0;
       border-top: none;
       display: flex;
@@ -156,6 +156,9 @@
       .questions-list li,
       .credits {
         font-size: 1.2rem;
+      }
+      .credits {
+        margin-top: 80px;
       }
     }
   </style>
