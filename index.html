@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Urban Mess: - 메인</title>
+  
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+
   <style>
     @font-face {
       font-family: 'Lay Grotesk';
@@ -85,15 +89,21 @@
       flex: 1;
       background-color: #d3d3d3;
       position: relative;
-      overflow: hidden;
+      cursor: pointer;
     }
 
-    /* Mapbox iframe 스타일 */
-    .map-container iframe {
+    #map {
       width: 100%;
       height: 100%;
-      border: none;
-      display: block;
+    }
+
+    /* Mapbox UI 컨트롤러(우측 상단 버튼 등) 및 하단 로고/저작권 숨김 */
+    .mapboxgl-ctrl,
+    .mapboxgl-ctrl-top-right,
+    .mapboxgl-ctrl-top-left,
+    .mapboxgl-ctrl-bottom-right,
+    .mapboxgl-ctrl-bottom-left {
+      display: none !important;
     }
 
     .click-text {
@@ -167,7 +177,7 @@
     </div>
 
     <div class="map-container" id="mapBox">
-      <iframe src="https://api.mapbox.com/styles/v1/leejessica1225/cmv06jab0005001s1fd8e551k.html?title=view&access_token=pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ&zoomwheel=true&fresh=true#13.56/40.73108/-73.99013"></iframe>
+      <div id="map"></div>
       <span class="click-text">click</span>
     </div>
 
@@ -179,10 +189,19 @@
   <div class="gray-expand-overlay" id="expandOverlay"></div>
 
   <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/leejessica1225/cmv06jab0005001s1fd8e551k',
+      center: [-73.99013, 40.73108],
+      zoom: 13.56,
+      interactive: false
+    });
+
     const mapBox = document.getElementById('mapBox');
     const expandOverlay = document.getElementById('expandOverlay');
 
-    /* 회색 박스를 클릭하여 page2.html로 이동하는 애니메이션 */
     function triggerTransition() {
       const rect = mapBox.getBoundingClientRect();
       const winW = window.innerWidth;
@@ -207,8 +226,7 @@
       }, 520);
     }
 
-    /* 지도 자체 클릭이나 영역 클릭 모두 작동되도록 연결 */
-    mapBox.addEventListener('click', function(e) {
+    mapBox.addEventListener('click', function() {
       triggerTransition();
     });
   </script>
