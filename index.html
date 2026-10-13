@@ -86,16 +86,15 @@
       background-color: #d3d3d3;
       position: relative;
       overflow: hidden;
-      cursor: pointer;
     }
 
-    /* iframe을 확대하고 잘라내어(crop) 하단 바와 우측 컨트롤러를 화면 밖으로 밀어냄 */
+    /* iframe 우측 돋보기/확대 컨트롤러와 하단 바를 살짝 밖으로 밀어내어 자름 */
     .map-wrapper {
       position: absolute;
-      top: -30px;
-      left: -30px;
-      width: calc(100% + 90px);
-      height: calc(100% + 90px);
+      top: 0;
+      left: 0;
+      width: calc(100% + 55px);
+      height: calc(100% + 65px);
     }
 
     .map-wrapper iframe {
@@ -105,33 +104,25 @@
       display: block;
     }
 
-    /* 지도 상의 모든 클릭을 감싸 페이지 이동 트랜지션을 실행하는 클릭 레이어 */
-    .map-click-overlay {
+    /* page2.html 이동용 플로팅 버튼 (지도를 드래그/줌 가능하게 유지) */
+    .expand-trigger-btn {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 2;
-    }
-
-    .click-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1.8rem;
-      color: #333;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+      bottom: 20px;
+      right: 20px;
+      background-color: #000;
+      color: #fff;
+      padding: 10px 18px;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      cursor: pointer;
+      z-index: 20;
+      transition: transform 0.2s ease, opacity 0.2s ease;
       user-select: none;
-      font-weight: 400;
-      pointer-events: none;
-      z-index: 5;
     }
 
-    .map-container:hover .click-text {
-      opacity: 1;
+    .expand-trigger-btn:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
     }
 
     .footer {
@@ -189,8 +180,7 @@
       <div class="map-wrapper">
         <iframe src="https://api.mapbox.com/styles/v1/leejessica1225/cmv06jab0005001s1fd8e551k.html?title=view&access_token=pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ&zoomwheel=true&fresh=true#13.56/40.73108/-73.99013"></iframe>
       </div>
-      <div class="map-click-overlay"></div>
-      <span class="click-text">click</span>
+      <div class="expand-trigger-btn" id="expandBtn">Click to Expand &rarr;</div>
     </div>
 
     <div class="footer">
@@ -202,6 +192,7 @@
 
   <script>
     const mapBox = document.getElementById('mapBox');
+    const expandBtn = document.getElementById('expandBtn');
     const expandOverlay = document.getElementById('expandOverlay');
 
     function triggerTransition() {
@@ -228,7 +219,8 @@
       }, 520);
     }
 
-    mapBox.addEventListener('click', function() {
+    expandBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
       triggerTransition();
     });
   </script>
