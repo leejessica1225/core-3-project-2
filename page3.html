@@ -80,7 +80,7 @@
       width: 100%;
       height: 100%;
       z-index: 10;
-      pointer-events: none; /* 드래그 및 회전이 뒤의 스트릿 뷰로 통과됨 */
+      pointer-events: none; /* 배경 마우스 드래그가 통과함 */
     }
 
     .sticker {
@@ -110,7 +110,7 @@
   </div>
 
   <script>
-    // GitHub images 폴더 내의 이미지 파일명 리스트 (24개 - 수정된 파일명 적용)
+    // GitHub 상위 루트 경로에 바로 존재하는 파일명 리스트 (24개)
     const imageFiles = [
       "threenine_trash.png", "melon_trash.png", "snapple_trash.png", "pigeon_trash.png", 
       "gloves_trash.png", "cone_trash.png", "flour_trash.png", "paperbag_trash.png", 
@@ -121,19 +121,17 @@
     ];
 
     const container = document.getElementById('sticker-container');
-
-    // 화면에 배치할 스티커 개수 (6개)
     const STICKER_COUNT = 6;
-    const placedBoxes = []; // 배치된 영역 데이터 저장용
+    const placedBoxes = [];
 
     // 배열 무작위 셔플 (중복 방지)
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
     }
 
-    // 사각형 겹침 탐지 함수
+    // 겹침 판정 함수
     function isOverlapping(newBox) {
-      const padding = 20; // 스티커 간 최소 간격 (20px)
+      const padding = 20; // 스티커 간 최소 간격
       for (let box of placedBoxes) {
         if (
           !(newBox.right + padding < box.left ||
@@ -141,67 +139,59 @@
             newBox.bottom + padding < box.top ||
             newBox.top - padding > box.bottom)
         ) {
-          return true; // 겹침 발생
+          return true;
         }
       }
-      return false; // 안 겹침
+      return false;
     }
 
     function generateStickers() {
       const selectedImages = shuffle([...imageFiles]).slice(0, STICKER_COUNT);
-
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
-      const margin = 80; // 화면 테두리 및 버튼과의 여백
+      const margin = 80;
 
       selectedImages.forEach((filename) => {
         const img = document.createElement('img');
-        
-        img.src = `./images/${filename}`;
         img.classList.add('sticker');
 
-        // 이미지 로드 실패 시 콘솔 출력 및 숨김 처리
-        img.onerror = function() {
-          console.error("이미지를 찾을 수 없습니다:", filename);
-          this.style.display = 'none';
+        // 이미지가 정상 로드되면 위치 지정 후 화면에 표시
+        img.onload = function() {
+          const size = Math.floor(Math.random() * 90) + 80; // 80px ~ 170px 랜덤 크기
+          img.style.width = `${size}px`;
+
+          let left, top, newBox;
+          let attempts = 0;
+          let placed = false;
+
+          while (attempts < 100 && !placed) {
+            attempts++;
+            left = Math.floor(Math.random() * (screenWidth - size - margin * 2)) + margin;
+            top = Math.floor(Math.random() * (screenHeight - size - margin * 2)) + margin;
+
+            newBox = {
+              left: left,
+              top: top,
+              right: left + size,
+              bottom: top + size
+            };
+
+            if (!isOverlapping(newBox)) {
+              placedBoxes.push(newBox);
+              placed = true;
+            }
+          }
+
+          img.style.left = `${left}px`;
+          img.style.top = `${top}px`;
+          container.appendChild(img);
         };
 
-        // 크기 랜덤 지정 (80px ~ 170px)
-        const size = Math.floor(Math.random() * 90) + 80;
-        img.style.width = `${size}px`;
-
-        let left, top, newBox;
-        let attempts = 0;
-        let placed = false;
-
-        // 겹치지 않는 위치 찾기 (최대 100회 시도)
-        while (attempts < 100 && !placed) {
-          attempts++;
-          left = Math.floor(Math.random() * (screenWidth - size - margin * 2)) + margin;
-          top = Math.floor(Math.random() * (screenHeight - size - margin * 2)) + margin;
-
-          newBox = {
-            left: left,
-            top: top,
-            right: left + size,
-            bottom: top + size
-          };
-
-          if (!isOverlapping(newBox)) {
-            placedBoxes.push(newBox);
-            placed = true;
-          }
-        }
-
-        // 스티커 최종 위치 적용
-        img.style.left = `${left}px`;
-        img.style.top = `${top}px`;
-
-        container.appendChild(img);
+        // 경로를 폴더 없이 바로 파일명으로 지정
+        img.src = `./${filename}`;
       });
     }
 
-    // 실행
     generateStickers();
   </script>
 
