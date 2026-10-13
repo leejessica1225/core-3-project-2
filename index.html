@@ -86,15 +86,16 @@
       background-color: #d3d3d3;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
 
-    /* iframe 우측 돋보기/확대 컨트롤러와 하단 바를 살짝 밖으로 밀어내어 자름 */
+    /* 하단 회색 툴바 영역을 아래로 자연스럽게 가려버리도록 높이 조절 */
     .map-wrapper {
       position: absolute;
       top: 0;
       left: 0;
       width: calc(100% + 55px);
-      height: calc(100% + 65px);
+      height: calc(100% + 50px);
     }
 
     .map-wrapper iframe {
@@ -104,25 +105,34 @@
       display: block;
     }
 
-    /* page2.html 이동용 플로팅 버튼 (지도를 드래그/줌 가능하게 유지) */
-    .expand-trigger-btn {
+    /* 원본 지도의 클릭 이벤트 전체 커버 레이어 */
+    .map-click-overlay {
       position: absolute;
-      bottom: 20px;
-      right: 20px;
-      background-color: #000;
-      color: #fff;
-      padding: 10px 18px;
-      font-size: 1.2rem;
-      border-radius: 30px;
-      cursor: pointer;
-      z-index: 20;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-      user-select: none;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
     }
 
-    .expand-trigger-btn:hover {
-      transform: scale(1.05);
-      opacity: 0.9;
+    /* 원본 호버 문구 */
+    .click-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.8rem;
+      color: #333;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      user-select: none;
+      font-weight: 400;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .map-container:hover .click-text {
+      opacity: 1;
     }
 
     .footer {
@@ -180,7 +190,8 @@
       <div class="map-wrapper">
         <iframe src="https://api.mapbox.com/styles/v1/leejessica1225/cmv06jab0005001s1fd8e551k.html?title=view&access_token=pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ&zoomwheel=true&fresh=true#13.56/40.73108/-73.99013"></iframe>
       </div>
-      <div class="expand-trigger-btn" id="expandBtn">Click to Expand &rarr;</div>
+      <div class="map-click-overlay"></div>
+      <span class="click-text">click</span>
     </div>
 
     <div class="footer">
@@ -192,7 +203,6 @@
 
   <script>
     const mapBox = document.getElementById('mapBox');
-    const expandBtn = document.getElementById('expandBtn');
     const expandOverlay = document.getElementById('expandOverlay');
 
     function triggerTransition() {
@@ -219,8 +229,7 @@
       }, 520);
     }
 
-    expandBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
+    mapBox.addEventListener('click', function() {
       triggerTransition();
     });
   </script>
