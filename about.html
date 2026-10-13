@@ -24,7 +24,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Lay Grotesk', sans-serif;
-      font-weight: 400;
+      font-weight: 400; /* 전체 기본 폰트 두께 Regular 설정 */
     }
 
     body, html {
@@ -48,6 +48,7 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      flex-shrink: 0;
     }
 
     .header h1 {
@@ -77,10 +78,70 @@
       opacity: 0.6;
     }
 
+    /* 본문 영역 스크롤 및 레이아웃 */
     .main-content {
       flex: 1;
       background-color: #fff;
       position: relative;
+      overflow-y: auto;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .about-section {
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .about-subtitle {
+      font-size: 1.8rem;
+      font-weight: 400; /* Regular 설정 */
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .about-caption {
+      font-size: 1.2rem;
+      font-weight: 400;
+      line-height: 1.4;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .about-text {
+      font-size: 1.05rem;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #111;
+    }
+
+    .questions-list {
+      list-style: none;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .questions-list li {
+      font-size: 1.05rem;
+      font-weight: 400;
+      line-height: 1.5;
+      padding-left: 16px;
+      border-left: 2px solid #000;
+    }
+
+    .credits {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      font-size: 0.95rem;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #555;
     }
 
     .footer-box {
@@ -90,6 +151,25 @@
       display: flex;
       align-items: center;
       padding: 0 20px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 12vw;
+      }
+      .nav-menu a {
+        font-size: 3.5vw;
+      }
+      .about-subtitle {
+        font-size: 1.4rem;
+      }
+      .about-caption {
+        font-size: 1.05rem;
+      }
+      .about-text, .questions-list li {
+        font-size: 0.95rem;
+      }
     }
   </style>
 </head>
@@ -104,6 +184,37 @@
     </div>
 
     <div class="main-content">
+      <div class="about-section">
+        <h2 class="about-subtitle">Urban Mess: An Exhibition of Things We Throw Away</h2>
+        <p class="about-caption">A photographic collection of discarded objects found on the streets of New York City.</p>
+
+        <p class="about-text">
+          New York is often described as a messy and chaotic city. While walking around the city, I started noticing all kinds of trash, random objects, and things left behind on the streets. At first, they just looked like mess, but the more I noticed them, the more interesting they became. Each one seemed to show a small part of the city’s everyday life.
+        </p>
+
+        <p class="about-text">
+          I started thinking about these discarded objects as part of an exhibition, with New York City itself becoming the gallery and the streets becoming the exhibition space. This website works as a map of that exhibition, allowing users to explore the collection and experience the city’s urban mess through the objects found throughout New York.
+        </p>
+
+        <div class="about-text">
+          <p>The project is centered around three questions:</p>
+          <ul class="questions-list">
+            <li>How and when does mess become part of a city’s character?</li>
+            <li>How can ugliness become visually interesting?</li>
+            <li>What does the mess of New York tell us about the people who live in it?</li>
+          </ul>
+        </div>
+
+        <p class="about-text">
+          The accompanying texts, “What Does the City Leave Behind?”, “Can Ugliness Be Visually Interesting?”, and “Where Does It Go?” explore what we leave behind, how we see the visual qualities of urban mess, and what happens to these objects after they are thrown away.
+        </p>
+
+        <div class="credits">
+          <p>Photographed by Jessica Lee</p>
+          <p>Researched by Jessica Lee</p>
+          <p>Designed by Jessica Lee</p>
+        </div>
+      </div>
     </div>
 
     <div class="footer-box"></div>
