@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Urban Mess: - Map</title>
 
   <!-- Mapbox GL JS v3 SDK -->
@@ -33,20 +33,21 @@
 
     body, html {
       width: 100vw;
-      height: 100vh;
+      height: 100%;
       height: 100dvh;
       overflow: hidden;
       background-color: #d3d3d3;
     }
 
+    /* 반응형 지도를 위한 Viewport 크기 최적화 */
     #map {
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       height: 100dvh;
       opacity: 1;
     }
 
-    /* Mapbox 컨트롤러 및 하단 속성/로고 숨김 */
+    /* Mapbox 기본 컨트롤러 및 하단 브랜드 속성 숨김 */
     .mapboxgl-ctrl,
     .mapboxgl-ctrl-bottom-left,
     .mapboxgl-ctrl-bottom-right,
@@ -55,20 +56,24 @@
       display: none !important;
     }
 
-    /* 커스텀 위치 아이콘 커스텀 스타일 */
-    .stuytown-marker {
-      width: 24px;
-      height: 24px;
-      background-color: #000;
-      border: 2px solid #fff;
+    /* 반응형 커스텀 마커 (뷰포트 크기에 따른 자연스러운 비율 조정) */
+    .custom-marker {
+      width: 20px;
+      height: 20px;
+      background-color: #ff0000;
+      border: 3px solid #ffffff;
       border-radius: 50%;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
       cursor: pointer;
-      transition: transform 0.2s ease;
     }
 
-    .stuytown-marker:hover {
-      transform: scale(1.2);
+    /* 모바일 화면 대응 스타일 조정 */
+    @media (max-width: 768px) {
+      .custom-marker {
+        width: 16px;
+        height: 16px;
+        border-width: 2px;
+      }
     }
   </style>
 </head>
@@ -79,24 +84,28 @@
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
 
+    const stuytownCoords = [-73.9778, 40.7317];
+
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/leejessica1225/cmv06jab0005001s1fd8e551k',
-      center: [-73.99013, 40.73108],
-      zoom: 13.56,
+      center: stuytownCoords,
+      zoom: window.innerWidth <= 768 ? 13.8 : 14.5, // 모바일 화면에서 지도 뷰포트 자동 조절
       fadeDuration: 0
     });
 
-    // 1. 마커로 사용할 HTML 엘리먼트 생성
+    // 커스텀 마커 생성
     const el = document.createElement('div');
-    el.className = 'stuytown-marker';
-
-    // 2. StuyTown 좌표 지정 및 마커 지도 추가
-    const stuytownCoords = [-73.9778, 40.7317];
+    el.className = 'custom-marker';
 
     new mapboxgl.Marker(el)
       .setLngLat(stuytownCoords)
       .addTo(map);
+
+    // 모바일 브라우저 창 크기 변경 시 지도가 깨지지 않도록 리사이즈 이벤트 자동 감지
+    window.addEventListener('resize', () => {
+      map.resize();
+    });
   </script>
 
 </body>
