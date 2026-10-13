@@ -98,7 +98,7 @@
       height: 100%;
     }
 
-    /* Mapbox 관련 하단 회색 바, 로고 및 우측 버튼 컨트롤러 완전 제거 */
+    /* Mapbox 관련 모든 하단 로고, 저작권, 컨트롤러 완벽 제거 */
     .mapboxgl-ctrl,
     .mapboxgl-ctrl-bottom-left,
     .mapboxgl-ctrl-bottom-right,
@@ -113,7 +113,8 @@
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 1.8rem;
-      color: #333;
+      color: #fff;
+      text-shadow: 0 0 8px rgba(0,0,0,0.6);
       opacity: 0;
       transition: opacity 0.3s ease;
       user-select: none;
@@ -190,13 +191,12 @@
   <div class="gray-expand-overlay" id="expandOverlay"></div>
 
   <script>
-    // 1. 액세스 토큰 설정
     mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
 
-    // 2. Mapbox 지도를 #map 디브에 직접 로드
+    // 표준 위성(Satellite) 스타일로 확실하게 렌더링
     const map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/leejessica1225/cmv06jab0005001s1fd8e551k',
+      style: 'mapbox://styles/mapbox/satellite-v9',
       center: [-73.99013, 40.73108],
       zoom: 13.56
     });
@@ -219,20 +219,4 @@
       expandOverlay.classList.add('active');
 
       setTimeout(() => {
-        expandOverlay.style.transition = 'clip-path 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
-        expandOverlay.style.clipPath = 'inset(0px 0px 0px 0px)';
-      }, 20);
-
-      setTimeout(() => {
-        window.location.href = 'page2.html';
-      }, 520);
-    }
-
-    // 3. 지도를 클릭하면 Expand 애니메이션 실행
-    map.on('click', function() {
-      triggerTransition();
-    });
-  </script>
-
-</body>
-</html>
+        expandOverlay.style.transition = 'clip-
