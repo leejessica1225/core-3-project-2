@@ -98,7 +98,7 @@
       height: 100%;
     }
 
-    /* Mapbox 관련 모든 하단 로고, 저작권, 컨트롤러 완벽 제거 */
+    /* Mapbox 컨트롤러/로고 제거 */
     .mapboxgl-ctrl,
     .mapboxgl-ctrl-bottom-left,
     .mapboxgl-ctrl-bottom-right,
@@ -193,12 +193,28 @@
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
 
-    // 위성 사진 + 장소/지역 레이블 표시 스타일 적용
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/satellite-streets-v12',
       center: [-73.99013, 40.73108],
       zoom: 13.56
+    });
+
+    // 지도가 로드되면 도로명, 상점명, 작은 주소 레이블만 필터링하여 지웁니다.
+    map.on('load', function() {
+      const layers = map.getStyle().layers;
+
+      layers.forEach(layer => {
+        // 길 이름(road), 상점/관광지(poi), 보행로(path) 텍스트 필터링 삭제
+        if (
+          layer.id.includes('road') || 
+          layer.id.includes('poi') || 
+          layer.id.includes('transit') || 
+          layer.id.includes('path')
+        ) {
+          map.setLayoutProperty(layer.id, 'visibility', 'none');
+        }
+      });
     });
 
     const mapBox = document.getElementById('mapBox');
@@ -228,10 +244,4 @@
       }, 520);
     }
 
-    map.on('click', function() {
-      triggerTransition();
-    });
-  </script>
-
-</body>
-</html>
+    map.on('click', function()
