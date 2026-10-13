@@ -36,16 +36,16 @@
       height: 100vh;
       height: 100dvh;
       overflow: hidden;
-      background-color: #d3d3d3; /* index.html의 overlay 색상과 동일하게 유지 */
+      background-color: #d3d3d3;
     }
 
-    /* 지도가 100% 전체 화면을 채우도록 설정 */
     #map {
       width: 100vw;
       height: 100vh;
       height: 100dvh;
       opacity: 0;
-      transition: opacity 0.6s ease; /* 전환 후 지도가 자연스럽게 페이드인 */
+      /* 지연 없이 0.15초 만에 매우 빠르게 나타나도록 수정 */
+      transition: opacity 0.15s ease-out;
     }
 
     #map.loaded {
@@ -60,40 +60,15 @@
     .mapboxgl-ctrl-top-left {
       display: none !important;
     }
-
-    /* 필요시 뒤로가기(메인으로 돌아가기) 버튼 추가 */
-    .back-btn {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1.5px solid #000;
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      text-decoration: none;
-      color: #000;
-      transition: background 0.2s ease;
-    }
-
-    .back-btn:hover {
-      background: #000;
-      color: #fff;
-    }
   </style>
 </head>
 <body>
-
-  <!-- 메인 페이지로 돌아가는 버튼 (필요 없으시면 삭제하셔도 됩니다) -->
-  <a href="index.html" class="back-btn">← Back</a>
 
   <div id="map"></div>
 
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
 
-    // index.html과 동일한 커스텀 스타일 지도 세팅
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/leejessica1225/cmv06jab0005001s1fd8e551k',
@@ -101,8 +76,8 @@
       zoom: 13.56
     });
 
-    // 지도가 로드되면 회색 화면에서 지도로 자연스럽게 페이드인
-    map.on('load', () => {
+    // 지도 렌더링 준비가 완료되는 즉시 빠르게 표시
+    map.on('style.load', () => {
       document.getElementById('map').classList.add('loaded');
     });
   </script>
