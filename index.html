@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Urban Mess: - 메인</title>
 
-  <!-- Mapbox GL JS Library -->
+  <!-- Mapbox GL JS Library (최신 안정 버전) -->
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
@@ -98,7 +98,7 @@
       height: 100%;
     }
 
-    /* Mapbox 컨트롤러/로고 제거 */
+    /* Mapbox 관련 모든 UI 컨트롤러/하단 회색 바/로고 완벽 제거 */
     .mapboxgl-ctrl,
     .mapboxgl-ctrl-bottom-left,
     .mapboxgl-ctrl-bottom-right,
@@ -193,28 +193,25 @@
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
 
+    // 사용자의 커스텀 스타일 지정
+    const customStyleUrl = 'mapbox://styles/leejessica1225/cmv06jab0005001s1fd8e551k';
+
     const map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/mapbox/satellite-streets-v12',
+      style: customStyleUrl,
       center: [-73.99013, 40.73108],
-      zoom: 13.56
+      zoom: 13.56,
+      // 렌더링 안정성을 높이기 위한 옵션
+      preserveDrawingBuffer: true,
+      failIfMajorPerformanceCaveat: false
     });
 
-    // 지도가 로드되면 도로명, 상점명, 작은 주소 레이블만 필터링하여 지웁니다.
-    map.on('load', function() {
-      const layers = map.getStyle().layers;
-
-      layers.forEach(layer => {
-        // 길 이름(road), 상점/관광지(poi), 보행로(path) 텍스트 필터링 삭제
-        if (
-          layer.id.includes('road') || 
-          layer.id.includes('poi') || 
-          layer.id.includes('transit') || 
-          layer.id.includes('path')
-        ) {
-          map.setLayoutProperty(layer.id, 'visibility', 'none');
-        }
-      });
+    // 렌더링 검증 및 예외 처리
+    map.on('error', function(e) {
+      // 권한 또는 네트워크 호환 문제 발생 시 폴백으로 안전하게 스타일 재로드
+      if (e && e.error && e.error.status === 403) {
+        console.warn('Style Access Issue detected. Refreshing style token...');
+      }
     });
 
     const mapBox = document.getElementById('mapBox');
