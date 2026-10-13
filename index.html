@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Urban Mess: - 메인</title>
 
-  <!-- Mapbox GL JS 라이브러리 로드 -->
+  <!-- Mapbox GL JS Library -->
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
@@ -98,7 +98,8 @@
       height: 100%;
     }
 
-    /* Mapbox 관련 모든 기본 UI(하단 로고, 저작권 바, 우측 컨트롤러) 숨김 */
+    /* Mapbox 관련 하단 회색 바, 로고 및 우측 버튼 컨트롤러 완전 제거 */
+    .mapboxgl-ctrl,
     .mapboxgl-ctrl-bottom-left,
     .mapboxgl-ctrl-bottom-right,
     .mapboxgl-ctrl-top-right,
@@ -189,9 +190,10 @@
   <div class="gray-expand-overlay" id="expandOverlay"></div>
 
   <script>
+    // 1. 액세스 토큰 설정
     mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
 
-    // Mapbox GL 지도를 #map 영역에 로드
+    // 2. Mapbox 지도를 #map 디브에 직접 로드
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/leejessica1225/cmv06jab0005001s1fd8e551k',
@@ -226,7 +228,7 @@
       }, 520);
     }
 
-    // 지도 클릭 시 Expand 애니메이션 발동
+    // 3. 지도를 클릭하면 Expand 애니메이션 실행
     map.on('click', function() {
       triggerTransition();
     });
