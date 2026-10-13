@@ -135,6 +135,13 @@
       opacity: 1;
       pointer-events: auto;
     }
+
+    /* 반응형 스타일 조정 (모바일 기기 대응) */
+    @media (max-width: 768px) {
+      .nav-menu a {
+        font-size: 3.5vw;
+      }
+    }
   </style>
 </head>
 <body>
@@ -145,6 +152,7 @@
       <nav class="nav-menu">
         <a href="about.html">About</a>
         <a href="text.html">Text</a>
+        <a href="catalog.html">Catalog</a>
       </nav>
     </div>
 
