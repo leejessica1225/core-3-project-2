@@ -35,7 +35,7 @@
       background-color: #000;
     }
 
-    /* 스트릿 뷰 컨테이너 */
+    /* 전체 스트릿 뷰 컨테이너 */
     .streetview-wrapper {
       position: relative;
       width: 100vw;
@@ -43,7 +43,7 @@
       height: 100dvh;
     }
 
-    /* 구글 스트릿 뷰 iframe */
+    /* 구글 스트릿 뷰 iframe 전체 화면 적용 */
     #streetview-iframe {
       width: 100%;
       height: 100%;
@@ -77,13 +77,13 @@
     <!-- 뒤로가기 버튼 -->
     <a href="page2.html" class="back-btn">← MAP</a>
 
-    <!-- NYU Langone Orthopedic Hospital 앞 360도 회전 스트릿 뷰 -->
+    <!-- NYU Langone Orthopedic Hospital 앞 360도 스트릿 뷰 -->
     <iframe 
       id="streetview-iframe"
-      src="https://www.google.com/maps/embed?pb=!4v1710000000000!6m8!1m2!1s7aRErwnfiFdqFyJERbfROw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fpanoid%3D7aRErwnfiFdqFyJERbfROw%26yaw%3D6.44%26pitch%3D39.05!7i16384!8i8192" 
+      src="https://www.google.com/maps/embed?pb=!4v1791904094783!6m8!1m7!1s7aRErwnfiFdqFyJERbfROw!2m2!1d40.73408914393735!2d-73.98313883562084!3f6.437480614722146!4f-39.04986442395682!5f0.7820865974627469" 
       allowfullscreen="" 
       loading="lazy" 
-      referrerpolicy="no-referrer-when-downgrade">
+      referrerpolicy="strict-origin-when-cross-origin">
     </iframe>
   </div>
 
