@@ -3,17 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Urban Mess: - 360 Exhibition</title>
-
-  <!-- Pannellum 360 라이브러리 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+  <title>Urban Mess: - Street View</title>
 
   <style>
     @font-face {
       font-family: 'Lay Grotesk';
       src: url('LayGrotesk-Medium.ttf') format('truetype');
       font-weight: 500;
+      font-style: normal;
     }
 
     * {
@@ -31,10 +28,23 @@
       background-color: #000;
     }
 
-    #panorama {
+    .streetview-wrapper {
+      position: relative;
       width: 100vw;
       height: 100vh;
       height: 100dvh;
+      cursor: grab;
+    }
+
+    .streetview-wrapper:active {
+      cursor: grabbing;
+    }
+
+    #streetview-iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      pointer-events: auto;
     }
 
     /* HOME 버튼 */
@@ -57,24 +67,44 @@
       color: #ffffff;
     }
 
-    /* 360도 공간 내 스티커 커스텀 스타일 (크기 확대) */
-    .pnm-sticker {
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
-      transform: translate(-50%, -50%);
-      pointer-events: none;
+    /* 스티커 레이어 */
+    #sticker-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none; /* 지도의 마우스 드래그가 동작하도록 통과 */
+      overflow: hidden;
+    }
+
+    .sticker {
+      position: absolute;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
+      user-select: none;
+      will-change: transform;
     }
   </style>
 </head>
 <body>
 
-  <a href="index.html" class="home-btn">HOME</a>
-  <div id="panorama"></div>
+  <div class="streetview-wrapper" id="viewWrapper">
+    <a href="index.html" class="home-btn">HOME</a>
+
+    <!-- NYU Langone / 301 Residence Hall 앞 360도 스트릿 뷰 -->
+    <iframe 
+      id="streetview-iframe"
+      src="https://www.google.com/maps/embed?pb=!4v1791904094783!6m8!1m7!1s7aRErwnfiFdqFyJERbfROw!2m2!1d40.73408914393735!2d-73.98313883562084!3f6.437480614722146!4f-39.04986442395682!5f0.7820865974627469" 
+      allowfullscreen="" 
+      loading="lazy" 
+      referrerpolicy="strict-origin-when-cross-origin">
+    </iframe>
+
+    <div id="sticker-container"></div>
+  </div>
 
   <script>
-    // 루트 경로의 24개 이미지 리스트
     const imageFiles = [
       "threenine_trash.png", "melon_trash.png", "snapple_trash.png", "pigeon_trash.png", 
       "gloves_trash.png", "cone_trash.png", "flour_trash.png", "paperbag_trash.png", 
@@ -84,51 +114,78 @@
       "blackbags_trash.png", "matcha_trash.png", "umbrella_trash.png", "ruler_trash.png"
     ];
 
+    const container = document.getElementById('sticker-container');
+    const wrapper = document.getElementById('viewWrapper');
+    const STICKER_COUNT = 3; // 3개만 표시
+
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
     }
 
-    // 1. 랜덤하게 3개 이미지 선택
-    const selectedImages = shuffle([...imageFiles]).slice(0, 3);
+    let isDragging = false;
+    let startX = 0;
+    let currentRotationX = 0;
+    const stickerElements = [];
 
-    // 2. 공간 상에 배치할 핫스팟 좌표 설정 (위도 pitch, 경도 yaw)
-    // 겹치지 않도록 구역을 무작위 지정
-    const predefinedPositions = shuffle([
-      { pitch: -10, yaw: -30 },
-      { pitch: -5, yaw: 15 },
-      { pitch: -15, yaw: 60 },
-      { pitch: 0, yaw: -80 },
-      { pitch: -20, yaw: 110 }
-    ]);
+    function generateStickers() {
+      const selectedImages = shuffle([...imageFiles]).slice(0, STICKER_COUNT);
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
 
-    // Pannellum에 전달할 Hotspot 생성
-    const customHotspots = selectedImages.map((filename, index) => {
-      const pos = predefinedPositions[index];
+      selectedImages.forEach((filename, index) => {
+        const img = document.createElement('img');
+        img.classList.add('sticker');
+
+        img.onload = function() {
+          // 크기를 사진처럼 거대하게 설정 (220px ~ 380px 사이)
+          const size = Math.floor(Math.random() * 160) + 220;
+          img.style.width = `${size}px`;
+
+          // 초기 좌/우/상/하 위치 분산
+          let initialLeft = (screenWidth / 3) * index + Math.random() * 80;
+          let initialTop = Math.floor(Math.random() * (screenHeight - size - 160)) + 80;
+
+          img.dataset.baseLeft = initialLeft;
+          img.style.left = `${initialLeft}px`;
+          img.style.top = `${initialTop}px`;
+
+          container.appendChild(img);
+          stickerElements.push({
+            element: img,
+            baseLeft: initialLeft
+          });
+        };
+
+        img.src = `./${filename}`;
+      });
+    }
+
+    // --------------------------------------------------
+    // 마우스 드래그 회전 시 스티커를 맵 상에 고정된 것처럼 이동시키는 인터랙션
+    // --------------------------------------------------
+    window.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
       
-      // 첨부 이미지처럼 크게 나오도록 스케일 커스텀 (200px ~ 380px 사이 랜덤)
-      const width = Math.floor(Math.random() * 180) + 200; 
-      const height = Math.floor(width * 1.2);
+      const deltaX = e.clientX - startX;
+      startX = e.clientX;
+      currentRotationX += deltaX;
 
-      return {
-        "pitch": pos.pitch,
-        "yaw": pos.yaw,
-        "cssClass": `pnm-sticker sticker-${index}`,
-        "createTooltipFunc": function(hotSpotDiv) {
-          hotSpotDiv.style.width = `${width}px`;
-          hotSpotDiv.style.height = `${height}px`;
-          hotSpotDiv.style.backgroundImage = `url('./${filename}')`;
-        }
-      };
+      // 지도를 돌리는 방향과 연동하여 스티커 수평 위치 이동
+      stickerElements.forEach(item => {
+        const newLeft = item.baseLeft + currentRotationX;
+        item.element.style.left = `${newLeft}px`;
+      });
     });
 
-    // 360도 뷰어 초기화
-    pannellum.viewer('panorama', {
-      "type": "equirectangular",
-      "panorama": "https://pannellum.org/images/alma.jpg", // 360도 파노라마 배경 (원하시는 배경 이미지 주소로 교체 가능)
-      "autoLoad": true,
-      "showControls": false,
-      "hotSpots": customHotspots
-    });
+    window.addEventListener('mouseup', () => { isDragging = false; });
+    window.addEventListener('mouseleave', () => { isDragging = false; });
+
+    generateStickers();
   </script>
 
 </body>
