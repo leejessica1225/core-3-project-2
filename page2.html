@@ -66,10 +66,11 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
       cursor: pointer;
       transition: transform 0.2s ease, background-color 0.2s ease;
+      z-index: 10;
     }
 
     .custom-marker:hover {
-      transform: scale(1.2);
+      transform: scale(1.25);
       background-color: #636366;
     }
 
@@ -90,24 +91,31 @@
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
 
-    // 1. 핀포인트 마커가 들어갈 실제 위치 (StuyTown & East Village 사이)
+    // 1. 핀포인트 마커 위치 (StuyTown & East Village 사이)
     const markerCoords = [-73.9818, 40.7305];
 
-    // 2. 오른쪽 사진처럼 전체 화각이 다 보이도록 설정하는 지도 중심 좌표
+    // 2. 전체 화각이 다 보이도록 설정하는 지도 중심 좌표
     const mapCenterCoords = [-73.99013, 40.73108];
 
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/leejessica1225/cmv06jab0005001s1fd8e551k',
-      center: mapCenterCoords, // 지도의 시점 중심
-      zoom: window.innerWidth <= 768 ? 12.8 : 13.56, // 화각이 넓게 다 보이도록 Zoom 축소
+      center: mapCenterCoords,
+      zoom: window.innerWidth <= 768 ? 12.8 : 13.56,
       fadeDuration: 0
     });
 
-    // 커스텀 핀포인트 마커 생성 및 지정 좌표 추가
+    // 커스텀 핀포인트 마커 엘리먼트 생성
     const el = document.createElement('div');
     el.className = 'custom-marker';
 
+    // 핀포인트 클릭 시 page3.html로 이동하는 이벤트 핸들러 추가
+    el.addEventListener('click', (e) => {
+      e.stopPropagation(); // 지도 자체의 클릭 이벤트와 충돌 방지
+      window.location.href = 'page3.html';
+    });
+
+    // 마커 지도에 추가
     new mapboxgl.Marker(el)
       .setLngLat(markerCoords)
       .addTo(map);
