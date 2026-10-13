@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About: - Urban Mess</title>
   <style>
     @font-face {
@@ -30,7 +30,6 @@
     body, html {
       width: 100%;
       height: 100%;
-      height: 100dvh;
       overflow: hidden;
       background-color: #fff;
     }
@@ -39,14 +38,12 @@
       display: flex;
       flex-direction: column;
       width: 100vw;
-      height: 100%;
-      height: 100dvh;
+      height: 100vh;
       position: relative;
     }
 
-    /* 반응형 헤더 */
     .header {
-      padding: clamp(10px, 1.5vh, 20px) clamp(16px, 2vw, 24px);
+      padding: 14px 20px;
       border-bottom: 2px solid #000;
       display: flex;
       justify-content: space-between;
@@ -55,7 +52,7 @@
     }
 
     .header h1 {
-      font-size: clamp(2.5rem, 8.8vw, 7.5rem);
+      font-size: 8.8vw;
       line-height: 0.92;
       font-weight: 500;
       letter-spacing: -0.025em;
@@ -65,105 +62,100 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      padding-top: 4px;
+      padding-top: 6px;
     }
 
     .nav-menu a {
       text-decoration: none;
       color: #000;
-      font-size: clamp(1rem, 1.8vw, 1.6rem);
+      font-size: 1.8vw;
       font-weight: 400;
       line-height: 1.1;
       letter-spacing: -0.01em;
-      transition: opacity 0.2s ease;
     }
 
     .nav-menu a:hover {
       opacity: 0.6;
     }
 
-    /* 본문 스크롤 영역 */
+    /* 본문 영역 스크롤 및 레이아웃 */
     .main-content {
       flex: 1;
       background-color: #fff;
       position: relative;
       overflow-y: auto;
-      padding: clamp(20px, 4vh, 48px) clamp(16px, 3vw, 40px);
+      padding: 40px 20px;
       display: flex;
       flex-direction: column;
     }
 
     .about-section {
-      max-width: 960px;
-      width: 100%;
+      max-width: 1100px;
       display: flex;
       flex-direction: column;
-      gap: clamp(16px, 2.5vh, 28px);
+      gap: 32px;
     }
 
-    /* 유동적 반응형 폰트 사이즈 */
+    /* 텍스트 크기 1.8rem 고정 복원 */
     .about-subtitle,
     .about-caption,
     .about-text,
     .questions-list li,
     .credits {
-      font-size: clamp(0.95rem, 1.35vw, 1.25rem);
+      font-size: 1.8rem;
       font-weight: 400;
-      line-height: 1.45;
-      letter-spacing: -0.015em;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
       color: #000;
-      word-break: keep-all;
     }
 
-    /* 질문 리스트 */
+    /* 불필요한 라인 및 기호 완벽 제거 */
     .questions-list {
       list-style: none;
-      margin-top: 8px;
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .questions-list li {
+      padding-left: 0;
+      border-left: none;
+    }
+
+    /* 크레딧 상단 공간 여유 있게 배치 */
+    .credits {
+      margin-top: 60px;
+      padding-top: 0;
+      border-top: none;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
 
-    .questions-list li {
-      padding-left: 0;
-      border: none;
-    }
-
-    /* 크레딧 영역 - 상단 공간(margin-top) 증대 */
-    .credits {
-      margin-top: clamp(40px, 8vh, 80px); /* 텍스트 본문과 훨씬 여유 있게 띄움 */
-      padding-top: 0;
-      border: none;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      color: #000;
-    }
-
-    /* 하단 푸터 */
     .footer-box {
-      height: clamp(40px, 5.6vh, 60px);
+      height: 5.6vh;
       border-top: 2px solid #000;
       background-color: #fff;
       display: flex;
       align-items: center;
-      padding: 0 clamp(16px, 2vw, 24px);
+      padding: 0 20px;
       flex-shrink: 0;
     }
 
-    /* 모바일 반응형 처리 */
     @media (max-width: 768px) {
       .header h1 {
-        font-size: 11vw;
+        font-size: 12vw;
       }
       .nav-menu a {
-        font-size: 4vw;
+        font-size: 3.5vw;
       }
-      .about-section {
-        gap: 18px;
-      }
+      .about-subtitle,
+      .about-caption,
+      .about-text,
+      .questions-list li,
       .credits {
-        margin-top: 40px;
+        font-size: 1.2rem;
       }
     }
   </style>
