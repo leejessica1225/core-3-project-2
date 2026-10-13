@@ -203,3 +203,35 @@
 
     const mapBox = document.getElementById('mapBox');
     const expandOverlay = document.getElementById('expandOverlay');
+
+    function triggerTransition() {
+      const rect = mapBox.getBoundingClientRect();
+      const winW = window.innerWidth;
+      const winH = window.innerHeight;
+
+      const top = rect.top;
+      const right = winW - rect.right;
+      const bottom = winH - rect.bottom;
+      const left = rect.left;
+
+      expandOverlay.style.transition = 'none';
+      expandOverlay.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
+      expandOverlay.classList.add('active');
+
+      setTimeout(() => {
+        expandOverlay.style.transition = 'clip-path 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+        expandOverlay.style.clipPath = 'inset(0px 0px 0px 0px)';
+      }, 20);
+
+      setTimeout(() => {
+        window.location.href = 'page2.html';
+      }, 520);
+    }
+
+    map.on('click', function() {
+      triggerTransition();
+    });
+  </script>
+
+</body>
+</html>
