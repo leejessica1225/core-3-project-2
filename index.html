@@ -219,4 +219,19 @@
       expandOverlay.classList.add('active');
 
       setTimeout(() => {
-        expandOverlay.style.transition = 'clip-
+        expandOverlay.style.transition = 'clip-path 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+        expandOverlay.style.clipPath = 'inset(0px 0px 0px 0px)';
+      }, 20);
+
+      setTimeout(() => {
+        window.location.href = 'page2.html';
+      }, 520);
+    }
+
+    map.on('click', function() {
+      triggerTransition();
+    });
+  </script>
+
+</body>
+</html>
