@@ -110,9 +110,9 @@
   </div>
 
   <script>
-    // GitHub images 폴더 내의 이미지 파일명 리스트 (24개)
+    // GitHub images 폴더 내의 이미지 파일명 리스트 (24개 - 수정된 파일명 적용)
     const imageFiles = [
-      "3_$9_trash.png", "melon_trash.png", "snapple_trash.png", "pigeon_trash.png", 
+      "threenine_trash.png", "melon_trash.png", "snapple_trash.png", "pigeon_trash.png", 
       "gloves_trash.png", "cone_trash.png", "flour_trash.png", "paperbag_trash.png", 
       "redbag_trash.png", "orangebox_trash.png", "can_trash.png", "sweater_trash.png", 
       "cvs_trash.png", "scrapwood_trash.png", "fence_trash.png", "waterpipe_trash.png", 
@@ -156,8 +156,15 @@
 
       selectedImages.forEach((filename) => {
         const img = document.createElement('img');
-        img.src = `images/${filename}`;
+        
+        img.src = `./images/${filename}`;
         img.classList.add('sticker');
+
+        // 이미지 로드 실패 시 콘솔 출력 및 숨김 처리
+        img.onerror = function() {
+          console.error("이미지를 찾을 수 없습니다:", filename);
+          this.style.display = 'none';
+        };
 
         // 크기 랜덤 지정 (80px ~ 170px)
         const size = Math.floor(Math.random() * 90) + 80;
