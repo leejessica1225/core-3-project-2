@@ -43,12 +43,6 @@
       width: 100vw;
       height: 100vh;
       height: 100dvh;
-      opacity: 0;
-      /* 지연 없이 0.15초 만에 매우 빠르게 나타나도록 수정 */
-      transition: opacity 0.15s ease-out;
-    }
-
-    #map.loaded {
       opacity: 1;
     }
 
@@ -59,6 +53,22 @@
     .mapboxgl-ctrl-top-right,
     .mapboxgl-ctrl-top-left {
       display: none !important;
+    }
+
+    /* 커스텀 위치 아이콘 커스텀 스타일 */
+    .stuytown-marker {
+      width: 24px;
+      height: 24px;
+      background-color: #000;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .stuytown-marker:hover {
+      transform: scale(1.2);
     }
   </style>
 </head>
@@ -73,13 +83,20 @@
       container: 'map',
       style: 'mapbox://styles/leejessica1225/cmv06jab0005001s1fd8e551k',
       center: [-73.99013, 40.73108],
-      zoom: 13.56
+      zoom: 13.56,
+      fadeDuration: 0
     });
 
-    // 지도 렌더링 준비가 완료되는 즉시 빠르게 표시
-    map.on('style.load', () => {
-      document.getElementById('map').classList.add('loaded');
-    });
+    // 1. 마커로 사용할 HTML 엘리먼트 생성
+    const el = document.createElement('div');
+    el.className = 'stuytown-marker';
+
+    // 2. StuyTown 좌표 지정 및 마커 지도 추가
+    const stuytownCoords = [-73.9778, 40.7317];
+
+    new mapboxgl.Marker(el)
+      .setLngLat(stuytownCoords)
+      .addTo(map);
   </script>
 
 </body>
