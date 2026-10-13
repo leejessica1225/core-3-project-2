@@ -193,45 +193,13 @@
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
 
-    // 표준 위성(Satellite) 스타일로 확실하게 렌더링
+    // 위성 사진 + 장소/지역 레이블 표시 스타일 적용
     const map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/mapbox/satellite-v9',
+      style: 'mapbox://styles/mapbox/satellite-streets-v12',
       center: [-73.99013, 40.73108],
       zoom: 13.56
     });
 
     const mapBox = document.getElementById('mapBox');
     const expandOverlay = document.getElementById('expandOverlay');
-
-    function triggerTransition() {
-      const rect = mapBox.getBoundingClientRect();
-      const winW = window.innerWidth;
-      const winH = window.innerHeight;
-
-      const top = rect.top;
-      const right = winW - rect.right;
-      const bottom = winH - rect.bottom;
-      const left = rect.left;
-
-      expandOverlay.style.transition = 'none';
-      expandOverlay.style.clipPath = `inset(${top}px ${right}px ${bottom}px ${left}px)`;
-      expandOverlay.classList.add('active');
-
-      setTimeout(() => {
-        expandOverlay.style.transition = 'clip-path 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
-        expandOverlay.style.clipPath = 'inset(0px 0px 0px 0px)';
-      }, 20);
-
-      setTimeout(() => {
-        window.location.href = 'page2.html';
-      }, 520);
-    }
-
-    map.on('click', function() {
-      triggerTransition();
-    });
-  </script>
-
-</body>
-</html>
