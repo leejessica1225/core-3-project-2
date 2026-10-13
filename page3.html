@@ -10,41 +10,15 @@
       font-family: 'Lay Grotesk';
       src: url('LayGrotesk-Medium.ttf') format('truetype');
       font-weight: 500;
-      font-style: normal;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Lay Grotesk', sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Lay Grotesk', sans-serif; }
+    body, html { width: 100vw; height: 100%; height: 100dvh; overflow: hidden; background-color: #000; }
 
-    body, html {
-      width: 100vw;
-      height: 100%;
-      height: 100dvh;
-      overflow: hidden;
-      background-color: #000;
-    }
-
-    .streetview-wrapper {
-      position: relative;
+    #street-view {
       width: 100vw;
       height: 100vh;
       height: 100dvh;
-      cursor: grab;
-    }
-
-    .streetview-wrapper:active {
-      cursor: grabbing;
-    }
-
-    #streetview-iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      pointer-events: auto;
     }
 
     /* HOME 버튼 */
@@ -59,50 +33,24 @@
       padding: 8px 16px;
       font-size: 0.9rem;
       text-decoration: none;
-      transition: background 0.2s ease, color 0.2s ease;
     }
 
-    .home-btn:hover {
-      background: #000000;
-      color: #ffffff;
-    }
-
-    /* 스티커 레이어 */
-    #sticker-container {
+    /* 커스텀 오버레이 스티커 스타일 */
+    .custom-sticker-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 10;
-      pointer-events: none; /* 지도의 마우스 드래그가 동작하도록 통과 */
-      overflow: hidden;
-    }
-
-    .sticker {
-      position: absolute;
-      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
-      user-select: none;
-      will-change: transform;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      filter: drop-shadow(0 12px 24px rgba(0,0,0,0.5));
     }
   </style>
+
+  <!-- 발급받으신 Google Maps API Key 적용 -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAM5AYPSJ3qDDdhUjPpZg4RqiaM-2en7y4"></script>
 </head>
 <body>
 
-  <div class="streetview-wrapper" id="viewWrapper">
-    <a href="index.html" class="home-btn">HOME</a>
-
-    <!-- NYU Langone / 301 Residence Hall 앞 360도 스트릿 뷰 -->
-    <iframe 
-      id="streetview-iframe"
-      src="https://www.google.com/maps/embed?pb=!4v1791904094783!6m8!1m7!1s7aRErwnfiFdqFyJERbfROw!2m2!1d40.73408914393735!2d-73.98313883562084!3f6.437480614722146!4f-39.04986442395682!5f0.7820865974627469" 
-      allowfullscreen="" 
-      loading="lazy" 
-      referrerpolicy="strict-origin-when-cross-origin">
-    </iframe>
-
-    <div id="sticker-container"></div>
-  </div>
+  <a href="index.html" class="home-btn">HOME</a>
+  <div id="street-view"></div>
 
   <script>
     const imageFiles = [
@@ -114,78 +62,86 @@
       "blackbags_trash.png", "matcha_trash.png", "umbrella_trash.png", "ruler_trash.png"
     ];
 
-    const container = document.getElementById('sticker-container');
-    const wrapper = document.getElementById('viewWrapper');
-    const STICKER_COUNT = 3; // 3개만 표시
-
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
     }
 
-    let isDragging = false;
-    let startX = 0;
-    let currentRotationX = 0;
-    const stickerElements = [];
+    function initStreetView() {
+      // NYU Langone / 301 Residence Hall 앞 위경도
+      const panoramaPos = { lat: 40.7340891, lng: -73.9831388 };
 
-    function generateStickers() {
-      const selectedImages = shuffle([...imageFiles]).slice(0, STICKER_COUNT);
-      const screenWidth = window.innerWidth;
-      const screenHeight = window.innerHeight;
+      const panorama = new google.maps.StreetViewPanorama(
+        document.getElementById("street-view"),
+        {
+          position: panoramaPos,
+          pov: { heading: 6.44, pitch: -10 },
+          zoom: 1,
+          disableDefaultUI: true
+        }
+      );
 
-      selectedImages.forEach((filename, index) => {
-        const img = document.createElement('img');
-        img.classList.add('sticker');
+      // 3개 이미지 무작위 선택
+      const selectedImages = shuffle([...imageFiles]).slice(0, 3);
 
-        img.onload = function() {
-          // 크기를 사진처럼 거대하게 설정 (220px ~ 380px 사이)
-          const size = Math.floor(Math.random() * 160) + 220;
-          img.style.width = `${size}px`;
+      // 301 Residence Hall 앞 실제 위치 좌표 및 거대한 크기 설정
+      const stickerLocations = [
+        { lat: 40.734120, lng: -73.983100, size: 320 },
+        { lat: 40.734050, lng: -73.983180, size: 380 },
+        { lat: 40.734180, lng: -73.983050, size: 280 }
+      ];
 
-          // 초기 좌/우/상/하 위치 분산
-          let initialLeft = (screenWidth / 3) * index + Math.random() * 80;
-          let initialTop = Math.floor(Math.random() * (screenHeight - size - 160)) + 80;
+      selectedImages.forEach((imgFile, index) => {
+        const loc = stickerLocations[index];
 
-          img.dataset.baseLeft = initialLeft;
-          img.style.left = `${initialLeft}px`;
-          img.style.top = `${initialTop}px`;
+        class StickerOverlay extends google.maps.OverlayView {
+          constructor(position, image, size) {
+            super();
+            this.position = position;
+            this.image = image;
+            this.size = size;
+            this.div = null;
+          }
 
-          container.appendChild(img);
-          stickerElements.push({
-            element: img,
-            baseLeft: initialLeft
-          });
-        };
+          onAdd() {
+            this.div = document.createElement("div");
+            this.div.className = "custom-sticker-overlay";
+            const img = document.createElement("img");
+            img.src = `./${this.image}`;
+            img.style.width = `${this.size}px`;
+            this.div.appendChild(img);
 
-        img.src = `./${filename}`;
+            const panes = this.getPanes();
+            panes.overlayLayer.appendChild(this.div);
+          }
+
+          draw() {
+            const overlayProjection = this.getProjection();
+            if (!overlayProjection) return;
+            const point = overlayProjection.fromLatLngToDivPixel(this.position);
+            if (point && this.div) {
+              this.div.style.left = point.x + "px";
+              this.div.style.top = point.y + "px";
+            }
+          }
+
+          onRemove() {
+            if (this.div) {
+              this.div.parentNode.removeChild(this.div);
+              this.div = null;
+            }
+          }
+        }
+
+        const overlay = new StickerOverlay(
+          new google.maps.LatLng(loc.lat, loc.lng),
+          imgFile,
+          loc.size
+        );
+        overlay.setMap(panorama);
       });
     }
 
-    // --------------------------------------------------
-    // 마우스 드래그 회전 시 스티커를 맵 상에 고정된 것처럼 이동시키는 인터랙션
-    // --------------------------------------------------
-    window.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      startX = e.clientX;
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      
-      const deltaX = e.clientX - startX;
-      startX = e.clientX;
-      currentRotationX += deltaX;
-
-      // 지도를 돌리는 방향과 연동하여 스티커 수평 위치 이동
-      stickerElements.forEach(item => {
-        const newLeft = item.baseLeft + currentRotationX;
-        item.element.style.left = `${newLeft}px`;
-      });
-    });
-
-    window.addEventListener('mouseup', () => { isDragging = false; });
-    window.addEventListener('mouseleave', () => { isDragging = false; });
-
-    generateStickers();
+    window.onload = initStreetView;
   </script>
 
 </body>
