@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Urban Mess: - 메인</title>
 
-  <!-- Mapbox GL JS v3 SDK (최신버전으로 변경하여 렌더링 실패 해결) -->
+  <!-- Mapbox GL JS v3 SDK -->
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.0/mapbox-gl.js"></script>
 
@@ -88,7 +88,7 @@
 
     .map-container {
       flex: 1;
-      background-color: #d3d3d3;
+      background-color: #000;
       position: relative;
       cursor: pointer;
     }
@@ -96,6 +96,13 @@
     #map {
       width: 100%;
       height: 100%;
+      /* Hover 시 밝기와 흐림 효과 트랜지션 추가 */
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+
+    /* 마우스를 올렸을 때 지도가 살짝 어두워지고 흐려지는 효과 */
+    .map-container:hover #map {
+      filter: brightness(0.6) blur(1.5px);
     }
 
     /* Mapbox 관련 모든 하단 회색 바, 저작권, 컨트롤러 완전 제거 */
@@ -112,9 +119,9 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 1.8rem;
+      font-size: 2rem;
       color: #fff;
-      text-shadow: 0 0 8px rgba(0,0,0,0.6);
+      text-shadow: 0 0 10px rgba(0,0,0,0.7);
       opacity: 0;
       transition: opacity 0.3s ease;
       user-select: none;
@@ -193,7 +200,6 @@
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
 
-    // Mapbox SDK로 사용자의 커스텀 스타일 지도 세팅
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/leejessica1225/cmv06jab0005001s1fd8e551k',
@@ -228,7 +234,7 @@
       }, 520);
     }
 
-    // 드래그(Pan)할 때는 이동만 되고, 클릭 완료(click) 시에만 Expand 발동하도록 처리
+    // 드래그(Pan)할 때는 이동만 되고, 단순 클릭 시에만 Expand 발동
     let isDragging = false;
     map.on('mousedown', () => { isDragging = false; });
     map.on('mousemove', () => { isDragging = true; });
