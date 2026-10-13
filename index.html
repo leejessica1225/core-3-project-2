@@ -4,10 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Urban Mess: - 메인</title>
-  
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
-  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-
   <style>
     @font-face {
       font-family: 'Lay Grotesk';
@@ -89,21 +85,34 @@
       flex: 1;
       background-color: #d3d3d3;
       position: relative;
+      overflow: hidden;
       cursor: pointer;
     }
 
-    #map {
-      width: 100%;
-      height: 100%;
+    /* iframe을 확대하고 잘라내어(crop) 하단 바와 우측 컨트롤러를 화면 밖으로 밀어냄 */
+    .map-wrapper {
+      position: absolute;
+      top: -30px;
+      left: -30px;
+      width: calc(100% + 90px);
+      height: calc(100% + 90px);
     }
 
-    /* Mapbox UI 컨트롤러(우측 상단 버튼 등) 및 하단 로고/저작권 숨김 */
-    .mapboxgl-ctrl,
-    .mapboxgl-ctrl-top-right,
-    .mapboxgl-ctrl-top-left,
-    .mapboxgl-ctrl-bottom-right,
-    .mapboxgl-ctrl-bottom-left {
-      display: none !important;
+    .map-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* 지도 상의 모든 클릭을 감싸 페이지 이동 트랜지션을 실행하는 클릭 레이어 */
+    .map-click-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
     }
 
     .click-text {
@@ -177,7 +186,10 @@
     </div>
 
     <div class="map-container" id="mapBox">
-      <div id="map"></div>
+      <div class="map-wrapper">
+        <iframe src="https://api.mapbox.com/styles/v1/leejessica1225/cmv06jab0005001s1fd8e551k.html?title=view&access_token=pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ&zoomwheel=true&fresh=true#13.56/40.73108/-73.99013"></iframe>
+      </div>
+      <div class="map-click-overlay"></div>
       <span class="click-text">click</span>
     </div>
 
@@ -189,16 +201,6 @@
   <div class="gray-expand-overlay" id="expandOverlay"></div>
 
   <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
-
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/leejessica1225/cmv06jab0005001s1fd8e551k',
-      center: [-73.99013, 40.73108],
-      zoom: 13.56,
-      interactive: false
-    });
-
     const mapBox = document.getElementById('mapBox');
     const expandOverlay = document.getElementById('expandOverlay');
 
