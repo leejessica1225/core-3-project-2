@@ -50,8 +50,8 @@
       border: 0;
     }
 
-    /* 상단 MAP으로 돌아가는 백 버튼 */
-    .back-btn {
+    /* 상단 HOME 이동 버튼 */
+    .home-btn {
       position: fixed;
       top: 30px;
       right: 30px;
@@ -65,7 +65,7 @@
       transition: background 0.2s ease, color 0.2s ease;
     }
 
-    .back-btn:hover {
+    .home-btn:hover {
       background: #000000;
       color: #ffffff;
     }
@@ -74,8 +74,8 @@
 <body>
 
   <div class="streetview-wrapper">
-    <!-- 뒤로가기 버튼 -->
-    <a href="page2.html" class="back-btn">← MAP</a>
+    <!-- 랜딩 페이지(index.html)로 이동하는 HOME 버튼 -->
+    <a href="index.html" class="home-btn">HOME</a>
 
     <!-- NYU Langone Orthopedic Hospital 앞 360도 스트릿 뷰 -->
     <iframe 
