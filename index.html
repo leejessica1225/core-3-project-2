@@ -86,9 +86,10 @@
       background-color: #d3d3d3;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
 
-    /* 하단 회색 여백을 확실하게 화면 밖으로 가리기 위해 높이 수치 대폭 확대 */
+    /* 하단 회색 영역을 완전히 숨기기 위한 크롭 레이아웃 */
     .map-wrapper {
       position: absolute;
       top: -35px;
@@ -102,6 +103,35 @@
       height: 100%;
       border: none;
       display: block;
+    }
+
+    /* 클릭 이벤트를 감지하여 expand 애니메이션을 작동시키는 레이어 */
+    .map-click-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+
+    .click-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.8rem;
+      color: #333;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      user-select: none;
+      font-weight: 400;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .map-container:hover .click-text {
+      opacity: 1;
     }
 
     .footer {
@@ -159,6 +189,8 @@
       <div class="map-wrapper">
         <iframe src="https://api.mapbox.com/styles/v1/leejessica1225/cmv06jab0005001s1fd8e551k.html?title=view&access_token=pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ&zoomwheel=true&fresh=true#13.56/40.73108/-73.99013"></iframe>
       </div>
+      <div class="map-click-overlay" id="clickOverlay"></div>
+      <span class="click-text">click</span>
     </div>
 
     <div class="footer">
@@ -170,6 +202,7 @@
 
   <script>
     const mapBox = document.getElementById('mapBox');
+    const clickOverlay = document.getElementById('clickOverlay');
     const expandOverlay = document.getElementById('expandOverlay');
 
     function triggerTransition() {
@@ -195,6 +228,10 @@
         window.location.href = 'page2.html';
       }, 520);
     }
+
+    clickOverlay.addEventListener('click', function() {
+      triggerTransition();
+    });
   </script>
 
 </body>
