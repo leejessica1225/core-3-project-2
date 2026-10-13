@@ -4,11 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Urban Mess: - 메인</title>
-
-  <!-- Mapbox GL JS Library (최신 안정 버전) -->
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
-  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-
   <style>
     @font-face {
       font-family: 'Lay Grotesk';
@@ -90,21 +85,35 @@
       flex: 1;
       background-color: #d3d3d3;
       position: relative;
+      overflow: hidden;
       cursor: pointer;
     }
 
-    #map {
-      width: 100%;
-      height: 100%;
+    /* 하단 회색 바 및 우측 버튼을 화면 밖으로 밀어내 가림 */
+    .map-wrapper {
+      position: absolute;
+      top: -30px;
+      left: -20px;
+      width: calc(100% + 80px);
+      height: calc(100% + 200px);
+      z-index: 1;
     }
 
-    /* Mapbox 관련 모든 UI 컨트롤러/하단 회색 바/로고 완벽 제거 */
-    .mapboxgl-ctrl,
-    .mapboxgl-ctrl-bottom-left,
-    .mapboxgl-ctrl-bottom-right,
-    .mapboxgl-ctrl-top-right,
-    .mapboxgl-ctrl-top-left {
-      display: none !important;
+    .map-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* 지도 상호작용(줌/드래그)을 유지하면서 클릭 애니메이션을 감지하는 인터랙션 레이어 */
+    .map-trigger-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
     }
 
     .click-text {
@@ -114,7 +123,7 @@
       transform: translate(-50%, -50%);
       font-size: 1.8rem;
       color: #fff;
-      text-shadow: 0 0 8px rgba(0,0,0,0.6);
+      text-shadow: 0 0 8px rgba(0,0,0,0.8);
       opacity: 0;
       transition: opacity 0.3s ease;
       user-select: none;
@@ -179,7 +188,10 @@
     </div>
 
     <div class="map-container" id="mapBox">
-      <div id="map"></div>
+      <div class="map-wrapper">
+        <iframe src="https://api.mapbox.com/styles/v1/leejessica1225/cmv06jab0005001s1fd8e551k.html?title=view&access_token=pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ&zoomwheel=true&fresh=true#13.56/40.73108/-73.99013"></iframe>
+      </div>
+      <div class="map-trigger-layer" id="triggerLayer"></div>
       <span class="click-text">click</span>
     </div>
 
@@ -191,31 +203,15 @@
   <div class="gray-expand-overlay" id="expandOverlay"></div>
 
   <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
-
-    // 사용자의 커스텀 스타일 지정
-    const customStyleUrl = 'mapbox://styles/leejessica1225/cmv06jab0005001s1fd8e551k';
-
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: customStyleUrl,
-      center: [-73.99013, 40.73108],
-      zoom: 13.56,
-      // 렌더링 안정성을 높이기 위한 옵션
-      preserveDrawingBuffer: true,
-      failIfMajorPerformanceCaveat: false
-    });
-
-    // 렌더링 검증 및 예외 처리
-    map.on('error', function(e) {
-      // 권한 또는 네트워크 호환 문제 발생 시 폴백으로 안전하게 스타일 재로드
-      if (e && e.error && e.error.status === 403) {
-        console.warn('Style Access Issue detected. Refreshing style token...');
-      }
-    });
-
     const mapBox = document.getElementById('mapBox');
+    const triggerLayer = document.getElementById('triggerLayer');
     const expandOverlay = document.getElementById('expandOverlay');
+
+    let isDragging = false;
+
+    // 드래그(Pan)할 때는 애니메이션이 실행되지 않고, 단순 클릭 시에만 Expand 애니메이션 작동
+    triggerLayer.addEventListener('mousedown', () => { isDragging = false; });
+    triggerLayer.addEventListener('mousemove', () => { isDragging = true; });
 
     function triggerTransition() {
       const rect = mapBox.getBoundingClientRect();
@@ -241,8 +237,10 @@
       }, 520);
     }
 
-    map.on('click', function() {
-      triggerTransition();
+    triggerLayer.addEventListener('click', (e) => {
+      if (!isDragging) {
+        triggerTransition();
+      }
     });
   </script>
 
