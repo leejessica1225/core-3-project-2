@@ -3,21 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Urban Mess: - Street View</title>
+  <title>Urban Mess: - 360 Exhibition</title>
+
+  <!-- Pannellum 360 라이브러리 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
 
   <style>
     @font-face {
       font-family: 'Lay Grotesk';
       src: url('LayGrotesk-Medium.ttf') format('truetype');
       font-weight: 500;
-      font-style: normal;
-    }
-
-    @font-face {
-      font-family: 'Lay Grotesk';
-      src: url('LayGrotesk-Regular.ttf') format('truetype');
-      font-weight: 400;
-      font-style: normal;
     }
 
     * {
@@ -35,22 +31,13 @@
       background-color: #000;
     }
 
-    /* 전체 컨테이너 */
-    .streetview-wrapper {
-      position: relative;
+    #panorama {
       width: 100vw;
       height: 100vh;
       height: 100dvh;
     }
 
-    /* 구글 스트릿 뷰 iframe 전체 화면 */
-    #streetview-iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    /* 상단 HOME 버튼 */
+    /* HOME 버튼 */
     .home-btn {
       position: fixed;
       top: 30px;
@@ -70,47 +57,24 @@
       color: #ffffff;
     }
 
-    /* --------------------------------------------------
-       랜덤 스티커 오버레이 레이어
-    -------------------------------------------------- */
-    #sticker-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 10;
-      pointer-events: none; /* 배경 마우스 드래그가 통과함 */
-    }
-
-    .sticker {
-      position: absolute;
-      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
-      user-select: none;
+    /* 360도 공간 내 스티커 커스텀 스타일 (크기 확대) */
+    .pnm-sticker {
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+      transform: translate(-50%, -50%);
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
 
-  <div class="streetview-wrapper">
-    <!-- HOME 이동 버튼 -->
-    <a href="index.html" class="home-btn">HOME</a>
-
-    <!-- 구글 스트릿 뷰 -->
-    <iframe 
-      id="streetview-iframe"
-      src="https://www.google.com/maps/embed?pb=!4v1791904094783!6m8!1m7!1s7aRErwnfiFdqFyJERbfROw!2m2!1d40.73408914393735!2d-73.98313883562084!3f6.437480614722146!4f-39.04986442395682!5f0.7820865974627469" 
-      allowfullscreen="" 
-      loading="lazy" 
-      referrerpolicy="strict-origin-when-cross-origin">
-    </iframe>
-
-    <!-- 스티커들이 배치될 컨테이너 -->
-    <div id="sticker-container"></div>
-  </div>
+  <a href="index.html" class="home-btn">HOME</a>
+  <div id="panorama"></div>
 
   <script>
-    // GitHub 상위 루트 경로에 바로 존재하는 파일명 리스트 (24개)
+    // 루트 경로의 24개 이미지 리스트
     const imageFiles = [
       "threenine_trash.png", "melon_trash.png", "snapple_trash.png", "pigeon_trash.png", 
       "gloves_trash.png", "cone_trash.png", "flour_trash.png", "paperbag_trash.png", 
@@ -120,79 +84,51 @@
       "blackbags_trash.png", "matcha_trash.png", "umbrella_trash.png", "ruler_trash.png"
     ];
 
-    const container = document.getElementById('sticker-container');
-    const STICKER_COUNT = 6;
-    const placedBoxes = [];
-
-    // 배열 무작위 셔플 (중복 방지)
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
     }
 
-    // 겹침 판정 함수
-    function isOverlapping(newBox) {
-      const padding = 20; // 스티커 간 최소 간격
-      for (let box of placedBoxes) {
-        if (
-          !(newBox.right + padding < box.left ||
-            newBox.left - padding > box.right ||
-            newBox.bottom + padding < box.top ||
-            newBox.top - padding > box.bottom)
-        ) {
-          return true;
+    // 1. 랜덤하게 3개 이미지 선택
+    const selectedImages = shuffle([...imageFiles]).slice(0, 3);
+
+    // 2. 공간 상에 배치할 핫스팟 좌표 설정 (위도 pitch, 경도 yaw)
+    // 겹치지 않도록 구역을 무작위 지정
+    const predefinedPositions = shuffle([
+      { pitch: -10, yaw: -30 },
+      { pitch: -5, yaw: 15 },
+      { pitch: -15, yaw: 60 },
+      { pitch: 0, yaw: -80 },
+      { pitch: -20, yaw: 110 }
+    ]);
+
+    // Pannellum에 전달할 Hotspot 생성
+    const customHotspots = selectedImages.map((filename, index) => {
+      const pos = predefinedPositions[index];
+      
+      // 첨부 이미지처럼 크게 나오도록 스케일 커스텀 (200px ~ 380px 사이 랜덤)
+      const width = Math.floor(Math.random() * 180) + 200; 
+      const height = Math.floor(width * 1.2);
+
+      return {
+        "pitch": pos.pitch,
+        "yaw": pos.yaw,
+        "cssClass": `pnm-sticker sticker-${index}`,
+        "createTooltipFunc": function(hotSpotDiv) {
+          hotSpotDiv.style.width = `${width}px`;
+          hotSpotDiv.style.height = `${height}px`;
+          hotSpotDiv.style.backgroundImage = `url('./${filename}')`;
         }
-      }
-      return false;
-    }
+      };
+    });
 
-    function generateStickers() {
-      const selectedImages = shuffle([...imageFiles]).slice(0, STICKER_COUNT);
-      const screenWidth = window.innerWidth;
-      const screenHeight = window.innerHeight;
-      const margin = 80;
-
-      selectedImages.forEach((filename) => {
-        const img = document.createElement('img');
-        img.classList.add('sticker');
-
-        // 이미지가 정상 로드되면 위치 지정 후 화면에 표시
-        img.onload = function() {
-          const size = Math.floor(Math.random() * 90) + 80; // 80px ~ 170px 랜덤 크기
-          img.style.width = `${size}px`;
-
-          let left, top, newBox;
-          let attempts = 0;
-          let placed = false;
-
-          while (attempts < 100 && !placed) {
-            attempts++;
-            left = Math.floor(Math.random() * (screenWidth - size - margin * 2)) + margin;
-            top = Math.floor(Math.random() * (screenHeight - size - margin * 2)) + margin;
-
-            newBox = {
-              left: left,
-              top: top,
-              right: left + size,
-              bottom: top + size
-            };
-
-            if (!isOverlapping(newBox)) {
-              placedBoxes.push(newBox);
-              placed = true;
-            }
-          }
-
-          img.style.left = `${left}px`;
-          img.style.top = `${top}px`;
-          container.appendChild(img);
-        };
-
-        // 경로를 폴더 없이 바로 파일명으로 지정
-        img.src = `./${filename}`;
-      });
-    }
-
-    generateStickers();
+    // 360도 뷰어 초기화
+    pannellum.viewer('panorama', {
+      "type": "equirectangular",
+      "panorama": "https://pannellum.org/images/alma.jpg", // 360도 파노라마 배경 (원하시는 배경 이미지 주소로 교체 가능)
+      "autoLoad": true,
+      "showControls": false,
+      "hotSpots": customHotspots
+    });
   </script>
 
 </body>
