@@ -24,13 +24,12 @@
       margin: 0;
       padding: 0;
       font-family: 'Lay Grotesk', sans-serif;
-      font-weight: 400; /* 전체 텍스트 볼드 없이 Regular로 기본 설정 */
+      font-weight: 400;
     }
 
     body, html {
       width: 100%;
       height: 100%;
-      overflow: hidden;
       background-color: #fff;
     }
 
@@ -38,17 +37,21 @@
       display: flex;
       flex-direction: column;
       width: 100vw;
-      height: 100vh;
+      min-height: 100vh;
       position: relative;
     }
 
+    /* 상단 헤더 고정 */
     .header {
+      position: sticky;
+      top: 0;
+      background-color: #fff;
       padding: 14px 20px;
       border-bottom: 2px solid #000;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      flex-shrink: 0;
+      z-index: 100;
     }
 
     .header h1 {
@@ -78,13 +81,12 @@
       opacity: 0.6;
     }
 
-    /* 본문 영역 스크롤 및 레이아웃 */
+    /* 메인 콘텐츠 구조 */
     .main-content {
+      position: relative;
       flex: 1;
       background-color: #fff;
-      position: relative;
-      overflow-y: auto;
-      padding: 40px 20px;
+      padding: 40px 20px 120px 20px;
       display: flex;
       flex-direction: column;
     }
@@ -93,33 +95,68 @@
       max-width: 1100px;
       display: flex;
       flex-direction: column;
-      gap: 120px; /* 각 큰 아티클 간의 여백 */
+      gap: 120px;
+      position: relative;
+      z-index: 10; /* 텍스트가 스티커 위에 올라오도록 주거나 투명하게 겹치게 유지 */
     }
 
     .article {
       display: flex;
       flex-direction: column;
-      gap: 32px; /* 각 단락(Paragraph) 사이의 띄어쓰기 간격 */
+      gap: 32px;
     }
 
-    /* 제목, 본문, 출처 모두 1.8rem 및 Regular (볼드 없음) */
+    /* 모든 텍스트 1.8rem 통일 (Regular) */
     .article-title,
     .article-p,
     .article-author {
       font-size: 1.8rem;
-      font-weight: 400; /* 볼드체 완전 제거 */
+      font-weight: 400;
       line-height: 1.35;
       letter-spacing: -0.02em;
       color: #000;
     }
 
     .article-title {
-      margin-bottom: 8px;
+      margin-bottom: 40px;
     }
 
-    /* 필자/출처 표기 상단 여백 (두 줄 띄운 효과) */
     .article-author {
-      margin-top: 40px;
+      margin-top: 60px;
+    }
+
+    /* 피그마 콜라주 스티커 오버레이 레이어 */
+    .collage-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Figma Make 애니메이션 스타일 이식 */
+    .collage-image {
+      position: absolute;
+      opacity: 0;
+      transform: translateY(90px) scale(0.58) rotate(-8deg);
+      transform-origin: 50% 100%;
+      transition: opacity 320ms ease, transform 680ms cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+    }
+
+    .collage-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* 스크롤 진행에 맞춰 나타날 때 */
+    .collage-image.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1) rotate(var(--rot, 0deg));
     }
 
     .footer-box {
@@ -129,7 +166,8 @@
       display: flex;
       align-items: center;
       padding: 0 20px;
-      flex-shrink: 0;
+      position: relative;
+      z-index: 100;
     }
 
     @media (max-width: 768px) {
@@ -159,6 +197,9 @@
         <a href="index.html">Home</a>
       </nav>
     </div>
+
+    <!-- 스크롤 시 스티커들이 콜라주 형태로 생겨나는 픽스드 레이어 -->
+    <div class="collage-layer" id="collageLayer"></div>
 
     <div class="main-content">
       <div class="text-section">
@@ -289,6 +330,76 @@
 
     <div class="footer-box"></div>
   </div>
+
+  <script>
+    // 쓰레기 스티커 이미지 목록
+    const imageFiles = [
+      "threenine_trash.png", "melon_trash.png", "snapple_trash.png", "pigeon_trash.png", 
+      "gloves_trash.png", "cone_trash.png", "flour_trash.png", "paperbag_trash.png", 
+      "redbag_trash.png", "orangebox_trash.png", "can_trash.png", "sweater_trash.png", 
+      "cvs_trash.png", "scrapwood_trash.png", "fence_trash.png", "waterpipe_trash.png", 
+      "boxes_trash.png", "trashcan_trash.png", "yellowbag_trash.png", "newspaper_trash.png", 
+      "blackbags_trash.png", "matcha_trash.png", "umbrella_trash.png", "ruler_trash.png"
+    ];
+
+    // 화면 곳곳에 배치될 스티커 설정 배열 (위치/크기/회전각도/나타나는 스크롤 시점)
+    const stickerConfigs = [
+      { left: "5%", top: "45%", width: "220px", rot: "-12deg", threshold: 0.08 },
+      { left: "70%", top: "55%", width: "260px", rot: "15deg", threshold: 0.16 },
+      { left: "40%", top: "60%", width: "180px", rot: "35deg", threshold: 0.25 },
+      { left: "75%", top: "35%", width: "210px", rot: "-5deg", threshold: 0.35 },
+      { left: "12%", top: "68%", width: "280px", rot: "10deg", threshold: 0.45 },
+      { left: "62%", top: "72%", width: "200px", rot: "-20deg", threshold: 0.55 },
+      { left: "45%", top: "38%", width: "240px", rot: "8deg", threshold: 0.65 },
+      { left: "80%", top: "65%", width: "190px", rot: "-15deg", threshold: 0.75 },
+      { left: "8%", top: "32%", width: "230px", rot: "22deg", threshold: 0.85 }
+    ];
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    const collageLayer = document.getElementById("collageLayer");
+    const randomImages = shuffle([...imageFiles]);
+    const stickerElements = [];
+
+    // 스티커 동적 생성
+    stickerConfigs.forEach((config, idx) => {
+      const imgFile = randomImages[idx % randomImages.length];
+      const div = document.createElement("div");
+      div.className = "collage-image";
+      div.style.left = config.left;
+      div.style.top = config.top;
+      div.style.width = config.width;
+      div.style.setProperty("--rot", config.rot);
+
+      const img = document.createElement("img");
+      img.src = `./${imgFile}`;
+      div.appendChild(img);
+
+      collageLayer.appendChild(div);
+      stickerElements.push({ element: div, threshold: config.threshold });
+    });
+
+    // 스크롤 진행도 계산 및 피그마 애니메이션 적용
+    function handleScroll() {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = maxScroll > 0 ? scrollTop / maxScroll : 0;
+
+      stickerElements.forEach(item => {
+        if (progress >= item.threshold) {
+          item.element.classList.add("is-visible");
+        } else {
+          item.element.classList.remove("is-visible");
+        }
+      });
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    handleScroll();
+  </script>
 
 </body>
 </html>
