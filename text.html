@@ -342,17 +342,20 @@
       "blackbags_trash.png", "matcha_trash.png", "umbrella_trash.png", "ruler_trash.png"
     ];
 
-    // **자연스럽게 오른쪽 여백으로 살짝 넘치도록 좌표(left: 5% ~ 72%) 재조정**
+    // **이븐(Evenly)하게 분산 배치된 스티커 12개의 좌표 & 임계치 설정**
     const stickerConfigs = [
-      { left: "5%", top: "45%", width: "220px", rot: "-12deg", threshold: 0.08 },
-      { left: "55%", top: "50%", width: "260px", rot: "15deg", threshold: 0.16 },
-      { left: "18%", top: "62%", width: "200px", rot: "-25deg", threshold: 0.25 },
-      { left: "68%", top: "35%", width: "240px", rot: "5deg", threshold: 0.35 },
-      { left: "10%", top: "68%", width: "280px", rot: "10deg", threshold: 0.45 },
-      { left: "42%", top: "70%", width: "220px", rot: "-18deg", threshold: 0.55 },
-      { left: "62%", top: "60%", width: "250px", rot: "8deg", threshold: 0.65 },
-      { left: "72%", top: "45%", width: "210px", rot: "-15deg", threshold: 0.75 },
-      { left: "8%", top: "32%", width: "230px", rot: "15deg", threshold: 0.85 }
+      { left: "3%",  top: "52%", width: "230px", rot: "-12deg", threshold: 0.05 },
+      { left: "62%", top: "42%", width: "250px", rot: "15deg",  threshold: 0.12 },
+      { left: "32%", top: "68%", width: "210px", rot: "-20deg", threshold: 0.20 },
+      { left: "75%", top: "58%", width: "240px", rot: "8deg",   threshold: 0.28 },
+      { left: "12%", top: "48%", width: "260px", rot: "10deg",  threshold: 0.36 },
+      { left: "48%", top: "38%", width: "220px", rot: "-15deg", threshold: 0.44 },
+      { left: "22%", top: "72%", width: "250px", rot: "18deg",  threshold: 0.52 },
+      { left: "68%", top: "65%", width: "230px", rot: "-8deg",  threshold: 0.60 },
+      { left: "5%",  top: "62%", width: "210px", rot: "22deg",  threshold: 0.68 },
+      { left: "42%", top: "55%", width: "270px", rot: "-12deg", threshold: 0.76 },
+      { left: "78%", top: "35%", width: "220px", rot: "14deg",  threshold: 0.84 },
+      { left: "18%", top: "32%", width: "240px", rot: "-6deg",  threshold: 0.92 }
     ];
 
     function shuffle(array) {
@@ -381,7 +384,7 @@
       stickerElements.push({ element: div, threshold: config.threshold });
     });
 
-    // 스크롤 진행도 계산 및 피그마 애니메이션 적용
+    // 스크롤 진행도 계산 및 애니메이션 실행
     function handleScroll() {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
