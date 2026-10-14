@@ -48,6 +48,7 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      flex-shrink: 0;
     }
 
     .header h1 {
@@ -77,10 +78,50 @@
       opacity: 0.6;
     }
 
+    /* 본문 영역 스크롤 및 레이아웃 */
     .main-content {
       flex: 1;
       background-color: #fff;
       position: relative;
+      overflow-y: auto;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .text-section {
+      max-width: 1100px;
+      display: flex;
+      flex-direction: column;
+      gap: 120px; /* 각 아티클 간의 여백 */
+    }
+
+    .article {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* 모든 본문 및 제목 폰트 크기 1.8rem 통일 */
+    .article-title,
+    .article-p,
+    .article-author {
+      font-size: 1.8rem;
+      font-weight: 400;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+      color: #000;
+    }
+
+    .article-title {
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    /* 필자/출처 표기 상단 여백 설정 */
+    .article-author {
+      margin-top: 16px;
+      color: #000;
     }
 
     .footer-box {
@@ -90,6 +131,24 @@
       display: flex;
       align-items: center;
       padding: 0 20px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 12vw;
+      }
+      .nav-menu a {
+        font-size: 3.5vw;
+      }
+      .article-title,
+      .article-p,
+      .article-author {
+        font-size: 1.2rem;
+      }
+      .text-section {
+        gap: 80px;
+      }
     }
   </style>
 </head>
@@ -104,6 +163,130 @@
     </div>
 
     <div class="main-content">
+      <div class="text-section">
+
+        <!-- ARTICLE 1 -->
+        <article class="article">
+          <h2 class="article-title">What Does the City Leave Behind?</h2>
+          
+          <p class="article-p">
+            If I was to say what I hope to achieve with my street photography, it would be to keep documenting the ever-changing streets of New York City in all its rat-infested, garbage-piled glory. Perhaps I’m fascinated by all the grime and grit this city has to offer because I grew up in the countryside in the United Kingdom with only the sound of cattle moving in the night.
+          </p>
+
+          <p class="article-p">
+            On my path to New York, I’ve done just about everything, working as a street-cleaner, garbage-hauler, milkman, paper delivery boy, Champagne waiter, nightclub barman, DJ, and real-estate broker. I was willing to learn everything and anything, so when I was offered a job as a photographer with a celebrity news agency in New York, I jumped at the opportunity.
+          </p>
+
+          <p class="article-p">
+            After landing in the US, I accepted my first assignment from my new boss: “You’re going to be photographing Pete Sampras’s wedding this weekend.” By photographing it, he really meant, “You’re going to be roaming the hallways of the Beverly Hills Hotel with a small camera stuck down your pants hoping for a sighting of the bride.” The life of a “celebrity photographer”—otherwise known as paparazzi—entails little glamour. More often than not, I was standing not on the red carpet behind a velvet rope but on the streets of New York, hiding behind a trash can in 20-degree weather, hoping for that decisive moment.
+          </p>
+
+          <p class="article-p">
+            The paparazzi always get a bad rap, from hiding behind trash to being called “trash.” Maybe this is why the profession attracts misfits, a motley crew of ex-military personnel, former press photographers, even a few “idle rich.” Whether we were speeding down the road in a taxi cab or furiously pedaling our bikes to the center of the action, we were there to capture it all, always out on the streets. And being on the street all day, you get a real feel for the city.
+          </p>
+
+          <p class="article-p">
+            In time, I found myself drawn to street photography, consumed by the makeup of New York. It may be a big city, but I felt as though wherever I went, I could stop and chat to someone I knew, discussing the politics of Greece with a coffee-vendor or how Uber is killing business for hotel doormen.
+          </p>
+
+          <p class="article-p">
+            At one point, I was clocking up bout 400 miles a week riding around the city on my bicycle. As the great Bill Cunningham knew, the bike is a great tool for a street photographer. But I was getting beaten down by the daily grind, so I decided to leave a business that was slowly destroying me. Instead, I took yet another job, as a salesman for a cycling clothing company, and started shooting portraits and characters on the street in my spare time. Someone taking their pet turkey for a walk or a spaceman striding down Prince Street in SoHo had become far more interesting to me than a celebrity going to Starbucks.
+          </p>
+
+          <p class="article-p">
+            In New York, there is always something to see, and every day is different. In mid-stream, it’s hard to convey in a single image what you’ve experienced in any one fleeting moment. Still, I find myself clicking the shutter simply because what I’m seeing through the viewfinder is magical, and for that moment, I feel I can capture it. Which brings me to what the city leaves behind when the crowds disperse and the noise settles. Black plastic trash bags, piled five feet high along the curbs of Broadway, become the unspoken monuments of Manhattan’s relentless consumption. To an outsider, it is pure squalor; to a street photographer, it is an honest artifact of daily life. In those mountain ranges of refuse lies the true, unfiltered biography of New York—half-eaten takeout containers from Chinatown, discarded stock tickers, crushed coffee cups, and faded love letters, all baking together on the humid summer asphalt waiting for the sanitation trucks.
+          </p>
+
+          <p class="article-p">
+            As night falls, these heaps of garbage transform the sidewalks into a stage for the city’s unsung scavengers and nocturnal life. Watch closely, and you’ll see the rats darting between the bags with frantic ambition, or a lone collector sorting through aluminum cans beneath the orange buzz of a streetlamp. This debris isn’t just waste; it’s the physical residue of eight million people living, consuming, and moving at breakneck speed.
+          </p>
+
+          <p class="article-author">The Streets of New York - Phil Penman</p>
+        </article>
+
+        <!-- ARTICLE 2 -->
+        <article class="article">
+          <h2 class="article-title">Can Ugliness Be Visually Interesting?</h2>
+
+          <p class="article-p">
+            Chris Jordan (www.chrisjordan.com), found his future in a pile of garbage. Jordan, now 44 and living in Seattle, is a former attorney who’s loved photography since early in law school. But he didn’t work up the courage to pursue it full-time until he faced the prospect of marking a major birthday sitting in a corporate law office. “As I approached 40, a new fear surfaced — the fear of not having lived my life,” he says.
+          </p>
+
+          <p class="article-p">
+            So he quit his job and set out as a photographer, bringing with him a nest egg he hoped would last two years to get established as an artist. He was interested in beautiful images, working with an 8×10 view camera and developing his own theory of color aesthetics. Then one day Jordan photographed a garbage heap. He was attracted to the colors, finding them an unlikely demonstration of his theories. He made a huge print, hung it in his studio and invited a couple of photographer friends over to see it. The friends “started talking about consumerism,” he recalls. “It was annoying to me because I wanted to talk about my color theory.”
+          </p>
+
+          <p class="article-p">
+            Eventually, though, the idea of the waste of consumer society — the glut of trash, electronics, packaging and the rest discarded daily — broke through. Jordan was fascinated, and horrified. The discovery “was like waking up from The Matrix. I discovered this really important issue. It’s just this shock.” And his future course of photography was set.
+          </p>
+
+          <p class="article-p">
+            Jordan still strived for beauty, but now it was as a means, not an end. He studied photographers such as Richard Misrach, whose beautiful photos depict the often-ugly effects of humans on the landscape, showing the impact of practice-bombing in the desert or waste dumped into the Mississippi River. Jordan thought the same concept would apply to consumer waste. “Beauty can be a very important tool for drawing the viewer into the conversation,” he says. Shooting on location (in later photos, in the studio), Jordan would create a pretty image of, say, vast numbers of discarded cell phones, giving them a pretty swirl to evoke a galaxy.
+          </p>
+
+          <p class="article-p">
+            But, concerned that his photos were so attractive that people would ignore the message, Jordan set out to create “the ugliest photo I could ever make.” His subject? Exactly 125,000 cigarette butts, the number discarded around the world every second. He made the image by photographing 5,000 cigarettes over and over again, combining the digital images and printing the result at a huge 5×10 feet. Viewed up close, the fine detail can be disgusting, says Jordan. “You can see the lipstick on a butt.”
+          </p>
+
+          <p class="article-p">
+            Still, when these less-pretty images were first shown in New York and elsewhere, “it turns out that they were by far the most popular images in the series,” he adds.
+          </p>
+
+          <p class="article-p">
+            For Jordan that was a revelation. He plans to keep working along similar lines, shooting the discards of the consumer world and bringing life to statistics — for example, the 426,000 cell phones discarded in the U.S. daily — that might otherwise be too dry to have an impact. While these images may be beautiful, they won’t be pretty, he says. “My idea of what is beauty has changed a lot.”
+          </p>
+
+          <p class="article-author">Ugly Made Beautiful - Jay Mallin</p>
+        </article>
+
+        <!-- ARTICLE 3 -->
+        <article class="article">
+          <h2 class="article-title">Where Does It Go?</h2>
+
+          <p class="article-p">
+            Containerization refers to the storage of waste in sealed, rodent-proof receptacles rather than in plastic bags. It is intended to mechanize waste collection, reduce the visibility of garbage set out in public spaces, and reduce the presence of vermin.
+          </p>
+
+          <p class="article-p">
+            Municipal containerization models may take different forms, depending on density: in many low-density neighborhoods, individual bins are optimal; in mid- to high-density neighborhoods, shared containers within close reach of all residential addresses are appropriate. Shared containers may be wheeled or stationary, and may be standardized in size, shape, and color. Containerization has been discussed in New York City going back to the 1970s, but never implemented at scale.
+          </p>
+
+          <p class="article-p">
+            Large piles of trash have become part and parcel of the New York City streetscape, and dodging between mountains of 44 million daily pounds of trash is a standard part of a New Yorker’s commute. It’s everywhere. Bags of trash are left out on curbs the night before pickup, proliferating the presence of rats, causing a public nuisance of trash mountains on sidewalks, and leaving behind a soiled sidewalk long after bags have been picked up.
+          </p>
+
+          <p class="article-p">
+            It hasn’t always been this way; New Yorkers were required to use bins until the late 1960s, and most Cities in the world do not allow trash bags unfettered access to the streets. New Yorkers are fed up; “dirty street conditions” are consistently in the top 10 service requests received by 311, with over 200,000 requests received in the past year alone. Rats thrive and reproduce based on access to food, which is typically found within 100 feet of their nest. In New York City, that food source sits in easily-accessible bags two to three times per week in front of every property: nearly 1/3 of all residential waste is made up of food.
+          </p>
+
+          <p class="article-p">
+            A study conducted by the New York City Department of Health and Mental Hygiene shows that a high volume of garbage is the top determinant of urban rat presence, and reduction in accessible trash is the single most effective intervention to curb rat populations.
+          </p>
+
+          <p class="article-p">
+            New Yorkers leave out 44 million pounds of waste every day of service—equal to the weight of 140 Statues of Liberty! Residential and institutional waste collected by DSNY accounts for 24 million pounds of the overall 44 million pounds of waste left on New York City curbs each day. This waste is generated by 3.5 million households in the five boroughs, as well as from 1,400 public school buildings, government institutions (including public hospitals), and many non-profit institutions.
+          </p>
+
+          <p class="article-p">
+            The balance is commercial waste that is collected separately by the private carting industry. Commercial waste represents more than half of the annual waste generated in New York City. Each year, more than 100,000 commercial establishments generate approximately eight billion pounds of waste. Approximately 90 private carters collect all commercial waste. In some parts of the city, more than 50 carters service a single neighborhood. Local Law 199 of 2019 began an overhaul of the system; the City will be divided into 20 zones with three carters per zone starting in 2024.
+          </p>
+
+          <p class="article-p">
+            DSNY collects waste in three separate streams citywide: refuse, metal/glass/plastic, and paper/cardboard. Additionally, curbside food and yard waste collection (organics) is available in Queens and will be rolled out in phases to every borough by Fall 2024. Accordingly, containerization solutions must provide the infrastructure and capacity for residents to separate all four of these streams at the curb in separate containers. Although generally measured by weight, waste must be assessed by volume for the purposes of containerization. If the daily volume of waste was set out in a straight line one foot wide by one foot high, it would extend 37 miles: five miles longer than the entire perimeter of Manhattan.
+          </p>
+
+          <p class="article-p">
+            For decades, setout rules have allowed New Yorkers to set out all waste streams in bags on the curb at 4 pm the night before collection, with the relatively recent exception of food waste that must be set out in a bin. On April 1, 2023, that changed, and New Yorkers are no longer allowed to place bags directly on the curb before 8 pm – a standard in line with other major cities. Residents may set out their waste at 6 pm in individual bins (55 gallons or fewer with sealed lids), and businesses that close before 8pm may set out their waste in individual bins an hour before closing.
+          </p>
+
+          <p class="article-p">
+            Transfer stations connect municipal waste collections to disposal sites by consolidating waste for transfer by larger vehicles. Collection trucks deposit materials at the transfer station. Materials from multiple trucks are then loaded into containers, which are transported by truck or rail out of the City. The process differs slightly for marine transfer stations, where the materials, once containerized, are loaded onto a barge before being transported by rail. Transfer stations improve efficiency, reduce fuel consumption and collection vehicle costs, and reduce traffic, air emissions, and road wear. Transfer stations are distinguished by the types of material they process. Putrescible transfer stations accept refuse. Non-putrescible transfer stations accept recyclables and C&D. Fill transfer stations accept a subset of C&D debris, including rocks, dirt, and soil.
+          </p>
+
+          <p class="article-author">The Future of Trash - DSNY</p>
+        </article>
+
+      </div>
     </div>
 
     <div class="footer-box"></div>
