@@ -56,30 +56,48 @@
       display: none !important;
     }
 
-    /* 은은한 모노톤 핀포인트 마커 */
+    /* pinpoint.png 커스텀 이미지 마커 & 깜빡임 애니메이션 */
     .custom-marker {
-      width: 24px;
-      height: 24px;
-      background-color: #8E8E93;
-      border: 2.5px solid #FFFFFF;
-      border-radius: 50%;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      width: 32px;
+      height: 32px;
+      background-image: url('pinpoint.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
       cursor: pointer;
-      transition: transform 0.2s ease, background-color 0.2s ease;
       z-index: 10;
+      /* 깜빡이는 무한 루프 애니메이션 적용 */
+      animation: blink 1.2s infinite ease-in-out;
+      transition: transform 0.2s ease;
     }
 
     .custom-marker:hover {
+      animation-play-state: paused; /* 호버 시 애니메이션 일시정지 후 확대 */
       transform: scale(1.25);
-      background-color: #636366;
+      opacity: 1;
+    }
+
+    /* 깜빡임 Keyframes (투명도 및 약간의 스케일 조절) */
+    @keyframes blink {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.2;
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     /* 모바일 화면 대응 스타일 */
     @media (max-width: 768px) {
       .custom-marker {
-        width: 18px;
-        height: 18px;
-        border-width: 2px;
+        width: 24px;
+        height: 24px;
       }
     }
   </style>
@@ -105,7 +123,7 @@
       fadeDuration: 0
     });
 
-    // 커스텀 핀포인트 마커 엘리먼트 생성
+    // 커스텀 pinpoint.png 마커 엘리먼트 생성
     const el = document.createElement('div');
     el.className = 'custom-marker';
 
