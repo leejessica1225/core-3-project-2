@@ -54,11 +54,22 @@
       z-index: 100;
     }
 
+    /* 헤더 타이틀 부드러운 글자 전환 트랜지션 추가 */
     .header h1 {
-      font-size: 8.8vw;
-      line-height: 0.92;
+      font-size: 5.5vw;
+      line-height: 1.0;
       font-weight: 500;
       letter-spacing: -0.025em;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 80vw;
+    }
+
+    .header h1.fade-out {
+      opacity: 0;
+      transform: translateY(-8px);
     }
 
     .nav-menu {
@@ -126,7 +137,7 @@
       margin-top: 60px;
     }
 
-    /* 하단 스크롤 여백 높이를 기존 100vh의 절반인 50vh로 조정 */
+    /* 하단 스크롤 여백 공간 (50vh) */
     .scroll-spacer {
       height: 50vh;
       width: 100%;
@@ -179,7 +190,8 @@
 
     @media (max-width: 768px) {
       .header h1 {
-        font-size: 12vw;
+        font-size: 7vw;
+        max-width: 75vw;
       }
       .nav-menu a {
         font-size: 3.5vw;
@@ -199,7 +211,7 @@
 
   <div class="container">
     <div class="header">
-      <h1>Text:</h1>
+      <h1 id="headerTitle">Text:</h1>
       <nav class="nav-menu">
         <a href="index.html">Home</a>
       </nav>
@@ -212,7 +224,7 @@
       <div class="text-section">
 
         <!-- ARTICLE 1 -->
-        <article class="article">
+        <article class="article" data-title="What Does the City Leave Behind?">
           <h2 class="article-title">What Does the City Leave Behind?</h2>
           
           <p class="article-p">
@@ -251,7 +263,7 @@
         </article>
 
         <!-- ARTICLE 2 -->
-        <article class="article">
+        <article class="article" data-title="Can Ugliness Be Visually Interesting?">
           <h2 class="article-title">Can Ugliness Be Visually Interesting?</h2>
 
           <p class="article-p">
@@ -286,7 +298,7 @@
         </article>
 
         <!-- ARTICLE 3 -->
-        <article class="article">
+        <article class="article" data-title="Where Does It Go?">
           <h2 class="article-title">Where Does It Go?</h2>
 
           <p class="article-p">
@@ -342,7 +354,55 @@
   </div>
 
   <script>
-    // 쓰레기 스티커 이미지 목록
+    // ----------------------------------------------------
+    // 1. 헤더 타이틀 동적 전환 로직 (Intersection Observer)
+    // ----------------------------------------------------
+    const headerTitle = document.getElementById("headerTitle");
+    const articles = document.querySelectorAll(".article");
+    let currentTitleText = "Text:";
+
+    function updateHeaderTitle(newText) {
+      if (currentTitleText === newText) return;
+      currentTitleText = newText;
+
+      // 부드러운 전환을 위한 페이드아웃 효과
+      headerTitle.classList.add("fade-out");
+      setTimeout(() => {
+        headerTitle.textContent = newText;
+        headerTitle.classList.remove("fade-out");
+      }, 200);
+    }
+
+    // 스크롤 시 각 아티클 위치 감지
+    function handleHeaderScroll() {
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const headerHeight = document.querySelector(".header").offsetHeight;
+      const triggerPoint = headerHeight + 100; // 헤더 바로 밑 감지 영역
+
+      let activeArticleTitle = "Text:";
+
+      articles.forEach(article => {
+        const rect = article.getBoundingClientRect();
+        // 아티클 상단이 헤더 부근을 지나고 있으면서, 아티클 하단이 아직 남아있는 경우
+        if (rect.top <= triggerPoint && rect.bottom > triggerPoint) {
+          activeArticleTitle = article.getAttribute("data-title");
+        }
+      });
+
+      // 제일 맨 위로 돌아왔을 때 기본 'Text:' 복원
+      if (scrollY < 100) {
+        activeArticleTitle = "Text:";
+      }
+
+      updateHeaderTitle(activeArticleTitle);
+    }
+
+    window.addEventListener("scroll", handleHeaderScroll, { passive: true });
+
+
+    // ----------------------------------------------------
+    // 2. 쓰레기 스티커 콜라주 애니메이션
+    // ----------------------------------------------------
     const imageFiles = [
       "threenine_trash.png", "melon_trash.png", "snapple_trash.png", "pigeon_trash.png", 
       "gloves_trash.png", "cone_trash.png", "flour_trash.png", "paperbag_trash.png", 
@@ -352,7 +412,6 @@
       "blackbags_trash.png", "matcha_trash.png", "umbrella_trash.png", "ruler_trash.png"
     ];
 
-    // **이븐(Evenly)하게 분산 배치된 스티커 12개의 좌표 & 임계치 설정**
     const stickerConfigs = [
       { left: "3%",  top: "52%", width: "230px", rot: "-12deg", threshold: 0.05 },
       { left: "62%", top: "42%", width: "250px", rot: "15deg",  threshold: 0.12 },
@@ -376,7 +435,6 @@
     const randomImages = shuffle([...imageFiles]);
     const stickerElements = [];
 
-    // 스티커 동적 생성
     stickerConfigs.forEach((config, idx) => {
       const imgFile = randomImages[idx % randomImages.length];
       const div = document.createElement("div");
@@ -394,8 +452,7 @@
       stickerElements.push({ element: div, threshold: config.threshold });
     });
 
-    // 스크롤 진행도 계산 및 애니메이션 실행
-    function handleScroll() {
+    function handleStickerScroll() {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const progress = maxScroll > 0 ? scrollTop / maxScroll : 0;
@@ -409,9 +466,15 @@
       });
     }
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll);
-    handleScroll();
+    window.addEventListener("scroll", handleStickerScroll, { passive: true });
+    window.addEventListener("resize", () => {
+      handleStickerScroll();
+      handleHeaderScroll();
+    });
+
+    // 초기 실행
+    handleStickerScroll();
+    handleHeaderScroll();
   </script>
 
 </body>
