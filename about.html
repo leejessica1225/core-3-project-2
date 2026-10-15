@@ -2,10 +2,16 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Urban Mess: - Street View</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About: - Urban Mess</title>
   <style>
+    @font-face {
+      font-family: 'Lay Grotesk';
+      src: url('LayGrotesk-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+    }
+
     @font-face {
       font-family: 'Lay Grotesk';
       src: url('LayGrotesk-Regular.ttf') format('truetype');
@@ -13,425 +19,196 @@
       font-style: normal;
     }
 
-    * { 
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box; 
-      font-family: 'Lay Grotesk', sans-serif; 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Lay Grotesk', sans-serif;
       font-weight: 400;
     }
 
-    body, html { 
-      width: 100vw; 
-      height: 100%; 
-      height: 100dvh; 
-      overflow: hidden; 
-      background-color: #000; 
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #fff;
     }
 
-    #street-view {
+    .container {
+      display: flex;
+      flex-direction: column;
       width: 100vw;
       height: 100vh;
-      height: 100dvh;
+      position: relative;
     }
 
-    /* Home 버튼 (대소문자 수정) */
-    .home-btn {
-      position: fixed;
-      top: 30px;
-      right: 30px;
-      z-index: 100;
-      background: #ffffff;
-      color: #000000;
-      border: 1.5px solid #000000;
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      text-decoration: none;
-    }
-
-    /* 커스텀 오버레이 스티커 스타일 */
-    .custom-sticker-overlay {
-      position: absolute;
-      transform: translate(-50%, -50%);
-      pointer-events: auto;
-      cursor: pointer;
-      filter: drop-shadow(0 12px 24px rgba(0,0,0,0.5));
-      transition: transform 0.15s ease;
-    }
-
-    .custom-sticker-overlay:hover {
-      transform: translate(-50%, -50%) scale(1.08);
-    }
-
-    /* 스티커 정보 카드 팝업 */
-    .info-card-panel {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 360px;
-      background-color: #fff;
-      border-left: 2px solid #000;
+    .header {
+      padding: 14px 20px;
       border-bottom: 2px solid #000;
-      z-index: 200;
-      display: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-shrink: 0;
+    }
+
+    .header h1 {
+      font-size: 8.8vw;
+      line-height: 0.92;
+      font-weight: 500;
+      letter-spacing: -0.025em;
+    }
+
+    .nav-menu {
+      display: flex;
       flex-direction: column;
+      align-items: flex-end;
+      padding-top: 6px;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: #000;
+      font-size: 1.8vw;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-menu a:hover {
+      opacity: 0.6;
+    }
+
+
+    .main-content {
+      flex: 1;
+      background-color: #fff;
+      position: relative;
+      overflow-y: auto;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .about-section {
+      max-width: 1100px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+
+    .about-subtitle,
+    .about-caption,
+    .about-text,
+    .questions-list li,
+    .credits {
+      font-size: 1.8rem;
+      font-weight: 400;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
       color: #000;
     }
 
-    .info-card-panel.active {
+
+    .questions-list {
+      list-style: none;
+      margin-top: 16px;
       display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
-    /* 1. 타이틀 영역 */
-    .card-title-row {
-      padding: 14px 16px;
-      border-bottom: 2px solid #000;
-      font-size: 1.35rem;
-      font-weight: 400;
-      letter-spacing: -0.025em;
-      line-height: 1.1;
+    .questions-list li {
+      padding-left: 0;
+      border-left: none;
     }
 
-    /* 2. 중간 구역 (가변 높이 적용으로 material 잘림 방지) */
-    .card-middle-row {
+
+    .credits {
+      margin-top: 120px;
+      padding-top: 0;
+      border-top: none;
       display: flex;
-      border-bottom: 2px solid #000;
-      min-height: 160px;
-      height: auto; /* 내용 길이에 맞춰 자동으로 확장 */
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .card-image-box {
-      flex: 1;
-      padding: 12px;
+    .footer-box {
+      height: 5.6vh;
+      border-top: 2px solid #000;
+      background-color: #fff;
       display: flex;
       align-items: center;
-      justify-content: center;
-      border-right: 2px solid #000;
-      background-color: #fff;
-    }
-
-    .card-image-box img {
-      max-width: 90%;
-      max-height: 140px;
-      object-fit: contain;
-    }
-
-    /* Material (항목 많아져도 넘치지 않고 깔끔 정렬) */
-    .card-materials-box {
-      flex: 1.15;
-      padding: 14px 12px;
-      font-size: 1.05rem;
-      font-weight: 400;
-      line-height: 1.25;
-      color: #000;
-      word-break: break-word;
-      letter-spacing: -0.015em;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    /* 3. Description */
-    .card-description-row {
-      padding: 14px 16px;
-      font-size: 1.05rem;
-      font-weight: 400;
-      line-height: 1.3;
-      color: #000;
-      letter-spacing: -0.015em;
+      padding: 0 20px;
+      flex-shrink: 0;
     }
 
     @media (max-width: 768px) {
-      .info-card-panel {
-        width: 100vw;
-        top: auto;
-        bottom: 0;
-        border-left: none;
-        border-top: 2px solid #000;
+      .header h1 {
+        font-size: 12vw;
       }
-      .card-title-row { font-size: 1.2rem; }
-      .card-materials-box,
-      .card-description-row { font-size: 0.95rem; }
+      .nav-menu a {
+        font-size: 3.5vw;
+      }
+      .about-subtitle,
+      .about-caption,
+      .about-text,
+      .questions-list li,
+      .credits {
+        font-size: 1.2rem;
+      }
+      .credits {
+        margin-top: 80px;
+      }
     }
   </style>
-
-  <!-- Google Maps JavaScript API -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAM5AYPSJ3qDDdhUjPpZg4RqiaM-2en7y4"></script>
 </head>
 <body>
 
-  <a href="index.html" class="home-btn">Home</a>
-  <div id="street-view"></div>
+  <div class="container">
+    <div class="header">
+      <h1>About:</h1>
+      <nav class="nav-menu">
+        <a href="index.html">Home</a>
+      </nav>
+    </div>
 
-  <!-- 우측 상단 스티커 정보 카드 팝업 -->
-  <div class="info-card-panel" id="infoCard">
-    <div class="card-title-row" id="cardTitle">Title</div>
-    <div class="card-middle-row">
-      <div class="card-image-box">
-        <img id="cardImage" src="" alt="Sticker Preview">
+    <div class="main-content">
+      <div class="about-section">
+        <h2 class="about-subtitle">Urban Mess: An Exhibition of Things We Throw Away</h2>
+        <p class="about-caption">A photographic collection of discarded objects found on the streets of New York City.</p>
+
+        <p class="about-text">
+          New York is often described as a messy and chaotic city. While walking around the city, I started noticing all kinds of trash, random objects, and things left behind on the streets. At first, they just looked like mess, but the more I noticed them, the more interesting they became. Each one seemed to show a small part of the city’s everyday life.
+        </p>
+
+        <p class="about-text">
+          I started thinking about these discarded objects as part of an exhibition, with New York City itself becoming the gallery and the streets becoming the exhibition space. This website works as a map of that exhibition, allowing users to explore the collection and experience the city’s urban mess through the objects found throughout New York.
+        </p>
+
+        <div class="about-text">
+          <p>The project is centered around three questions:</p>
+          <ul class="questions-list">
+            <li>How and when does mess become part of a city’s character?</li>
+            <li>How can ugliness become visually interesting?</li>
+            <li>What does the mess of New York tell us about the people who live in it?</li>
+          </ul>
+        </div>
+
+        <p class="about-text">
+          The accompanying texts, “What Does the City Leave Behind?”, “Can Ugliness Be Visually Interesting?”, and “Where Does It Go?” explore what we leave behind, how we see the visual qualities of urban mess, and what happens to these objects after they are thrown away.
+        </p>
+
+        <div class="credits">
+          <p>Photographed by Jessica Lee</p>
+          <p>Researched by Jessica Lee</p>
+          <p>Designed by Jessica Lee</p>
+        </div>
       </div>
-      <div class="card-materials-box" id="cardMaterials">Materials</div>
     </div>
-    <div class="card-description-row" id="cardDescription">
-      An object found on the streets of New York City, capturing a moment of urban decay.
-    </div>
+
+    <div class="footer-box"></div>
   </div>
-
-  <script>
-    // 전달받은 24개 이미지 데이터베이스
-    const stickerData = {
-      "threenine_trash.png": {
-        title: "3 for $9",
-        materials: ["newsprint paper", "plastic trash bag", "ink"]
-      },
-      "melon_trash.png": {
-        title: "Perishing Flesh",
-        materials: ["melon rind", "seeds", "plastic shopping bag", "aluminum can"]
-      },
-      "snapple_trash.png": {
-        title: "Crushed Vessel",
-        materials: ["plastic beverage bottle", "vinyl", "paper label"]
-      },
-      "pigeon_trash.png": {
-        title: "Urban Sanctuary",
-        materials: ["feathers", "organic specimen"]
-      },
-      "gloves_trash.png": {
-        title: "High-Fives, No Hands",
-        materials: ["cotton", "latex", "nylon"]
-      },
-      "cone_trash.png": {
-        title: "Cone-tastrophe!",
-        materials: ["plastic", "rubber", "water", "concrete"]
-      },
-      "flour_trash.png": {
-        title: "Spilled White on Iron",
-        materials: ["cast iron", "steel", "powder", "paper", "concrete"]
-      },
-      "paperbag_trash.png": {
-        title: "Crumpled Kraft",
-        materials: ["light brown crumpled paper bag", "ink"]
-      },
-      "redbag_trash.png": {
-        title: "Crimson Takeout",
-        materials: ["red plastic bag", "paper box", "food residue", "vinyl"]
-      },
-      "orangebox_trash.png": {
-        title: "Bound Memory of Commerce",
-        materials: ["cardboard", "paper box", "plastic twine", "ink"]
-      },
-      "can_trash.png": {
-        title: "Metallic Echoes",
-        materials: ["aluminum cans", "metal lids", "printed ink"]
-      },
-      "sweater_trash.png": {
-        title: "Abandoned Fabric and Flora",
-        materials: ["cotton", "polyester", "organic matter"]
-      },
-      "cvs_trash.png": {
-        title: "Paper Heart",
-        materials: ["paper shopping bag", "steel", "cast iron", "wood"]
-      },
-      "scrapwood_trash.png": {
-        title: "Jenga: Hardcore Edition",
-        materials: ["scrap wood", "plastic", "vinyl", "rubber", "steel"]
-      },
-      "fence_trash.png": {
-        title: "Do Not Cross",
-        materials: ["galvanized steel", "yellow caution tape", "vinyl", "plastic"]
-      },
-      "waterpipe_trash.png": {
-        title: "Shattered Flow",
-        materials: ["cast iron", "paint", "water", "concrete", "asphalt"]
-      },
-      "boxes_trash.png": {
-        title: "Compressed Strata",
-        materials: ["cardboard", "pulp molded tray", "steel", "twine"]
-      },
-      "trashcan_trash.png": {
-        title: "Sugary Chaos Bouquet",
-        materials: ["paper", "plastic", "vinyl", "aluminum", "food waste"]
-      },
-      "yellowbag_trash.png": {
-        title: "Clear Heap",
-        materials: ["plastic trash bags", "polystyrene foam", "plastic", "aluminum can"]
-      },
-      "newspaper_trash.png": {
-        title: "One Angry Juror",
-        materials: ["newsprint paper", "rubber band", "string", "paper coffee cup", "plastic lid"]
-      },
-      "blackbags_trash.png": {
-        title: "Dark Volume",
-        materials: ["plastic trash bags", "plastic bucket", "cardboard", "mixed waste"]
-      },
-      "matcha_trash.png": {
-        title: "Iced Siren",
-        materials: ["plastic cup", "plastic lid", "plastic straw", "matcha residue"]
-      },
-      "umbrella_trash.png": {
-        title: "Blue Shelter",
-        materials: ["polyester fabric", "steel", "plastic", "fiberglass"]
-      },
-      "ruler_trash.png": {
-        title: "Abandoned Game",
-        materials: ["Wood", "printed paper", "metal", "plastic", "cardboard"]
-      }
-    };
-
-    const imageFiles = Object.keys(stickerData);
-    let activeOverlays = [];
-    let currentSelectedImage = null;
-
-    function shuffle(array) {
-      return array.sort(() => Math.random() - 0.5);
-    }
-
-    // 스티커 토글 및 내용 업데이트
-    function toggleInfoCard(imgFile) {
-      const card = document.getElementById("infoCard");
-
-      if (card.classList.contains("active") && currentSelectedImage === imgFile) {
-        closeInfoCard();
-        return;
-      }
-
-      currentSelectedImage = imgFile;
-
-      const data = stickerData[imgFile] || {
-        title: "Urban Artifact",
-        materials: ["mixed waste"]
-      };
-
-      document.getElementById("cardTitle").textContent = data.title;
-      document.getElementById("cardImage").src = `./${imgFile}`;
-      
-      // 재질 데이터에서 마지막 요소만 쉼표 없이 출력
-      const matList = data.materials.map(m => m.trim().replace(/,$/, ''));
-      const formattedMaterials = matList
-        .map((item, idx) => (idx === matList.length - 1 ? item : `${item},`))
-        .join('<br>');
-
-      document.getElementById("cardMaterials").innerHTML = formattedMaterials;
-
-      card.classList.add("active");
-    }
-
-    function closeInfoCard() {
-      document.getElementById("infoCard").classList.remove("active");
-      currentSelectedImage = null;
-    }
-
-    // 커스텀 스티커 오버레이 클래스
-    class StickerOverlay extends google.maps.OverlayView {
-      constructor(position, image, size) {
-        super();
-        this.position = position;
-        this.image = image;
-        this.size = size;
-        this.div = null;
-      }
-
-      onAdd() {
-        this.div = document.createElement("div");
-        this.div.className = "custom-sticker-overlay";
-        const img = document.createElement("img");
-        img.src = `./${this.image}`;
-        img.style.width = `${this.size}px`;
-        this.div.appendChild(img);
-
-        this.div.addEventListener("click", (e) => {
-          e.stopPropagation();
-          toggleInfoCard(this.image);
-        });
-
-        const panes = this.getPanes();
-        panes.overlayLayer.appendChild(this.div);
-      }
-
-      draw() {
-        const overlayProjection = this.getProjection();
-        if (!overlayProjection) return;
-        const point = overlayProjection.fromLatLngToDivPixel(this.position);
-        if (point && this.div) {
-          this.div.style.left = point.x + "px";
-          this.div.style.top = point.y + "px";
-        }
-      }
-
-      onRemove() {
-        if (this.div) {
-          this.div.parentNode.removeChild(this.div);
-          this.div = null;
-        }
-      }
-    }
-
-    function clearStickers() {
-      activeOverlays.forEach(overlay => overlay.setMap(null));
-      activeOverlays = [];
-    }
-
-    function spawnNewStickers(panorama) {
-      clearStickers();
-
-      const currentPos = panorama.getPosition();
-      if (!currentPos) return;
-
-      const lat = currentPos.lat();
-      const lng = currentPos.lng();
-
-      const selectedImages = shuffle([...imageFiles]).slice(0, 3);
-
-      const offsets = [
-        { dLat: 0.00004 + Math.random() * 0.00003, dLng: 0.00003 + Math.random() * 0.00003 },
-        { dLat: -0.00004 - Math.random() * 0.00003, dLng: -0.00003 - Math.random() * 0.00003 },
-        { dLat: 0.00005 - Math.random() * 0.00002, dLng: -0.00004 + Math.random() * 0.00002 }
-      ];
-
-      selectedImages.forEach((imgFile, index) => {
-        const targetLat = lat + offsets[index].dLat;
-        const targetLng = lng + offsets[index].dLng;
-        const size = Math.floor(Math.random() * 120) + 260;
-
-        const overlay = new StickerOverlay(
-          new google.maps.LatLng(targetLat, targetLng),
-          imgFile,
-          size
-        );
-        overlay.setMap(panorama);
-        activeOverlays.push(overlay);
-      });
-    }
-
-    function initStreetView() {
-      const panoramaPos = { lat: 40.7340891, lng: -73.9831388 };
-
-      const panorama = new google.maps.StreetViewPanorama(
-        document.getElementById("street-view"),
-        {
-          position: panoramaPos,
-          pov: { heading: 6.44, pitch: -10 },
-          zoom: 1,
-          disableDefaultUI: true
-        }
-      );
-
-      panorama.addListener("click", () => {
-        closeInfoCard();
-      });
-
-      google.maps.event.addListenerOnce(panorama, 'position_changed', () => {
-        spawnNewStickers(panorama);
-      });
-
-      panorama.addListener('position_changed', () => {
-        spawnNewStickers(panorama);
-        closeInfoCard();
-      });
-    }
-
-    window.onload = initStreetView;
-  </script>
 
 </body>
 </html>
