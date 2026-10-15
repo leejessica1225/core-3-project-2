@@ -35,7 +35,7 @@
       height: 100dvh;
     }
 
-    /* HOME 버튼 */
+    /* Home 버튼 (대소문자 수정) */
     .home-btn {
       position: fixed;
       top: 30px;
@@ -63,12 +63,12 @@
       transform: translate(-50%, -50%) scale(1.08);
     }
 
-    /* 스티커 정보 카드 팝업 (Material 수용하도록 360px로 여유롭게 확장) */
+    /* 스티커 정보 카드 팝업 */
     .info-card-panel {
       position: fixed;
       top: 0;
       right: 0;
-      width: 360px; /* 310px에서 360px로 늘려 가로 공간 확보 */
+      width: 360px;
       background-color: #fff;
       border-left: 2px solid #000;
       border-bottom: 2px solid #000;
@@ -92,11 +92,12 @@
       line-height: 1.1;
     }
 
-    /* 2. 중간 구역 (높이 170px로 확대하여 세로 잘림 완벽 방지) */
+    /* 2. 중간 구역 (가변 높이 적용으로 material 잘림 방지) */
     .card-middle-row {
       display: flex;
       border-bottom: 2px solid #000;
-      min-height: 170px;
+      min-height: 160px;
+      height: auto; /* 내용 길이에 맞춰 자동으로 확장 */
     }
 
     .card-image-box {
@@ -111,14 +112,14 @@
 
     .card-image-box img {
       max-width: 90%;
-      max-height: 90%;
+      max-height: 140px;
       object-fit: contain;
     }
 
-    /* Material: 가로 비율 flex: 1.1 확장 및 폰트 수용성 극대화 */
+    /* Material (항목 많아져도 넘치지 않고 깔끔 정렬) */
     .card-materials-box {
-      flex: 1.1;
-      padding: 12px 12px;
+      flex: 1.15;
+      padding: 14px 12px;
       font-size: 1.05rem;
       font-weight: 400;
       line-height: 1.25;
@@ -159,7 +160,7 @@
 </head>
 <body>
 
-  <a href="index.html" class="home-btn">HOME</a>
+  <a href="index.html" class="home-btn">Home</a>
   <div id="street-view"></div>
 
   <!-- 우측 상단 스티커 정보 카드 팝업 -->
@@ -304,12 +305,10 @@
       document.getElementById("cardTitle").textContent = data.title;
       document.getElementById("cardImage").src = `./${imgFile}`;
       
-      // 마지막 항목에는 쉼표(,)를 붙이지 않고 그 외 항목에만 쉼표 적용
-      const formattedMaterials = data.materials
-        .map((m, index) => {
-          const isLast = index === data.materials.length - 1;
-          return isLast ? m.trim() : `${m.trim()},`;
-        })
+      // 재질 데이터에서 마지막 요소만 쉼표 없이 출력
+      const matList = data.materials.map(m => m.trim().replace(/,$/, ''));
+      const formattedMaterials = matList
+        .map((item, idx) => (idx === matList.length - 1 ? item : `${item},`))
         .join('<br>');
 
       document.getElementById("cardMaterials").innerHTML = formattedMaterials;
