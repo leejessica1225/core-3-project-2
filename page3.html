@@ -35,12 +35,108 @@
       text-decoration: none;
     }
 
-    /* 커스텀 오버레이 스티커 스타일 */
+    /* 커스텀 오버레이 스티커 스타일 (클릭 가능하도록 pointer-events: auto 적용) */
     .custom-sticker-overlay {
       position: absolute;
       transform: translate(-50%, -50%);
-      pointer-events: none;
+      pointer-events: auto;
+      cursor: pointer;
       filter: drop-shadow(0 12px 24px rgba(0,0,0,0.5));
+      transition: transform 0.15s ease;
+    }
+
+    .custom-sticker-overlay:hover {
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    /* 스티커 클릭 시 우측 상단에 뜨는 정보 카드 팝업 (레퍼런스 디자인 100% 동일) */
+    .info-card-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 380px;
+      background-color: #fff;
+      border-left: 2px solid #000;
+      border-bottom: 2px solid #000;
+      z-index: 200;
+      display: none; /* 클릭 전에는 숨김 */
+      flex-direction: column;
+      color: #000;
+    }
+
+    .info-card-panel.active {
+      display: flex;
+    }
+
+    /* 카드 헤더 (제목 + 닫기 버튼) */
+    .card-title-row {
+      padding: 16px 20px;
+      border-bottom: 2px solid #000;
+      font-size: 1.6rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close-card-btn {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 4px;
+    }
+
+    /* 중간 2열 구조 (왼쪽: 스티커 이미지, 오른쪽: 재질 정보) */
+    .card-middle-row {
+      display: flex;
+      border-bottom: 2px solid #000;
+      min-height: 180px;
+    }
+
+    .card-image-box {
+      flex: 1.2;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 2px solid #000;
+      background-color: #fff;
+    }
+
+    .card-image-box img {
+      max-width: 100%;
+      max-height: 140px;
+      object-fit: contain;
+    }
+
+    .card-materials-box {
+      flex: 0.8;
+      padding: 16px 14px;
+      font-size: 1.05rem;
+      line-height: 1.35;
+      color: #000;
+      word-break: break-word;
+    }
+
+    /* 하단 설명 텍스트 구조 */
+    .card-description-row {
+      padding: 18px 20px;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      color: #000;
+    }
+
+    @media (max-width: 768px) {
+      .info-card-panel {
+        width: 100vw;
+        top: auto;
+        bottom: 0;
+        border-left: none;
+        border-top: 2px solid #000;
+      }
     }
   </style>
 
@@ -52,7 +148,50 @@
   <a href="index.html" class="home-btn">HOME</a>
   <div id="street-view"></div>
 
+  <!-- 우측 상단 스티커 정보 카드 팝업 -->
+  <div class="info-card-panel" id="infoCard">
+    <div class="card-title-row">
+      <span id="cardTitle">Cone-tastrophe!</span>
+      <button class="close-card-btn" onclick="closeInfoCard()">✕</button>
+    </div>
+    <div class="card-middle-row">
+      <div class="card-image-box">
+        <img id="cardImage" src="./cone_trash.png" alt="Sticker Preview">
+      </div>
+      <div class="card-materials-box" id="cardMaterials">
+        plastic,<br>rubber,<br>water,<br>concrete
+      </div>
+    </div>
+    <div class="card-description-row" id="cardDescription">
+      description blah blah blah Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ut ligula eu purus viverra finibus quis vel neque. Fusce eget tempus tellus.
+    </div>
+  </div>
+
   <script>
+    // 이미지 파일 및 기본 스티커 데이터베이스 (필요 시 수정/확장 가능)
+    const stickerData = {
+      "cone_trash.png": {
+        title: "Cone-tastrophe!",
+        materials: "plastic,<br>rubber,<br>water,<br>concrete",
+        description: "description blah blah blah Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ut ligula eu purus viverra finibus quis vel neque. Fusce eget tempus tellus. Morbi sed ultrices leo. Aliquam eu enim volutpat, hendrerit enim ut, sollicitudin ex."
+      },
+      "pigeon_trash.png": {
+        title: "Urban Pigeon",
+        materials: "organic matter,<br>feathers,<br>beak",
+        description: "A familiar winged resident navigating the pavement of New York City, foraging among the discarded remnants of daily human consumption."
+      },
+      "matcha_trash.png": {
+        title: "Iced Matcha Cup",
+        materials: "plastic,<br>straw,<br>liquid waste,<br>ice",
+        description: "A half-empty clear plastic coffee cup abandoned on the sidewalk, reflecting the fast-paced daily coffee run culture."
+      },
+      "threenine_trash.png": {
+        title: "Discarded Bag",
+        materials: "plastic, vinyl, paper",
+        description: "Found plastic bag crumpled near Broadway curb."
+      }
+    };
+
     const imageFiles = [
       "threenine_trash.png", "melon_trash.png", "snapple_trash.png", "pigeon_trash.png", 
       "gloves_trash.png", "cone_trash.png", "flour_trash.png", "paperbag_trash.png", 
@@ -62,10 +201,31 @@
       "blackbags_trash.png", "matcha_trash.png", "umbrella_trash.png", "ruler_trash.png"
     ];
 
-    let activeOverlays = []; // 현재 화면에 떠 있는 오버레이 관리 배열
+    let activeOverlays = [];
 
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
+    }
+
+    // 카드 정보 업데이트 및 열기 함수
+    function openInfoCard(imgFile) {
+      const data = stickerData[imgFile] || {
+        title: imgFile.replace('_trash.png', '').replace('_', ' ').toUpperCase(),
+        materials: "plastic,<br>paper,<br>mixed waste",
+        description: "An object found on the streets of New York City, capturing a moment of urban decay and daily consumption."
+      };
+
+      document.getElementById("cardTitle").textContent = data.title;
+      document.getElementById("cardImage").src = `./${imgFile}`;
+      document.getElementById("cardMaterials").innerHTML = data.materials;
+      document.getElementById("cardDescription").textContent = data.description;
+
+      document.getElementById("infoCard").classList.add("active");
+    }
+
+    // 카드 닫기 함수
+    function closeInfoCard() {
+      document.getElementById("infoCard").classList.remove("active");
     }
 
     // 커스텀 스티커 오버레이 클래스
@@ -85,6 +245,12 @@
         img.src = `./${this.image}`;
         img.style.width = `${this.size}px`;
         this.div.appendChild(img);
+
+        // 스티커 이미지 클릭 시 우측 상단 정보 카드 표시
+        this.div.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openInfoCard(this.image);
+        });
 
         const panes = this.getPanes();
         panes.overlayLayer.appendChild(this.div);
@@ -126,7 +292,6 @@
 
       const selectedImages = shuffle([...imageFiles]).slice(0, 3);
 
-      // 현재 위치 주변 무작위 시야 좌표 계산 오프셋
       const offsets = [
         { dLat: 0.00004 + Math.random() * 0.00003, dLng: 0.00003 + Math.random() * 0.00003 },
         { dLat: -0.00004 - Math.random() * 0.00003, dLng: -0.00003 - Math.random() * 0.00003 },
@@ -136,7 +301,7 @@
       selectedImages.forEach((imgFile, index) => {
         const targetLat = lat + offsets[index].dLat;
         const targetLng = lng + offsets[index].dLng;
-        const size = Math.floor(Math.random() * 120) + 260; // 큰 사이즈 유지
+        const size = Math.floor(Math.random() * 120) + 260;
 
         const overlay = new StickerOverlay(
           new google.maps.LatLng(targetLat, targetLng),
@@ -161,14 +326,20 @@
         }
       );
 
+      // 스트릿뷰 배경 클릭 시 카드 닫기
+      panorama.addListener("click", () => {
+        closeInfoCard();
+      });
+
       // 1. 초기 생성
       google.maps.event.addListenerOnce(panorama, 'position_changed', () => {
         spawnNewStickers(panorama);
       });
 
-      // 2. 사용자가 클릭해서 위치(스트릿)를 이동할 때마다 새로 배치
+      // 2. 위치 이동 시 새로 배치
       panorama.addListener('position_changed', () => {
         spawnNewStickers(panorama);
+        closeInfoCard();
       });
     }
 
