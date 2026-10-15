@@ -18,7 +18,7 @@
       background-color: #fff;
     }
 
-    /* 화면 전체를 채우는 가로 스크롤 컨테이너 */
+ 
     .catalog-scroll-container {
       width: 100vw;
       height: 100vh;
@@ -29,10 +29,10 @@
       align-items: center;
       -webkit-overflow-scrolling: touch;
       cursor: grab;
-      scrollbar-width: none; /* 파이어폭스 스크롤바 숨김 */
+      scrollbar-width: none; 
     }
 
-    /* 크롬/사파리 스크롤바 숨김 */
+    
     .catalog-scroll-container::-webkit-scrollbar {
       display: none;
     }
@@ -41,37 +41,36 @@
       cursor: grabbing;
     }
 
-    /* 이미지 트랙: 이미지 사이 여백(gap) 지정 */
+   
     .catalog-track {
       display: flex;
       height: 100vh;
       align-items: center;
-      gap: 120px; /* 이미지 간 여백 (원하시는 만큼 수치 조절 가능) */
-      padding-right: 120px; /* 무한 연결 시 자연스러운 간격 유지 */
+      gap: 60px; 
+      padding-right: 60px; 
     }
 
-    /* 이미지 스타일: 비율 유지하며 꽉 채움 */
+   
     .catalog-track img {
       height: 100vh;
       width: auto;
       display: block;
       object-fit: contain;
-      pointer-events: none; /* 드래그 시 이미지 선택 방지 */
+      pointer-events: none; 
     }
   </style>
 </head>
 <body>
 
-  <!-- 무한 가로 스크롤 영역 -->
+
   <main class="catalog-scroll-container" id="scrollContainer">
     <div class="catalog-track" id="catalogTrack">
-      <!-- 1차 원본 세트 -->
+
       <img src="urban mess final print3.jpg" alt="Urban Mess Catalog 3">
       <img src="urban mess final print4.jpg" alt="Urban Mess Catalog 4">
       <img src="urban mess final print5.jpg" alt="Urban Mess Catalog 5">
       <img src="urban mess final print6.jpg" alt="Urban Mess Catalog 6">
 
-      <!-- 무한 순환용 복제 세트 -->
       <img src="urban mess final print3.jpg" alt="Urban Mess Catalog 3">
       <img src="urban mess final print4.jpg" alt="Urban Mess Catalog 4">
       <img src="urban mess final print5.jpg" alt="Urban Mess Catalog 5">
@@ -83,27 +82,19 @@
     const scrollContainer = document.getElementById('scrollContainer');
     const catalogTrack = document.getElementById('catalogTrack');
 
-    // ----------------------------------------------------
-    // 1. 무한 가로 스크롤 루프 (Infinite Scroll Loop)
-    // ----------------------------------------------------
+
     function handleInfiniteScroll() {
-      // 1세트(4개 이미지 + 여백)의 전체 넓이 계산
       const halfWidth = catalogTrack.scrollWidth / 2;
 
-      // 스크롤이 끝쪽(복제본)에 다다르면 시분초 차이 없이 1세트 지점으로 위치 리셋
       if (scrollContainer.scrollLeft >= halfWidth) {
         scrollContainer.scrollLeft -= halfWidth;
       } else if (scrollContainer.scrollLeft <= 0) {
-        // 왼쪽으로 역스크롤 시에도 무한 순환되도록 처리
         scrollContainer.scrollLeft += halfWidth;
       }
     }
 
     scrollContainer.addEventListener('scroll', handleInfiniteScroll, { passive: true });
 
-    // ----------------------------------------------------
-    // 2. 마우스 휠(상하 스크롤) -> 가로 스크롤 전환
-    // ----------------------------------------------------
     scrollContainer.addEventListener('wheel', (e) => {
       if (e.deltaY !== 0 || e.deltaX !== 0) {
         e.preventDefault();
@@ -111,9 +102,7 @@
       }
     }, { passive: false });
 
-    // ----------------------------------------------------
-    // 3. 마우스 드래그 가로 스크롤
-    // ----------------------------------------------------
+   
     let isDown = false;
     let startX;
     let scrollLeft;
