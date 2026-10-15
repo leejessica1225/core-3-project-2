@@ -56,10 +56,10 @@
       display: none !important;
     }
 
-    /* 1. Mapbox 좌표용 바깥 래퍼 (크기 84px) */
+    /* 1. Mapbox 좌표용 바깥 래퍼 (원래 기본 크기 24px) */
     .marker-container {
-      width: 84px;
-      height: 84px;
+      width: 24px;
+      height: 24px;
       cursor: pointer;
     }
 
@@ -81,7 +81,7 @@
       transition: transform 0.2s ease, opacity 0.2s ease;
     }
 
-    /* Hover 시 제자리에서 확대 */
+    /* Hover 시 제자리에서 약간 확대 */
     .marker-container:hover .pinpoint-icon {
       animation-play-state: paused;
       transform: scale(1.25);
@@ -104,11 +104,11 @@
       }
     }
 
-    /* 모바일 화면 대응 스타일 (모바일 크기 56px) */
+    /* 모바일 화면 대응 스타일 (원래 기본 크기 18px) */
     @media (max-width: 768px) {
       .marker-container {
-        width: 56px;
-        height: 56px;
+        width: 18px;
+        height: 18px;
       }
     }
   </style>
