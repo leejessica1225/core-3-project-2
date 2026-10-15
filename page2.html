@@ -39,7 +39,6 @@
       background-color: #d3d3d3;
     }
 
-    /* 반응형 지도 Viewport */
     #map {
       width: 100%;
       height: 100%;
@@ -47,7 +46,6 @@
       opacity: 1;
     }
 
-    /* Mapbox 기본 컨트롤러 및 속성/로고 숨김 */
     .mapboxgl-ctrl,
     .mapboxgl-ctrl-bottom-left,
     .mapboxgl-ctrl-bottom-right,
@@ -56,14 +54,14 @@
       display: none !important;
     }
 
-    /* 1. Mapbox 좌표용 바깥 래퍼 (기본 크기 24px) */
+    /* 1. Mapbox 좌표용 바깥 래퍼 */
     .marker-container {
       width: 24px;
       height: 24px;
       cursor: pointer;
     }
 
-    /* 2. pinpoint1.png 적용 및 화질/애니메이션 속성 */
+    /* 2. pinpoint1.png 적용 및 고해상도 다운스케일링 선명도 보정 */
     .pinpoint-icon {
       width: 100%;
       height: 100%;
@@ -72,7 +70,7 @@
       background-repeat: no-repeat;
       background-position: center;
 
-      /* 이미지 화질 선명도 보정 */
+      /* 브라우저 축소 시 경계선 뭉개짐 방지 및 선명도 극대화 옵션 */
       image-rendering: -webkit-optimize-contrast;
       image-rendering: crisp-edges;
 
@@ -81,14 +79,12 @@
       transition: transform 0.2s ease, opacity 0.2s ease;
     }
 
-    /* Hover 시 제자리에서 약간 확대 */
     .marker-container:hover .pinpoint-icon {
       animation-play-state: paused;
       transform: scale(1.25);
       opacity: 1;
     }
 
-    /* 깜빡임 Keyframes */
     @keyframes blink {
       0% {
         opacity: 1;
@@ -104,7 +100,6 @@
       }
     }
 
-    /* 모바일 화면 대응 스타일 (기본 크기 18px) */
     @media (max-width: 768px) {
       .marker-container {
         width: 18px;
@@ -120,10 +115,7 @@
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibGVlamVzc2ljYTEyMjUiLCJhIjoiY212MDBlY3djMDEwNzJ5cHlmcm4ydTY5biJ9._rFqHdB2lQ_6yt18e02VkQ';
 
-    // 1. 핀포인트 마커 위치 (StuyTown & East Village 사이)
     const markerCoords = [-73.9818, 40.7305];
-
-    // 2. 전체 화각이 다 보이도록 설정하는 지도 중심 좌표
     const mapCenterCoords = [-73.99013, 40.73108];
 
     const map = new mapboxgl.Map({
@@ -134,7 +126,6 @@
       fadeDuration: 0
     });
 
-    // 커스텀 마커 DOM 구조 생성 (바깥 래퍼 + 안쪽 아이콘)
     const containerEl = document.createElement('div');
     containerEl.className = 'marker-container';
 
@@ -142,13 +133,11 @@
     iconEl.className = 'pinpoint-icon';
     containerEl.appendChild(iconEl);
 
-    // 핀포인트 클릭 시 page3.html로 이동하는 이벤트 핸들러 추가
     containerEl.addEventListener('click', (e) => {
-      e.stopPropagation(); // 지도 자체의 클릭 이벤트와 충돌 방지
+      e.stopPropagation();
       window.location.href = 'page3.html';
     });
 
-    // Mapbox Marker 생성 및 지도 추가
     new mapboxgl.Marker({
       element: containerEl,
       anchor: 'center'
@@ -156,7 +145,6 @@
       .setLngLat(markerCoords)
       .addTo(map);
 
-    // 창 크기 변경 시 지도 재정렬
     window.addEventListener('resize', () => {
       map.resize();
     });
