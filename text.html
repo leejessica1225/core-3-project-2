@@ -41,13 +41,12 @@
       position: relative;
     }
 
-    /* 상단 헤더 고정: 고정 높이(100px)로 설정하여 밑줄 위치가 절대 변하지 않음 */
+    /* 상단 헤더 고정 - padding과 border 수치 완벽 고정 */
     .header {
       position: sticky;
       top: 0;
       background-color: #fff;
-      padding: 0 20px;
-      height: 100px; /* 원래 고정 높이 */
+      padding: 14px 20px;
       border-bottom: 2px solid #000;
       display: flex;
       justify-content: space-between;
@@ -55,33 +54,24 @@
       z-index: 100;
     }
 
-    /* 헤더 타이틀 지직거림 및 흔들림 방지 최적화 */
+    /* 지직거림 및 트랜지션 오차를 없앤 깔끔한 타이틀 */
     .header h1 {
       font-size: 5.4vw;
-      line-height: 100px; /* 헤더 높이와 맞춰 지직거림 완벽 제거 */
+      line-height: 0.92;
       font-weight: 500;
       letter-spacing: -0.025em;
       white-space: nowrap;
       overflow: hidden;
+      text-overflow: ellipsis;
       max-width: 82vw;
-      
-      /* 하드웨어 가속 및 부드러운 페이드 효과 */
-      transition: opacity 0.2s ease;
-      will-change: opacity;
-      transform: translateZ(0);
-      backface-visibility: hidden;
     }
 
-    .header h1.fade-out {
-      opacity: 0;
-    }
-
-    /* Home 링크 원래 위치 고정 */
+    /* Home 링크 위치 고정 */
     .nav-menu {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      padding-top: 22px; /* 헤더 높이 100px 기준 상단 정렬 레이아웃 맞춤 */
+      padding-top: 6px;
     }
 
     .nav-menu a {
@@ -194,16 +184,9 @@
     }
 
     @media (max-width: 768px) {
-      .header {
-        height: 70px;
-      }
       .header h1 {
         font-size: 6.8vw;
-        line-height: 70px;
         max-width: 75vw;
-      }
-      .nav-menu {
-        padding-top: 16px;
       }
       .nav-menu a {
         font-size: 3.5vw;
@@ -367,46 +350,29 @@
 
   <script>
     // ----------------------------------------------------
-    // 1. 헤더 타이틀 동적 전환 로직
+    // 1. IntersectionObserver 기반 고성능 제목 전환 (지직거림 0%)
     // ----------------------------------------------------
     const headerTitle = document.getElementById("headerTitle");
     const articles = document.querySelectorAll(".article");
-    const defaultTitle = "What Does the City Leave Behind?";
-    let currentTitleText = defaultTitle;
 
-    function updateHeaderTitle(newText) {
-      if (currentTitleText === newText) return;
-      currentTitleText = newText;
+    const observerOptions = {
+      root: null,
+      rootMargin: "-80px 0px -70% 0px", // 헤더 직하단 영역 들어오는 순간 감지
+      threshold: 0
+    };
 
-      headerTitle.classList.add("fade-out");
-      setTimeout(() => {
-        headerTitle.textContent = newText;
-        headerTitle.classList.remove("fade-out");
-      }, 180);
-    }
-
-    function handleHeaderScroll() {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const headerHeight = document.querySelector(".header").offsetHeight;
-      const triggerPoint = headerHeight + 100;
-
-      let activeArticleTitle = defaultTitle;
-
-      articles.forEach(article => {
-        const rect = article.getBoundingClientRect();
-        if (rect.top <= triggerPoint && rect.bottom > triggerPoint) {
-          activeArticleTitle = article.getAttribute("data-title");
+    const titleObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const newTitle = entry.target.getAttribute("data-title");
+          if (headerTitle.textContent !== newTitle) {
+            headerTitle.textContent = newTitle; // 딜레이 없이 즉시 교체하여 지직거림 방지
+          }
         }
       });
+    }, observerOptions);
 
-      if (scrollY < 100) {
-        activeArticleTitle = defaultTitle;
-      }
-
-      updateHeaderTitle(activeArticleTitle);
-    }
-
-    window.addEventListener("scroll", handleHeaderScroll, { passive: true });
+    articles.forEach(article => titleObserver.observe(article));
 
 
     // ----------------------------------------------------
@@ -476,14 +442,10 @@
     }
 
     window.addEventListener("scroll", handleStickerScroll, { passive: true });
-    window.addEventListener("resize", () => {
-      handleStickerScroll();
-      handleHeaderScroll();
-    });
+    window.addEventListener("resize", handleStickerScroll);
 
     // 초기 실행
     handleStickerScroll();
-    handleHeaderScroll();
   </script>
 
 </body>
