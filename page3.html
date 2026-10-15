@@ -35,7 +35,7 @@
       height: 100dvh;
     }
 
-    /* Home 버튼 */
+    /* Home 버튼 (다른 페이지 네비게이션과 동일한 font-size 1.8vw 적용) */
     .home-btn {
       position: fixed;
       top: 30px;
@@ -45,7 +45,9 @@
       color: #000000;
       border: 1.5px solid #000000;
       padding: 8px 16px;
-      font-size: 0.9rem;
+      font-size: 1.8vw;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
       text-decoration: none;
     }
 
@@ -109,7 +111,7 @@
       justify-content: center;
       border-right: 2px solid #000;
       background-color: #fff;
-      overflow: hidden; /* 배율 확대로 인한 영역 이탈 방지 */
+      overflow: hidden;
     }
 
     .card-image-box img {
@@ -144,6 +146,9 @@
     }
 
     @media (max-width: 768px) {
+      .home-btn {
+        font-size: 3.5vw;
+      }
       .info-card-panel {
         width: 100vw;
         top: auto;
@@ -180,7 +185,6 @@
   </div>
 
   <script>
-    // 각 스티커 이미지 크기 조정을 위한 scale 매핑 추가
     const stickerData = {
       "threenine_trash.png": {
         title: "3 for $9",
@@ -192,25 +196,25 @@
         title: "Perishing Flesh",
         materials: ["melon rind", "seeds", "plastic shopping bag", "aluminum can"],
         description: "A hollowed-out melon rind lying beside a plastic shopping bag, a rare organic fragment on the hard city concrete.",
-        scale: 3.0 // 3배 확대
+        scale: 1.9
       },
       "snapple_trash.png": {
         title: "Crushed Vessel",
         materials: ["plastic beverage bottle", "vinyl", "paper label"],
         description: "A flattened plastic juice bottle resting on the concrete, reflecting the quick, disposable rhythm of street life.",
-        scale: 3.2 // 3.2배 확대
+        scale: 2.1
       },
       "pigeon_trash.png": {
         title: "Urban Sanctuary",
         materials: ["feathers", "organic specimen"],
         description: "A calm pigeon nestled quietly on the sidewalk, finding a moment of rest amidst the relentless city rush.",
-        scale: 3.0 // 3배 확대
+        scale: 1.95
       },
       "gloves_trash.png": {
         title: "High-Fives, No Hands",
         materials: ["cotton", "latex", "nylon"],
         description: "Worn-out pink work gloves scattered on the pavement, resting after a long day of unseen urban labor.",
-        scale: 3.2 // 3.2배 확대
+        scale: 2.0
       },
       "cone_trash.png": {
         title: "Cone-tastrophe!",
@@ -228,7 +232,7 @@
         title: "Crumpled Kraft",
         materials: ["light brown crumpled paper bag", "ink"],
         description: "A heavily creased brown paper bag sitting alone on the ground, holding the forgotten warmth of a past errand.",
-        scale: 3.5 // 3.5배 확대
+        scale: 2.2
       },
       "redbag_trash.png": {
         title: "Crimson Takeout",
@@ -240,13 +244,13 @@
         title: "Bound Memory of Commerce",
         materials: ["cardboard", "paper box", "plastic twine", "ink"],
         description: "A neat stack of crushed cardboard boxes tied with twine, waiting on the curb at the end of a busy business day.",
-        scale: 3.0 // 3배 확대
+        scale: 1.9
       },
       "can_trash.png": {
         title: "Metallic Echoes",
         materials: ["aluminum cans", "metal lids", "printed ink"],
         description: "Crushed aluminum cans and lids scattered on the pavement, glowing subtly under the streetlights.",
-        scale: 3.2 // 3.2배 확대
+        scale: 2.0
       },
       "sweater_trash.png": {
         title: "Abandoned Fabric and Flora",
@@ -300,7 +304,7 @@
         title: "One Angry Juror",
         materials: ["newsprint paper", "rubber band", "string", "paper coffee cup", "plastic lid"],
         description: "A bundle of discarded newspapers tied together next to a paper coffee cup, leaving yesterday's news behind on the curb.",
-        scale: 3.2 // 3.2배 확대
+        scale: 2.0
       },
       "blackbags_trash.png": {
         title: "Dark Volume",
@@ -312,19 +316,19 @@
         title: "Iced Siren",
         materials: ["plastic cup", "plastic lid", "plastic straw", "matcha residue"],
         description: "An abandoned iced matcha cup with melting condensation, a snapshot of a fleeting coffee break on the go.",
-        scale: 3.2 // 3.2배 확대
+        scale: 2.0
       },
       "umbrella_trash.png": {
         title: "Blue Shelter",
         materials: ["polyester fabric", "steel", "plastic", "fiberglass"],
         description: "A blue umbrella resting wide open on the sidewalk, left behind after a sudden New York downpour.",
-        scale: 2.8 // 2.8배 확대
+        scale: 1.8
       },
       "ruler_trash.png": {
         title: "Abandoned Game",
         materials: ["Wood", "printed paper", "metal", "plastic", "cardboard"],
         description: "A broken wooden game board tossed onto the sidewalk, a forgotten piece of late-night street entertainment.",
-        scale: 3.0 // 3배 확대
+        scale: 1.9
       }
     };
 
@@ -357,7 +361,6 @@
       
       const cardImg = document.getElementById("cardImage");
       cardImg.src = `./${imgFile}`;
-      // 이미지별 개별 scale 변환 적용
       cardImg.style.transform = `scale(${data.scale || 1.0})`;
 
       document.getElementById("cardDescription").textContent = data.description;
