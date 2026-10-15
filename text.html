@@ -86,7 +86,7 @@
       position: relative;
       flex: 1;
       background-color: #fff;
-      padding: 40px 20px 120px 20px;
+      padding: 40px 20px 0 20px;
       display: flex;
       flex-direction: column;
     }
@@ -126,7 +126,13 @@
       margin-top: 60px;
     }
 
-    /* 피그마 콜라주 스티커 오버레이 레이어 (텍스트보다 위로 오도록 z-index: 15로 수정) */
+    /* 텍스트가 끝난 후 화면 높이만큼 완전히 위로 밀어올릴 수 있게 만드는 여백 공간 */
+    .scroll-spacer {
+      height: 100vh;
+      width: 100%;
+    }
+
+    /* 피그마 콜라주 스티커 오버레이 레이어 (z-index: 15) */
     .collage-layer {
       position: fixed;
       top: 0;
@@ -327,6 +333,9 @@
         </article>
 
       </div>
+
+      <!-- 텍스트 종료 후 전체 화면 높이만큼 추가적인 스크롤 공간을 만드는 여백 블록 -->
+      <div class="scroll-spacer"></div>
     </div>
 
     <div class="footer-box"></div>
