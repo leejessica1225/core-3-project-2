@@ -8,12 +8,26 @@
   <style>
     @font-face {
       font-family: 'Lay Grotesk';
-      src: url('LayGrotesk-Medium.ttf') format('truetype');
-      font-weight: 500;
+      src: url('LayGrotesk-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Lay Grotesk', sans-serif; }
-    body, html { width: 100vw; height: 100%; height: 100dvh; overflow: hidden; background-color: #000; }
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      font-family: 'Lay Grotesk', sans-serif; 
+      font-weight: 400; /* 전체 Regular 폰트 적용 */
+    }
+
+    body, html { 
+      width: 100vw; 
+      height: 100%; 
+      height: 100dvh; 
+      overflow: hidden; 
+      background-color: #000; 
+    }
 
     #street-view {
       width: 100vw;
@@ -35,7 +49,7 @@
       text-decoration: none;
     }
 
-    /* 커스텀 오버레이 스티커 스타일 (클릭 가능하도록 pointer-events: auto 적용) */
+    /* 커스텀 오버레이 스티커 스타일 */
     .custom-sticker-overlay {
       position: absolute;
       transform: translate(-50%, -50%);
@@ -49,17 +63,17 @@
       transform: translate(-50%, -50%) scale(1.08);
     }
 
-    /* 스티커 클릭 시 우측 상단에 뜨는 정보 카드 팝업 (레퍼런스 디자인 100% 동일) */
+    /* 스티커 정보 카드 팝업 (우측 상단 고정) */
     .info-card-panel {
       position: fixed;
       top: 0;
       right: 0;
-      width: 380px;
+      width: 420px;
       background-color: #fff;
       border-left: 2px solid #000;
       border-bottom: 2px solid #000;
       z-index: 200;
-      display: none; /* 클릭 전에는 숨김 */
+      display: none;
       flex-direction: column;
       color: #000;
     }
@@ -68,37 +82,27 @@
       display: flex;
     }
 
-    /* 카드 헤더 (제목 + 닫기 버튼) */
+    /* 1. 타이틀 (Figma 36px 기준 -> 1.8rem) */
     .card-title-row {
-      padding: 16px 20px;
+      padding: 18px 20px;
       border-bottom: 2px solid #000;
-      font-size: 1.6rem;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 400;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
     }
 
-    .close-card-btn {
-      background: none;
-      border: none;
-      font-size: 1.4rem;
-      cursor: pointer;
-      line-height: 1;
-      padding: 0 4px;
-    }
-
-    /* 중간 2열 구조 (왼쪽: 스티커 이미지, 오른쪽: 재질 정보) */
+    /* 2. 중간 구역 (이미지 + 재질 정보) */
     .card-middle-row {
       display: flex;
       border-bottom: 2px solid #000;
-      min-height: 180px;
+      min-height: 220px;
     }
 
+    /* 이미지 크게 보이고 박스 안에서 일관성 유지 */
     .card-image-box {
-      flex: 1.2;
-      padding: 20px;
+      flex: 1.1;
+      padding: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -107,26 +111,32 @@
     }
 
     .card-image-box img {
-      max-width: 100%;
-      max-height: 140px;
+      width: 90%;
+      height: 90%;
       object-fit: contain;
     }
 
+    /* Material: 한 줄에 하나씩 표기 (Figma 28px 기준 -> 1.4rem) */
     .card-materials-box {
-      flex: 0.8;
-      padding: 16px 14px;
-      font-size: 1.05rem;
+      flex: 0.9;
+      padding: 18px 16px;
+      font-size: 1.4rem;
+      font-weight: 400;
       line-height: 1.35;
       color: #000;
+      white-space: pre-line; /* 줄바꿈 수직 정렬 가독성 향상 */
       word-break: break-word;
+      letter-spacing: -0.015em;
     }
 
-    /* 하단 설명 텍스트 구조 */
+    /* 3. Description (Figma 28px 기준 -> 1.4rem) */
     .card-description-row {
-      padding: 18px 20px;
-      font-size: 0.95rem;
-      line-height: 1.45;
+      padding: 20px;
+      font-size: 1.4rem;
+      font-weight: 400;
+      line-height: 1.35;
       color: #000;
+      letter-spacing: -0.015em;
     }
 
     @media (max-width: 768px) {
@@ -137,6 +147,9 @@
         border-left: none;
         border-top: 2px solid #000;
       }
+      .card-title-row { font-size: 1.4rem; }
+      .card-materials-box,
+      .card-description-row { font-size: 1.1rem; }
     }
   </style>
 
@@ -150,9 +163,8 @@
 
   <!-- 우측 상단 스티커 정보 카드 팝업 -->
   <div class="info-card-panel" id="infoCard">
-    <div class="card-title-row">
-      <span id="cardTitle">Cone-tastrophe!</span>
-      <button class="close-card-btn" onclick="closeInfoCard()">✕</button>
+    <div class="card-title-row" id="cardTitle">
+      Cone-tastrophe!
     </div>
     <div class="card-middle-row">
       <div class="card-image-box">
@@ -163,31 +175,31 @@
       </div>
     </div>
     <div class="card-description-row" id="cardDescription">
-      description blah blah blah Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ut ligula eu purus viverra finibus quis vel neque. Fusce eget tempus tellus.
+      description blah blah blah Lorem ipsum dolor sit amet.
     </div>
   </div>
 
   <script>
-    // 이미지 파일 및 기본 스티커 데이터베이스 (필요 시 수정/확장 가능)
+    // 재질(materials) 정보는 항상 한 줄에 '단어,' 형태로 줄바꿈되도록 데이터 정의
     const stickerData = {
       "cone_trash.png": {
         title: "Cone-tastrophe!",
         materials: "plastic,<br>rubber,<br>water,<br>concrete",
-        description: "description blah blah blah Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ut ligula eu purus viverra finibus quis vel neque. Fusce eget tempus tellus. Morbi sed ultrices leo. Aliquam eu enim volutpat, hendrerit enim ut, sollicitudin ex."
+        description: "description blah blah blah Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       },
       "pigeon_trash.png": {
         title: "Urban Pigeon",
         materials: "organic matter,<br>feathers,<br>beak",
-        description: "A familiar winged resident navigating the pavement of New York City, foraging among the discarded remnants of daily human consumption."
+        description: "A familiar winged resident navigating the pavement of New York City."
       },
       "matcha_trash.png": {
         title: "Iced Matcha Cup",
         materials: "plastic,<br>straw,<br>liquid waste,<br>ice",
-        description: "A half-empty clear plastic coffee cup abandoned on the sidewalk, reflecting the fast-paced daily coffee run culture."
+        description: "A half-empty clear plastic coffee cup abandoned on the sidewalk, reflecting daily coffee culture."
       },
-      "threenine_trash.png": {
+      "cvs_trash.png": {
         title: "Discarded Bag",
-        materials: "plastic, vinyl, paper",
+        materials: "plastic,<br>vinyl,<br>paper",
         description: "Found plastic bag crumpled near Broadway curb."
       }
     };
@@ -202,30 +214,47 @@
     ];
 
     let activeOverlays = [];
+    let currentSelectedImage = null;
 
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
     }
 
-    // 카드 정보 업데이트 및 열기 함수
-    function openInfoCard(imgFile) {
+    // 스티커 토글 및 내용 교체 함수 (동일 이미지 재클릭 시 닫기)
+    function toggleInfoCard(imgFile) {
+      const card = document.getElementById("infoCard");
+
+      if (card.classList.contains("active") && currentSelectedImage === imgFile) {
+        closeInfoCard();
+        return;
+      }
+
+      currentSelectedImage = imgFile;
+
       const data = stickerData[imgFile] || {
         title: imgFile.replace('_trash.png', '').replace('_', ' ').toUpperCase(),
         materials: "plastic,<br>paper,<br>mixed waste",
-        description: "An object found on the streets of New York City, capturing a moment of urban decay and daily consumption."
+        description: "An object found on the streets of New York City, capturing a moment of urban decay."
       };
 
       document.getElementById("cardTitle").textContent = data.title;
       document.getElementById("cardImage").src = `./${imgFile}`;
-      document.getElementById("cardMaterials").innerHTML = data.materials;
+      
+      // 쉼표로 연결된 재질 텍스트가 있을 경우 자동으로 한 줄에 하나씩 변환
+      let formattedMaterials = data.materials;
+      if (!formattedMaterials.includes('<br>')) {
+        formattedMaterials = formattedMaterials.split(',').map(m => m.trim() + ',').join('<br>');
+      }
+      
+      document.getElementById("cardMaterials").innerHTML = formattedMaterials;
       document.getElementById("cardDescription").textContent = data.description;
 
-      document.getElementById("infoCard").classList.add("active");
+      card.classList.add("active");
     }
 
-    // 카드 닫기 함수
     function closeInfoCard() {
       document.getElementById("infoCard").classList.remove("active");
+      currentSelectedImage = null;
     }
 
     // 커스텀 스티커 오버레이 클래스
@@ -246,10 +275,10 @@
         img.style.width = `${this.size}px`;
         this.div.appendChild(img);
 
-        // 스티커 이미지 클릭 시 우측 상단 정보 카드 표시
+        // 스티커 클릭 시 토글 실행
         this.div.addEventListener("click", (e) => {
           e.stopPropagation();
-          openInfoCard(this.image);
+          toggleInfoCard(this.image);
         });
 
         const panes = this.getPanes();
@@ -274,13 +303,11 @@
       }
     }
 
-    // 기존 오버레이 모두 제거 함수
     function clearStickers() {
       activeOverlays.forEach(overlay => overlay.setMap(null));
       activeOverlays = [];
     }
 
-    // 새로운 스티커 3개 배치 함수
     function spawnNewStickers(panorama) {
       clearStickers();
 
@@ -326,17 +353,15 @@
         }
       );
 
-      // 스트릿뷰 배경 클릭 시 카드 닫기
+      // 바탕화면(스트릿뷰) 클릭 시 창 닫기
       panorama.addListener("click", () => {
         closeInfoCard();
       });
 
-      // 1. 초기 생성
       google.maps.event.addListenerOnce(panorama, 'position_changed', () => {
         spawnNewStickers(panorama);
       });
 
-      // 2. 위치 이동 시 새로 배치
       panorama.addListener('position_changed', () => {
         spawnNewStickers(panorama);
         closeInfoCard();
