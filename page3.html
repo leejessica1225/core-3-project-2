@@ -68,7 +68,7 @@
       position: fixed;
       top: 0;
       right: 0;
-      width: 380px; /* 이미지 시원하게 보이도록 박스 가로 폭 확보 */
+      width: 380px;
       background-color: #fff;
       border-left: 2px solid #000;
       border-bottom: 2px solid #000;
@@ -82,7 +82,7 @@
       display: flex;
     }
 
-    /* 1. 타이틀 영역 (Figma 36px/1.8rem 유지) */
+    /* 1. 타이틀 영역 (Figma 36px / 1.8rem) */
     .card-title-row {
       padding: 16px 20px;
       border-bottom: 2px solid #000;
@@ -92,17 +92,16 @@
       line-height: 1.1;
     }
 
-    /* 2. 중간 구역 (이미지 박스 높이 확보) */
+    /* 2. 중간 구역 (이미지 + 재질) */
     .card-middle-row {
       display: flex;
       border-bottom: 2px solid #000;
       height: 190px;
     }
 
-    /* 이미지 박스: 여백 최소화 및 크게 보이기 */
     .card-image-box {
       flex: 1.2;
-      padding: 8px; /* 여백 줄여서 이미지 공간 최대화 */
+      padding: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -111,14 +110,13 @@
       overflow: hidden;
     }
 
-    /* 팝업 내 이미지 크기 대폭 확대 (95% 채움) */
     .card-image-box img {
       width: 95%;
       height: 95%;
       object-fit: contain;
     }
 
-    /* Material: 한 줄에 하나씩 표기 (Figma 28px/1.4rem 유지) */
+    /* Material: 한 줄에 단어 하나만 표기 (Figma 28px / 1.4rem) */
     .card-materials-box {
       flex: 0.8;
       padding: 16px 14px;
@@ -130,7 +128,7 @@
       letter-spacing: -0.015em;
     }
 
-    /* 3. Description (Figma 28px/1.4rem 유지) */
+    /* 3. Description (Figma 28px / 1.4rem) */
     .card-description-row {
       padding: 20px;
       font-size: 1.4rem;
@@ -164,60 +162,120 @@
 
   <!-- 우측 상단 스티커 정보 카드 팝업 -->
   <div class="info-card-panel" id="infoCard">
-    <div class="card-title-row" id="cardTitle">
-      Cone-tastrophe!
-    </div>
+    <div class="card-title-row" id="cardTitle">Title</div>
     <div class="card-middle-row">
       <div class="card-image-box">
-        <img id="cardImage" src="./cone_trash.png" alt="Sticker Preview">
+        <img id="cardImage" src="" alt="Sticker Preview">
       </div>
-      <div class="card-materials-box" id="cardMaterials">
-        plastic,<br>rubber,<br>water,<br>concrete
-      </div>
+      <div class="card-materials-box" id="cardMaterials">Materials</div>
     </div>
     <div class="card-description-row" id="cardDescription">
-      description blah blah blah Lorem ipsum dolor sit amet.
+      An object found on the streets of New York City, capturing a moment of urban decay.
     </div>
   </div>
 
   <script>
+    // 전달받은 24개 이미지 데이터베이스 (Title & Materials 매핑)
     const stickerData = {
-      "cone_trash.png": {
-        title: "Cone-tastrophe!",
-        materials: "plastic,<br>rubber,<br>water,<br>concrete",
-        description: "description blah blah blah Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      "threenine_trash.png": {
+        title: "3 for $9",
+        materials: ["newsprint paper", "plastic trash bag", "ink"]
+      },
+      "melon_trash.png": {
+        title: "Perishing Flesh",
+        materials: ["melon rind", "seeds", "plastic shopping bag", "aluminum can"]
+      },
+      "snapple_trash.png": {
+        title: "Crushed Vessel",
+        materials: ["plastic beverage bottle", "vinyl", "paper label"]
       },
       "pigeon_trash.png": {
-        title: "Urban Pigeon",
-        materials: "organic matter,<br>feathers,<br>beak",
-        description: "A familiar winged resident navigating the pavement of New York City."
-      },
-      "matcha_trash.png": {
-        title: "Iced Matcha Cup",
-        materials: "plastic,<br>straw,<br>liquid waste,<br>ice",
-        description: "A half-empty clear plastic coffee cup abandoned on the sidewalk, reflecting daily coffee culture."
-      },
-      "cvs_trash.png": {
-        title: "Discarded Bag",
-        materials: "plastic,<br>vinyl,<br>paper",
-        description: "Found plastic bag crumpled near Broadway curb."
+        title: "Urban Sanctuary",
+        materials: ["feathers", "organic specimen"]
       },
       "gloves_trash.png": {
-        title: "GLOVES",
-        materials: "plastic,<br>paper,<br>mixed waste",
-        description: "An object found on the streets of New York City, capturing a moment of urban decay."
+        title: "High-Fives, No Hands",
+        materials: ["cotton", "latex", "nylon"]
+      },
+      "cone_trash.png": {
+        title: "Cone-tastrophe!",
+        materials: ["plastic", "rubber", "water", "concrete"]
+      },
+      "flour_trash.png": {
+        title: "Spilled White on Iron",
+        materials: ["cast iron", "steel", "powder", "paper", "concrete"]
+      },
+      "paperbag_trash.png": {
+        title: "Crumpled Kraft",
+        materials: ["light brown crumpled paper bag", "ink"]
+      },
+      "redbag_trash.png": {
+        title: "Crimson Takeout",
+        materials: ["red plastic bag", "paper box", "food residue", "vinyl"]
+      },
+      "orangebox_trash.png": {
+        title: "Bound Memory of Commerce",
+        materials: ["cardboard", "paper box", "plastic twine", "ink"]
+      },
+      "can_trash.png": {
+        title: "Metallic Echoes",
+        materials: ["aluminum cans", "metal lids", "printed ink"]
+      },
+      "sweater_trash.png": {
+        title: "Abandoned Fabric and Flora",
+        materials: ["cotton", "polyester", "organic matter"]
+      },
+      "cvs_trash.png": {
+        title: "Paper Heart",
+        materials: ["paper shopping bag", "steel", "cast iron", "wood"]
+      },
+      "scrapwood_trash.png": {
+        title: "Jenga: Hardcore Edition",
+        materials: ["scrap wood", "plastic", "vinyl", "rubber", "steel"]
+      },
+      "fence_trash.png": {
+        title: "Do Not Cross",
+        materials: ["galvanized steel", "yellow caution tape", "vinyl", "plastic"]
+      },
+      "waterpipe_trash.png": {
+        title: "Shattered Flow",
+        materials: ["cast iron", "paint", "water", "concrete", "asphalt"]
+      },
+      "boxes_trash.png": {
+        title: "Compressed Strata",
+        materials: ["cardboard", "pulp molded tray", "steel", "twine"]
+      },
+      "trashcan_trash.png": {
+        title: "Sugary Chaos Bouquet",
+        materials: ["paper", "plastic", "vinyl", "aluminum", "food waste"]
+      },
+      "yellowbag_trash.png": {
+        title: "Clear Heap",
+        materials: ["plastic trash bags", "polystyrene foam", "plastic", "aluminum can"]
+      },
+      "newspaper_trash.png": {
+        title: "One Angry Juror",
+        materials: ["newsprint paper", "rubber band", "string", "paper coffee cup", "plastic lid"]
+      },
+      "blackbags_trash.png": {
+        title: "Dark Volume",
+        materials: ["plastic trash bags", "plastic bucket", "cardboard", "mixed waste"]
+      },
+      "matcha_trash.png": {
+        title: "Iced Siren",
+        materials: ["plastic cup", "plastic lid", "plastic straw", "matcha residue"]
+      },
+      "umbrella_trash.png": {
+        title: "Blue Shelter",
+        materials: ["polyester fabric", "steel", "plastic", "fiberglass"]
+      },
+      "ruler_trash.png": {
+        title: "Abandoned Game",
+        materials: ["Wood", "printed paper", "metal", "plastic", "cardboard"]
       }
     };
 
-    const imageFiles = [
-      "threenine_trash.png", "melon_trash.png", "snapple_trash.png", "pigeon_trash.png", 
-      "gloves_trash.png", "cone_trash.png", "flour_trash.png", "paperbag_trash.png", 
-      "redbag_trash.png", "orangebox_trash.png", "can_trash.png", "sweater_trash.png", 
-      "cvs_trash.png", "scrapwood_trash.png", "fence_trash.png", "waterpipe_trash.png", 
-      "boxes_trash.png", "trashcan_trash.png", "yellowbag_trash.png", "newspaper_trash.png", 
-      "blackbags_trash.png", "matcha_trash.png", "umbrella_trash.png", "ruler_trash.png"
-    ];
-
+    const imageFiles = Object.keys(stickerData);
     let activeOverlays = [];
     let currentSelectedImage = null;
 
@@ -225,6 +283,7 @@
       return array.sort(() => Math.random() - 0.5);
     }
 
+    // 스티커 토글 및 내용 업데이트
     function toggleInfoCard(imgFile) {
       const card = document.getElementById("infoCard");
 
@@ -236,21 +295,16 @@
       currentSelectedImage = imgFile;
 
       const data = stickerData[imgFile] || {
-        title: imgFile.replace('_trash.png', '').replace('_', ' ').toUpperCase(),
-        materials: "plastic,<br>paper,<br>mixed waste",
-        description: "An object found on the streets of New York City, capturing a moment of urban decay."
+        title: "Urban Artifact",
+        materials: ["mixed waste"]
       };
 
       document.getElementById("cardTitle").textContent = data.title;
       document.getElementById("cardImage").src = `./${imgFile}`;
       
-      let formattedMaterials = data.materials;
-      if (!formattedMaterials.includes('<br>')) {
-        formattedMaterials = formattedMaterials.split(',').map(m => m.trim() + ',').join('<br>');
-      }
-      
+      // 한 줄에 하나씩 단어 + 쉼표 표기 적용
+      const formattedMaterials = data.materials.map(m => `${m.trim()},`).join('<br>');
       document.getElementById("cardMaterials").innerHTML = formattedMaterials;
-      document.getElementById("cardDescription").textContent = data.description;
 
       card.classList.add("active");
     }
@@ -260,6 +314,7 @@
       currentSelectedImage = null;
     }
 
+    // 커스텀 스티커 오버레이 클래스
     class StickerOverlay extends google.maps.OverlayView {
       constructor(position, image, size) {
         super();
