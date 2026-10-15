@@ -63,22 +63,17 @@
       cursor: pointer;
     }
 
-    /* 2. pinpoint1.png 적용 및 고화질/가속 최적화 속성 */
+    /* 2. pinpoint.svg 적용 및 깜빡임 애니메이션 */
     .pinpoint-icon {
       width: 100%;
       height: 100%;
-      background-image: url('pinpoint1.png');
+      background-image: url('pinpoint.svg');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
 
-      /* 고해상도 렌더링 & GPU 가속 속성 (화질 보정) */
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: crisp-edges;
-      transform: translateZ(0);
-      backface-visibility: hidden;
-
-      /* 부드러운 깜빡임 애니메이션 */
+      /* SVG 그래픽 전용 선명도 옵션 및 부드러운 애니메이션 */
+      will-change: transform, opacity;
       animation: blink 1.2s infinite ease-in-out;
       transition: transform 0.2s ease, opacity 0.2s ease;
     }
@@ -86,7 +81,7 @@
     /* Hover 시 제자리에서 약간 확대 */
     .marker-container:hover .pinpoint-icon {
       animation-play-state: paused;
-      transform: scale(1.2) translateZ(0);
+      transform: scale(1.2);
       opacity: 1;
     }
 
@@ -94,15 +89,15 @@
     @keyframes blink {
       0% {
         opacity: 1;
-        transform: scale(1) translateZ(0);
+        transform: scale(1);
       }
       50% {
         opacity: 0.2;
-        transform: scale(0.9) translateZ(0);
+        transform: scale(0.9);
       }
       100% {
         opacity: 1;
-        transform: scale(1) translateZ(0);
+        transform: scale(1);
       }
     }
 
