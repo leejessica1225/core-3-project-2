@@ -58,14 +58,13 @@
 
     /* pinpoint.png 커스텀 이미지 마커 & 깜빡임 애니메이션 */
     .custom-marker {
-      width: 32px;
-      height: 32px;
+      width: 48px;  /* 마커 크기 확대 */
+      height: 48px; /* 마커 크기 확대 */
       background-image: url('pinpoint.png');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
       cursor: pointer;
-      /* Mapbox 마커 위치 정렬을 위한 필수 스타일 */
       display: block;
       position: absolute;
       will-change: transform, opacity;
@@ -75,7 +74,7 @@
 
     .custom-marker:hover {
       animation-play-state: paused;
-      transform: scale(1.25) !important;
+      transform: scale(1.2) !important;
       opacity: 1;
     }
 
@@ -95,8 +94,8 @@
     /* 모바일 화면 대응 스타일 */
     @media (max-width: 768px) {
       .custom-marker {
-        width: 24px;
-        height: 24px;
+        width: 36px;
+        height: 36px;
       }
     }
   </style>
