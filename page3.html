@@ -63,12 +63,12 @@
       transform: translate(-50%, -50%) scale(1.08);
     }
 
-    /* 스티커 정보 카드 팝업 (440px로 가로 상자 확대) */
+    /* 스티커 정보 카드 팝업 (가로 너비 380px) */
     .info-card-panel {
       position: fixed;
       top: 0;
       right: 0;
-      width: 440px; /* 큰 글자 크기(1.4rem)를 수용하도록 440px로 확장 */
+      width: 380px;
       background-color: #fff;
       border-left: 2px solid #000;
       border-bottom: 2px solid #000;
@@ -76,14 +76,13 @@
       display: none;
       flex-direction: column;
       color: #000;
-      height: auto;
     }
 
     .info-card-panel.active {
       display: flex;
     }
 
-    /* 1. 타이틀 영역 (1.8rem 복원) */
+    /* 1. 타이틀 영역 (1.8rem) */
     .card-title-row {
       padding: 16px 20px;
       border-bottom: 2px solid #000;
@@ -93,18 +92,16 @@
       line-height: 1.1;
     }
 
-    /* 2. 중간 구역 (상자 높이가 내용에 맞춰 자동으로 확장되게 설정) */
+    /* 2. 중간 구역 (세로 높이를 충분히 확장하여 Material 텍스트 안잘리게 설정) */
     .card-middle-row {
       display: flex;
       border-bottom: 2px solid #000;
-      min-height: 200px;
-      height: auto;
+      min-height: 240px; /* 세로 길이를 늘려서 많은 항목도 완벽히 수용 */
     }
 
     /* 이미지 박스 */
     .card-image-box {
-      width: 180px; /* 이미지 상자 폭 고정 */
-      flex-shrink: 0;
+      flex: 1;
       padding: 14px;
       display: flex;
       align-items: center;
@@ -114,33 +111,29 @@
     }
 
     .card-image-box img {
-      max-width: 100%;
-      max-height: 170px;
+      max-width: 90%;
+      max-height: 180px;
       object-fit: contain;
     }
 
-    /* Material 영역 (1.4rem 복원) */
+    /* Material 영역 (1.4rem) */
     .card-materials-box {
       flex: 1;
-      padding: 18px 16px;
-      font-size: 1.4rem; /* 原 1.4rem 폰트 크기 정확히 유지 */
+      padding: 16px 14px;
+      font-size: 1.4rem;
       font-weight: 400;
       line-height: 1.35;
       color: #000;
       letter-spacing: -0.015em;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
     }
 
-    .material-item {
-      white-space: nowrap; /* 줄바꿈 쪼개짐 방지 */
-    }
-
-    /* 3. Description (1.4rem 복원) */
+    /* 3. Description (1.4rem) */
     .card-description-row {
       padding: 20px;
-      font-size: 1.4rem; /* 原 1.4rem 폰트 크기 정확히 유지 */
+      font-size: 1.4rem;
       font-weight: 400;
       line-height: 1.35;
       color: #000;
@@ -309,14 +302,14 @@
       document.getElementById("cardTitle").textContent = data.title;
       document.getElementById("cardImage").src = `./${imgFile}`;
       
-      // 한 줄에 1개씩 단어 배치 + 마지막 요소만 쉼표 제거
-      const formattedMaterials = data.materials
+      // 재질 데이터 처리: 배열 요소를 순회하여 마지막 요소에만 쉼표를 제거하고 병합
+      const rawMaterials = Array.isArray(data.materials) ? data.materials : [data.materials];
+      const formattedMaterials = rawMaterials
         .map((item, idx) => {
-          const isLast = idx === data.materials.length - 1;
-          const text = isLast ? item.trim() : `${item.trim()},`;
-          return `<div class="material-item">${text}</div>`;
+          const cleanItem = String(item).trim().replace(/,$/, '');
+          return idx === rawMaterials.length - 1 ? cleanItem : `${cleanItem},`;
         })
-        .join('');
+        .join('<br>');
 
       document.getElementById("cardMaterials").innerHTML = formattedMaterials;
 
