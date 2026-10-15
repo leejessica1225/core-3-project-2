@@ -41,37 +41,37 @@
       position: relative;
     }
 
-    /* 고정된 라인 위치 유지 및 세로 정중앙(align-items: center) 정렬 */
+    /* About 페이지 및 원본 위치와 100% 동일한 헤더 구조 */
     .header {
       position: sticky;
       top: 0;
       background-color: #fff;
-      padding: 0 20px;
-      min-height: 10.5vw; /* 라인 위치 고정 */
+      padding: 14px 20px;
+      min-height: 10.5vw; /* 밑줄 높이 고정 */
       border-bottom: 2px solid #000;
       display: flex;
       justify-content: space-between;
-      align-items: center; /* 상단~라인 사이 정중앙 정렬 */
+      align-items: flex-start; /* Home 링크 상단 원위치 배치 */
       z-index: 100;
     }
 
-    /* 안 잘리는 한도 내 최대 글자 크기(5.1vw) 및 중앙 배치 */
+    /* 화면 끝까지 안 잘리고 크게 들어가는 타이틀 */
     .header h1 {
-      font-size: 5.1vw;
-      line-height: 1;
+      font-size: 6.0vw;
+      line-height: 0.92;
       font-weight: 500;
       letter-spacing: -0.025em;
       white-space: nowrap;
       overflow: visible;
-      max-width: 82vw;
-      transition: font-size 0.2s ease;
+      max-width: 84vw;
     }
 
-    /* Home 링크 우측 중앙 배치 */
+    /* Home 링크 원본 위치 (상단 여백 6px) */
     .nav-menu {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
+      padding-top: 6px;
     }
 
     .nav-menu a {
@@ -188,7 +188,7 @@
         min-height: 14vw;
       }
       .header h1 {
-        font-size: 5.8vw;
+        font-size: 7.2vw;
         max-width: 75vw;
       }
       .nav-menu a {
@@ -353,7 +353,7 @@
 
   <script>
     // ----------------------------------------------------
-    // 1. 헤더 타이틀 동적 전환 로직
+    // 1. IntersectionObserver 기반 고성능 제목 전환
     // ----------------------------------------------------
     const headerTitle = document.getElementById("headerTitle");
     const articles = document.querySelectorAll(".article");
