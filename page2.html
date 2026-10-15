@@ -56,14 +56,14 @@
       display: none !important;
     }
 
-    /* 1. Mapbox 좌표용 바깥 래퍼 (42px 미세 조정) */
+    /* 1. Mapbox 좌표용 바깥 래퍼 */
     .marker-container {
       width: 42px;
       height: 42px;
       cursor: pointer;
     }
 
-    /* 2. pinpoint1.png 적용 및 화질/애니메이션 속성 */
+    /* 2. pinpoint1.png 적용 및 고화질/가속 최적화 속성 */
     .pinpoint-icon {
       width: 100%;
       height: 100%;
@@ -72,9 +72,11 @@
       background-repeat: no-repeat;
       background-position: center;
 
-      /* 이미지 화질 선명도 보정 속성 */
+      /* 고해상도 렌더링 & GPU 가속 속성 (화질 보정) */
       image-rendering: -webkit-optimize-contrast;
       image-rendering: crisp-edges;
+      transform: translateZ(0);
+      backface-visibility: hidden;
 
       /* 부드러운 깜빡임 애니메이션 */
       animation: blink 1.2s infinite ease-in-out;
@@ -84,7 +86,7 @@
     /* Hover 시 제자리에서 약간 확대 */
     .marker-container:hover .pinpoint-icon {
       animation-play-state: paused;
-      transform: scale(1.2);
+      transform: scale(1.2) translateZ(0);
       opacity: 1;
     }
 
@@ -92,19 +94,19 @@
     @keyframes blink {
       0% {
         opacity: 1;
-        transform: scale(1);
+        transform: scale(1) translateZ(0);
       }
       50% {
         opacity: 0.2;
-        transform: scale(0.9);
+        transform: scale(0.9) translateZ(0);
       }
       100% {
         opacity: 1;
-        transform: scale(1);
+        transform: scale(1) translateZ(0);
       }
     }
 
-    /* 모바일 화면 대응 스타일 (30px) */
+    /* 모바일 화면 대응 스타일 */
     @media (max-width: 768px) {
       .marker-container {
         width: 30px;
