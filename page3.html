@@ -117,7 +117,7 @@
       object-fit: contain;
     }
 
-    /* Material 영역: 상단 정렬(flex-start) 적용 */
+    /* Material 영역: 상단 정렬 적용 */
     .card-materials-box {
       flex: 0.95;
       padding: 16px 14px;
@@ -128,10 +128,10 @@
       letter-spacing: -0.015em;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start; /* 위에서부터 차례대로 정렬 */
+      justify-content: flex-start;
     }
 
-    /* 3. Description */
+    /* 3. Description 영역 */
     .card-description-row {
       padding: 20px;
       font-size: 1.4rem;
@@ -173,107 +173,132 @@
       <div class="card-materials-box" id="cardMaterials">Materials</div>
     </div>
     <div class="card-description-row" id="cardDescription">
-      An object found on the streets of New York City, capturing a moment of urban decay.
+      Description
     </div>
   </div>
 
   <script>
+    // 전달받은 24개 이미지 데이터베이스 (Title, Materials, Description 완벽 매핑)
     const stickerData = {
       "threenine_trash.png": {
         title: "3 for $9",
-        materials: ["newsprint paper", "plastic trash bag", "ink"]
+        materials: ["newsprint paper", "plastic trash bag", "ink"],
+        description: "A discarded price sign resting beside a tied plastic bag, telling a quiet story of street-side bargains and daily trade."
       },
       "melon_trash.png": {
         title: "Perishing Flesh",
-        materials: ["melon rind", "seeds", "plastic shopping bag", "aluminum can"]
+        materials: ["melon rind", "seeds", "plastic shopping bag", "aluminum can"],
+        description: "A hollowed-out melon rind lying beside a plastic shopping bag, a rare organic fragment on the hard city concrete."
       },
       "snapple_trash.png": {
         title: "Crushed Vessel",
-        materials: ["plastic beverage bottle", "vinyl", "paper label"]
+        materials: ["plastic beverage bottle", "vinyl", "paper label"],
+        description: "A flattened plastic juice bottle resting on the concrete, reflecting the quick, disposable rhythm of street life."
       },
       "pigeon_trash.png": {
         title: "Urban Sanctuary",
-        materials: ["feathers", "organic specimen"]
+        materials: ["feathers", "organic specimen"],
+        description: "A calm pigeon nestled quietly on the sidewalk, finding a moment of rest amidst the relentless city rush."
       },
       "gloves_trash.png": {
         title: "High-Fives, No Hands",
-        materials: ["cotton", "latex", "nylon"]
+        materials: ["cotton", "latex", "nylon"],
+        description: "Worn-out pink work gloves scattered on the pavement, resting after a long day of unseen urban labor."
       },
       "cone_trash.png": {
         title: "Cone-tastrophe!",
-        materials: ["plastic", "rubber", "water", "concrete"]
+        materials: ["plastic", "rubber", "water", "concrete"],
+        description: "A battered traffic cone knocked sideways on wet asphalt, marking a brief moment of chaos in the city grid."
       },
       "flour_trash.png": {
         title: "Spilled White on Iron",
-        materials: ["cast iron", "steel", "powder", "paper", "concrete"]
+        materials: ["cast iron", "steel", "powder", "paper", "concrete"],
+        description: "An old fire hydrant coated in dried white paint splatter, standing as a quiet monument to street-level wear and tear."
       },
       "paperbag_trash.png": {
         title: "Crumpled Kraft",
-        materials: ["light brown crumpled paper bag", "ink"]
+        materials: ["light brown crumpled paper bag", "ink"],
+        description: "A heavily creased brown paper bag sitting alone on the ground, holding the forgotten warmth of a past errand."
       },
       "redbag_trash.png": {
         title: "Crimson Takeout",
-        materials: ["red plastic bag", "paper box", "food residue", "vinyl"]
+        materials: ["red plastic bag", "paper box", "food residue", "vinyl"],
+        description: "A bright red takeout bag and crushed cardboard box left on the sidewalk, the colorful traces of a quick late-night meal."
       },
       "orangebox_trash.png": {
         title: "Bound Memory of Commerce",
-        materials: ["cardboard", "paper box", "plastic twine", "ink"]
+        materials: ["cardboard", "paper box", "plastic twine", "ink"],
+        description: "A neat stack of crushed cardboard boxes tied with twine, waiting on the curb at the end of a busy business day."
       },
       "can_trash.png": {
         title: "Metallic Echoes",
-        materials: ["aluminum cans", "metal lids", "printed ink"]
+        materials: ["aluminum cans", "metal lids", "printed ink"],
+        description: "Crushed aluminum cans and lids scattered on the pavement, glowing subtly under the streetlights."
       },
       "sweater_trash.png": {
         title: "Abandoned Fabric and Flora",
-        materials: ["cotton", "polyester", "organic matter"]
+        materials: ["cotton", "polyester", "organic matter"],
+        description: "A forgotten navy hoodie lying next to a stray patch of weeds, bridging the gap between human wear and urban nature."
       },
       "cvs_trash.png": {
         title: "Paper Heart",
-        materials: ["paper shopping bag", "steel", "cast iron", "wood"]
+        materials: ["paper shopping bag", "steel", "cast iron", "wood"],
+        description: "A crinkled brown paper bag with a red recycling symbol hanging off a rusty metal beam, a brief sign of life in the alley."
       },
       "scrapwood_trash.png": {
         title: "Jenga: Hardcore Edition",
-        materials: ["scrap wood", "plastic", "vinyl", "rubber", "steel"]
+        materials: ["scrap wood", "plastic", "vinyl", "rubber", "steel"],
+        description: "A messy pile of discarded timber and tool buckets left on the curb, a raw footprint of constant urban transformation."
       },
       "fence_trash.png": {
         title: "Do Not Cross",
-        materials: ["galvanized steel", "yellow caution tape", "vinyl", "plastic"]
+        materials: ["galvanized steel", "yellow caution tape", "vinyl", "plastic"],
+        description: "Galvanized steel barricades wrapped in yellow caution tape, quietly directing the flow of crowd and urban movement."
       },
       "waterpipe_trash.png": {
         title: "Shattered Flow",
-        materials: ["cast iron", "paint", "water", "concrete", "asphalt"]
+        materials: ["cast iron", "paint", "water", "concrete", "asphalt"],
+        description: "A sleek fire hydrant standing over a dark, glistening puddle on the asphalt, capturing the city’s quiet rainy moments."
       },
       "boxes_trash.png": {
         title: "Compressed Strata",
-        materials: ["cardboard", "pulp molded tray", "steel", "twine"]
+        materials: ["cardboard", "pulp molded tray", "steel", "twine"],
+        description: "Stacked cardboard and egg cartons tightly bound together, carrying the heavy layers of daily city consumption."
       },
       "trashcan_trash.png": {
         title: "Sugary Chaos Bouquet",
-        materials: ["paper", "plastic", "vinyl", "aluminum", "food waste"]
+        materials: ["paper", "plastic", "vinyl", "aluminum", "food waste"],
+        description: "A trash can overflowing with colorful coffee cups and plastic straws, a sweet remnant of New York's daily caffeine fix."
       },
       "yellowbag_trash.png": {
         title: "Clear Heap",
-        materials: ["plastic trash bags", "polystyrene foam", "plastic", "aluminum can"]
+        materials: ["plastic trash bags", "polystyrene foam", "plastic", "aluminum can"],
+        description: "A pile of translucent trash bags revealing glimpses of daily waste, catching the soft reflections of city light."
       },
       "newspaper_trash.png": {
         title: "One Angry Juror",
-        materials: ["newsprint paper", "rubber band", "string", "paper coffee cup", "plastic lid"]
+        materials: ["newsprint paper", "rubber band", "string", "paper coffee cup", "plastic lid"],
+        description: "A bundle of discarded newspapers tied together next to a paper coffee cup, leaving yesterday's news behind on the curb."
       },
       "blackbags_trash.png": {
         title: "Dark Volume",
-        materials: ["plastic trash bags", "plastic bucket", "cardboard", "mixed waste"]
+        materials: ["plastic trash bags", "plastic bucket", "cardboard", "mixed waste"],
+        description: "Heavy black trash bags piled together on the curb, forming a dark silhouette in the quiet city night."
       },
       "matcha_trash.png": {
         title: "Iced Siren",
-        materials: ["plastic cup", "plastic lid", "plastic straw", "matcha residue"]
+        materials: ["plastic cup", "plastic lid", "plastic straw", "matcha residue"],
+        description: "An abandoned iced matcha cup with melting condensation, a snapshot of a fleeting coffee break on the go."
       },
       "umbrella_trash.png": {
         title: "Blue Shelter",
-        materials: ["polyester fabric", "steel", "plastic", "fiberglass"]
+        materials: ["polyester fabric", "steel", "plastic", "fiberglass"],
+        description: "A blue umbrella resting wide open on the sidewalk, left behind after a sudden New York downpour."
       },
       "ruler_trash.png": {
         title: "Abandoned Game",
-        materials: ["Wood", "printed paper", "metal", "plastic", "cardboard"]
+        materials: ["Wood", "printed paper", "metal", "plastic", "cardboard"],
+        description: "A broken wooden game board tossed onto the sidewalk, a forgotten piece of late-night street entertainment."
       }
     };
 
@@ -297,11 +322,13 @@
 
       const data = stickerData[imgFile] || {
         title: "Urban Artifact",
-        materials: ["mixed waste"]
+        materials: ["mixed waste"],
+        description: "An object found on the streets of New York City, capturing a moment of urban decay."
       };
 
       document.getElementById("cardTitle").textContent = data.title;
       document.getElementById("cardImage").src = `./${imgFile}`;
+      document.getElementById("cardDescription").textContent = data.description;
       
       const rawMaterials = Array.isArray(data.materials) ? data.materials : [data.materials];
       const formattedMaterials = rawMaterials
