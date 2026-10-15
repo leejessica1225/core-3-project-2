@@ -35,7 +35,6 @@
       height: 100dvh;
     }
 
-    /* Home 버튼 (다른 페이지 네비게이션과 동일한 font-size 1.8vw 적용) */
     .home-btn {
       position: fixed;
       top: 30px;
@@ -44,14 +43,13 @@
       background: #ffffff;
       color: #000000;
       border: 1.5px solid #000000;
-      padding: 8px 16px;
-      font-size: 1.8vw;
+      padding: 8px 18px;
+      font-size: clamp(14px, 1.2vw, 20px);
       line-height: 1.1;
       letter-spacing: -0.01em;
       text-decoration: none;
     }
 
-    /* 커스텀 오버레이 스티커 스타일 */
     .custom-sticker-overlay {
       position: absolute;
       transform: translate(-50%, -50%);
@@ -65,7 +63,6 @@
       transform: translate(-50%, -50%) scale(1.08);
     }
 
-    /* 스티커 정보 카드 팝업 */
     .info-card-panel {
       position: fixed;
       top: 0;
@@ -84,7 +81,6 @@
       display: flex;
     }
 
-    /* 1. 타이틀 영역 */
     .card-title-row {
       padding: 16px 20px;
       border-bottom: 2px solid #000;
@@ -94,7 +90,6 @@
       line-height: 1.1;
     }
 
-    /* 2. 중간 구역 */
     .card-middle-row {
       display: flex;
       border-bottom: 2px solid #000;
@@ -102,7 +97,6 @@
       height: auto;
     }
 
-    /* 이미지 박스 */
     .card-image-box {
       flex: 1.25;
       padding: 12px;
@@ -121,7 +115,6 @@
       transition: transform 0.2s ease;
     }
 
-    /* Material 영역: 상단 정렬 적용 */
     .card-materials-box {
       flex: 0.95;
       padding: 16px 14px;
@@ -135,7 +128,6 @@
       justify-content: flex-start;
     }
 
-    /* 3. Description 영역 */
     .card-description-row {
       padding: 20px;
       font-size: 1.4rem;
@@ -147,7 +139,8 @@
 
     @media (max-width: 768px) {
       .home-btn {
-        font-size: 3.5vw;
+        font-size: 1rem;
+        padding: 6px 14px;
       }
       .info-card-panel {
         width: 100vw;
@@ -162,7 +155,6 @@
     }
   </style>
 
-  <!-- Google Maps JavaScript API -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAM5AYPSJ3qDDdhUjPpZg4RqiaM-2en7y4"></script>
 </head>
 <body>
@@ -170,7 +162,6 @@
   <a href="index.html" class="home-btn">Home</a>
   <div id="street-view"></div>
 
-  <!-- 우측 상단 스티커 정보 카드 팝업 -->
   <div class="info-card-panel" id="infoCard">
     <div class="card-title-row" id="cardTitle">Title</div>
     <div class="card-middle-row">
