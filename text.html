@@ -41,7 +41,7 @@
       position: relative;
     }
 
-    /* 상단 헤더 고정 - padding과 border 수치 완벽 고정 */
+    /* 원래의 상단 헤더 고정 패딩 및 라인 위치 복원 */
     .header {
       position: sticky;
       top: 0;
@@ -54,19 +54,18 @@
       z-index: 100;
     }
 
-    /* 지직거림 및 트랜지션 오차를 없앤 깔끔한 타이틀 */
+    /* 헤더 타이틀 스타일 */
     .header h1 {
-      font-size: 5.4vw;
+      font-size: 4.8vw; /* 기본 1번 제목용 크기 */
       line-height: 0.92;
       font-weight: 500;
       letter-spacing: -0.025em;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      overflow: visible;
       max-width: 82vw;
     }
 
-    /* Home 링크 위치 고정 */
+    /* Home 링크 원래 위치 유지 */
     .nav-menu {
       display: flex;
       flex-direction: column;
@@ -185,7 +184,7 @@
 
     @media (max-width: 768px) {
       .header h1 {
-        font-size: 6.8vw;
+        font-size: 6.5vw;
         max-width: 75vw;
       }
       .nav-menu a {
@@ -219,7 +218,7 @@
       <div class="text-section">
 
         <!-- ARTICLE 1 -->
-        <article class="article" data-title="What Does the City Leave Behind?">
+        <article class="article" data-title="What Does the City Leave Behind?" data-size="4.8vw">
           <h2 class="article-title">What Does the City Leave Behind?</h2>
           
           <p class="article-p">
@@ -257,8 +256,8 @@
           <p class="article-author">The Streets of New York - Phil Penman</p>
         </article>
 
-        <!-- ARTICLE 2 -->
-        <article class="article" data-title="Can Ugliness Be Visually Interesting?">
+        <!-- ARTICLE 2 (가장 긴 제목 - 4.1vw로 한 줄 정렬) -->
+        <article class="article" data-title="Can Ugliness Be Visually Interesting?" data-size="4.1vw">
           <h2 class="article-title">Can Ugliness Be Visually Interesting?</h2>
 
           <p class="article-p">
@@ -292,8 +291,8 @@
           <p class="article-author">Ugly Made Beautiful - Jay Mallin</p>
         </article>
 
-        <!-- ARTICLE 3 -->
-        <article class="article" data-title="Where Does It Go?">
+        <!-- ARTICLE 3 (짧은 제목 - 6.5vw 대형 크기 적용) -->
+        <article class="article" data-title="Where Does It Go?" data-size="6.5vw">
           <h2 class="article-title">Where Does It Go?</h2>
 
           <p class="article-p">
@@ -350,14 +349,14 @@
 
   <script>
     // ----------------------------------------------------
-    // 1. IntersectionObserver 기반 고성능 제목 전환 (지직거림 0%)
+    // 1. IntersectionObserver 기반 제목 및 폰트 크기 동적 전환
     // ----------------------------------------------------
     const headerTitle = document.getElementById("headerTitle");
     const articles = document.querySelectorAll(".article");
 
     const observerOptions = {
       root: null,
-      rootMargin: "-80px 0px -70% 0px", // 헤더 직하단 영역 들어오는 순간 감지
+      rootMargin: "-60px 0px -75% 0px", // 헤더 라인을 지나는 순간 감지
       threshold: 0
     };
 
@@ -365,8 +364,13 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const newTitle = entry.target.getAttribute("data-title");
+          const newSize = entry.target.getAttribute("data-size");
+          
           if (headerTitle.textContent !== newTitle) {
-            headerTitle.textContent = newTitle; // 딜레이 없이 즉시 교체하여 지직거림 방지
+            headerTitle.textContent = newTitle;
+            if (window.innerWidth > 768 && newSize) {
+              headerTitle.style.fontSize = newSize; // 제목 길이에 딱 맞는 폰트 크기 적용
+            }
           }
         }
       });
