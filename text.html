@@ -41,37 +41,39 @@
       position: relative;
     }
 
-    /* About 페이지 및 원본 위치와 100% 동일한 헤더 구조 */
+    /* 헤더 고정 높이 및 기본 상단 정렬 */
     .header {
       position: sticky;
       top: 0;
       background-color: #fff;
       padding: 14px 20px;
-      min-height: 10.5vw; /* 밑줄 높이 고정 */
+      min-height: 10.5vw; /* 라인 위치 고정 */
       border-bottom: 2px solid #000;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start; /* Home 링크 상단 원위치 배치 */
+      align-items: flex-start; /* Home 버튼을 위한 기본 상단 정렬 */
       z-index: 100;
     }
 
-    /* 화면 끝까지 안 잘리고 크게 들어가는 타이틀 */
+    /* 제목 h1만 상단과 하단 라인 '정중앙'에 위치하도록 독립 설정 */
     .header h1 {
       font-size: 6.0vw;
-      line-height: 0.92;
+      line-height: 1;
       font-weight: 500;
       letter-spacing: -0.025em;
       white-space: nowrap;
       overflow: visible;
       max-width: 84vw;
+      align-self: center; /* 헤더 세로 정중앙 배치 */
+      margin-top: 0.5vw;  /* 여백 밸런스 정밀 교정 */
     }
 
-    /* Home 링크 원본 위치 (상단 여백 6px) */
+    /* Home 버튼 원래 위치 (상단 배치) */
     .nav-menu {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      padding-top: 6px;
+      padding-top: 6px; /* Home만 원래 스크린샷 상단 위치 */
     }
 
     .nav-menu a {
