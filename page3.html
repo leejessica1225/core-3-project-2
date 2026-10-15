@@ -63,12 +63,12 @@
       transform: translate(-50%, -50%) scale(1.08);
     }
 
-    /* 스티커 정보 카드 팝업 (가로 380px 고정) */
+    /* 스티커 정보 카드 팝업 */
     .info-card-panel {
       position: fixed;
       top: 0;
       right: 0;
-      width: 380px;
+      width: 380px; /* 길목이 길어진 단어도 수용하도록 폭 확보 */
       background-color: #fff;
       border-left: 2px solid #000;
       border-bottom: 2px solid #000;
@@ -76,7 +76,6 @@
       display: none;
       flex-direction: column;
       color: #000;
-      height: auto; /* 전체 카드 높이 가변 */
     }
 
     .info-card-panel.active {
@@ -93,7 +92,7 @@
       line-height: 1.1;
     }
 
-    /* 2. 중간 구역 (고정 height 제거, min-height 적용으로 절대 안 잘림) */
+    /* 2. 중간 구역 (가변 높이 적용) */
     .card-middle-row {
       display: flex;
       border-bottom: 2px solid #000;
@@ -101,10 +100,8 @@
       height: auto;
     }
 
-    /* 이미지 박스 */
     .card-image-box {
-      width: 150px; /* 이미지 영역 너비 고정 */
-      flex-shrink: 0;
+      flex: 1;
       padding: 12px;
       display: flex;
       align-items: center;
@@ -114,15 +111,15 @@
     }
 
     .card-image-box img {
-      max-width: 100%;
-      max-height: 130px;
+      max-width: 90%;
+      max-height: 140px;
       object-fit: contain;
     }
 
-    /* Material 영역 (가로 공간 충분히 확보) */
+    /* Material 영역 */
     .card-materials-box {
-      flex: 1; /* 나머지 모든 가로 공간 차지 */
-      padding: 14px 14px;
+      flex: 1.3;
+      padding: 14px 12px;
       font-size: 1.05rem;
       font-weight: 400;
       line-height: 1.3;
@@ -131,10 +128,6 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-    }
-
-    .material-item {
-      white-space: nowrap; /* 단어가 임의로 줄바꿈되어 쪼개지는 현상 방지 */
     }
 
     /* 3. Description */
@@ -309,12 +302,13 @@
       document.getElementById("cardTitle").textContent = data.title;
       document.getElementById("cardImage").src = `./${imgFile}`;
       
-      // 한 줄당 재질 1개 배치 + 마지막 항목만 쉼표 자동 제거
+      // 한 줄에 무조건 단어 하나만 나오도록 div + white-space: nowrap 적용
+      // 맨 마지막 항목만 쉼표 제거
       const formattedMaterials = data.materials
         .map((item, idx) => {
           const isLast = idx === data.materials.length - 1;
           const text = isLast ? item.trim() : `${item.trim()},`;
-          return `<div class="material-item">${text}</div>`;
+          return `<div style="white-space: nowrap;">${text}</div>`;
         })
         .join('');
 
