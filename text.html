@@ -54,17 +54,17 @@
       z-index: 100;
     }
 
-    /* 헤더 타이틀 부드러운 글자 전환 트랜지션 추가 */
+    /* 원래의 폰트 사이즈(8.8vw) 및 스타일 완벽 동일하게 복원 */
     .header h1 {
-      font-size: 5.5vw;
-      line-height: 1.0;
+      font-size: 8.8vw;
+      line-height: 0.92;
       font-weight: 500;
       letter-spacing: -0.025em;
       transition: opacity 0.25s ease, transform 0.25s ease;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 80vw;
+      max-width: 82vw;
     }
 
     .header h1.fade-out {
@@ -190,7 +190,7 @@
 
     @media (max-width: 768px) {
       .header h1 {
-        font-size: 7vw;
+        font-size: 12vw;
         max-width: 75vw;
       }
       .nav-menu a {
@@ -365,7 +365,6 @@
       if (currentTitleText === newText) return;
       currentTitleText = newText;
 
-      // 부드러운 전환을 위한 페이드아웃 효과
       headerTitle.classList.add("fade-out");
       setTimeout(() => {
         headerTitle.textContent = newText;
@@ -373,23 +372,20 @@
       }, 200);
     }
 
-    // 스크롤 시 각 아티클 위치 감지
     function handleHeaderScroll() {
       const scrollY = window.scrollY || document.documentElement.scrollTop;
       const headerHeight = document.querySelector(".header").offsetHeight;
-      const triggerPoint = headerHeight + 100; // 헤더 바로 밑 감지 영역
+      const triggerPoint = headerHeight + 100;
 
       let activeArticleTitle = "Text:";
 
       articles.forEach(article => {
         const rect = article.getBoundingClientRect();
-        // 아티클 상단이 헤더 부근을 지나고 있으면서, 아티클 하단이 아직 남아있는 경우
         if (rect.top <= triggerPoint && rect.bottom > triggerPoint) {
           activeArticleTitle = article.getAttribute("data-title");
         }
       });
 
-      // 제일 맨 위로 돌아왔을 때 기본 'Text:' 복원
       if (scrollY < 100) {
         activeArticleTitle = "Text:";
       }
