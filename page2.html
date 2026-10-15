@@ -65,31 +65,30 @@
       background-repeat: no-repeat;
       background-position: center;
       cursor: pointer;
-      z-index: 10;
-      /* 깜빡이는 무한 루프 애니메이션 적용 */
+      /* Mapbox 마커 위치 정렬을 위한 필수 스타일 */
+      display: block;
+      position: absolute;
+      will-change: transform, opacity;
+      /* 깜빡이는 애니메이션 */
       animation: blink 1.2s infinite ease-in-out;
-      transition: transform 0.2s ease;
     }
 
     .custom-marker:hover {
-      animation-play-state: paused; /* 호버 시 애니메이션 일시정지 후 확대 */
-      transform: scale(1.25);
+      animation-play-state: paused;
+      transform: scale(1.25) !important;
       opacity: 1;
     }
 
-    /* 깜빡임 Keyframes (투명도 및 약간의 스케일 조절) */
+    /* 깜빡임 Keyframes */
     @keyframes blink {
       0% {
         opacity: 1;
-        transform: scale(1);
       }
       50% {
         opacity: 0.2;
-        transform: scale(0.9);
       }
       100% {
         opacity: 1;
-        transform: scale(1);
       }
     }
 
@@ -133,8 +132,11 @@
       window.location.href = 'page3.html';
     });
 
-    // 마커 지도에 추가
-    new mapboxgl.Marker(el)
+    // Mapbox Marker 생성 시 element 및 anchor 지정
+    new mapboxgl.Marker({
+      element: el,
+      anchor: 'center'
+    })
       .setLngLat(markerCoords)
       .addTo(map);
 
