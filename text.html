@@ -41,12 +41,13 @@
       position: relative;
     }
 
-    /* 상단 헤더 고정 */
+    /* 상단 헤더 고정: 고정 높이(100px)로 설정하여 밑줄 위치가 절대 변하지 않음 */
     .header {
       position: sticky;
       top: 0;
       background-color: #fff;
-      padding: 14px 20px;
+      padding: 0 20px;
+      height: 100px; /* 원래 고정 높이 */
       border-bottom: 2px solid #000;
       display: flex;
       justify-content: space-between;
@@ -54,28 +55,33 @@
       z-index: 100;
     }
 
-    /* 아티클 제목 표시용 헤더 타이틀 스타일 */
+    /* 헤더 타이틀 지직거림 및 흔들림 방지 최적화 */
     .header h1 {
       font-size: 5.4vw;
-      line-height: 0.92;
+      line-height: 100px; /* 헤더 높이와 맞춰 지직거림 완벽 제거 */
       font-weight: 500;
       letter-spacing: -0.025em;
-      transition: opacity 0.2s ease;
       white-space: nowrap;
-      overflow: visible;
+      overflow: hidden;
       max-width: 82vw;
+      
+      /* 하드웨어 가속 및 부드러운 페이드 효과 */
+      transition: opacity 0.2s ease;
+      will-change: opacity;
+      transform: translateZ(0);
+      backface-visibility: hidden;
     }
 
     .header h1.fade-out {
       opacity: 0;
     }
 
-    /* Home 링크 원래 위치 유지 */
+    /* Home 링크 원래 위치 고정 */
     .nav-menu {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      padding-top: 6px;
+      padding-top: 22px; /* 헤더 높이 100px 기준 상단 정렬 레이아웃 맞춤 */
     }
 
     .nav-menu a {
@@ -188,9 +194,16 @@
     }
 
     @media (max-width: 768px) {
+      .header {
+        height: 70px;
+      }
       .header h1 {
         font-size: 6.8vw;
+        line-height: 70px;
         max-width: 75vw;
+      }
+      .nav-menu {
+        padding-top: 16px;
       }
       .nav-menu a {
         font-size: 3.5vw;
@@ -369,7 +382,7 @@
       setTimeout(() => {
         headerTitle.textContent = newText;
         headerTitle.classList.remove("fade-out");
-      }, 200);
+      }, 180);
     }
 
     function handleHeaderScroll() {
