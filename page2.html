@@ -56,25 +56,30 @@
       display: none !important;
     }
 
-    /* pinpoint.png 커스텀 이미지 마커 & 깜빡임 애니메이션 */
-    .custom-marker {
-      width: 48px;  /* 마커 크기 확대 */
-      height: 48px; /* 마커 크기 확대 */
+    /* 1. Mapbox 좌표용 바깥 래퍼 */
+    .marker-container {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+
+    /* 2. 실제 이미지, 애니메이션, Hover 스케일을 담당하는 안쪽 아이콘 */
+    .pinpoint-icon {
+      width: 100%;
+      height: 100%;
       background-image: url('pinpoint.png');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      cursor: pointer;
-      display: block;
-      position: absolute;
-      will-change: transform, opacity;
-      /* 깜빡이는 애니메이션 */
+      /* 부드러운 깜빡임 애니메이션 */
       animation: blink 1.2s infinite ease-in-out;
+      transition: transform 0.2s ease, opacity 0.2s ease;
     }
 
-    .custom-marker:hover {
+    /* Hover 시 위치 충돌 없이 제자리에서만 확Scale 되도록 설정 */
+    .marker-container:hover .pinpoint-icon {
       animation-play-state: paused;
-      transform: scale(1.2) !important;
+      transform: scale(1.25);
       opacity: 1;
     }
 
@@ -82,20 +87,23 @@
     @keyframes blink {
       0% {
         opacity: 1;
+        transform: scale(1);
       }
       50% {
         opacity: 0.2;
+        transform: scale(0.9);
       }
       100% {
         opacity: 1;
+        transform: scale(1);
       }
     }
 
-    /* 모바일 화면 대응 스타일 */
+    /* 모바일 화면 대응 스타일 (중간 모바일 크기 28px) */
     @media (max-width: 768px) {
-      .custom-marker {
-        width: 36px;
-        height: 36px;
+      .marker-container {
+        width: 28px;
+        height: 28px;
       }
     }
   </style>
@@ -121,19 +129,23 @@
       fadeDuration: 0
     });
 
-    // 커스텀 pinpoint.png 마커 엘리먼트 생성
-    const el = document.createElement('div');
-    el.className = 'custom-marker';
+    // 커스텀 마커 DOM 구조 생성 (바깥 래퍼 + 안쪽 아이콘)
+    const containerEl = document.createElement('div');
+    containerEl.className = 'marker-container';
+
+    const iconEl = document.createElement('div');
+    iconEl.className = 'pinpoint-icon';
+    containerEl.appendChild(iconEl);
 
     // 핀포인트 클릭 시 page3.html로 이동하는 이벤트 핸들러 추가
-    el.addEventListener('click', (e) => {
+    containerEl.addEventListener('click', (e) => {
       e.stopPropagation(); // 지도 자체의 클릭 이벤트와 충돌 방지
       window.location.href = 'page3.html';
     });
 
-    // Mapbox Marker 생성 시 element 및 anchor 지정
+    // Mapbox Marker 생성 및 지도 추가
     new mapboxgl.Marker({
-      element: el,
+      element: containerEl,
       anchor: 'center'
     })
       .setLngLat(markerCoords)
