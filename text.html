@@ -41,29 +41,30 @@
       position: relative;
     }
 
-    /* 상단 헤더 고정 - 원래 박스 패딩 및 정렬 유지 */
+    /* 상단 헤더 고정 - 헤더 높이(height)를 명시하여 라인 위치가 고정되도록 설정 */
     .header {
       position: sticky;
       top: 0;
       background-color: #fff;
-      padding: 14px 20px;
+      padding: 0 20px;
+      height: 11vw; /* 라인 위치가 바뀌지 않는 고정 헤더 높이 */
       border-bottom: 2px solid #000;
       display: flex;
       justify-content: space-between;
-      align-items: center; /* 세로 중앙 정렬로 박스 높이 유지 */
+      align-items: center; /* 라인 안에서 세로 중앙 배치 */
       z-index: 100;
     }
 
-    /* 헤더 타이틀: 기본 Text:는 8.8vw, 제목 전환 시 자바스크립트로 폰트 사이즈 반응형 조정 */
+    /* 헤더 타이틀: Text:일 때는 8.8vw, 제목으로 변경 시 안 잘리는 최대 크기 6.1vw 적용 */
     .header h1 {
       font-size: 8.8vw;
-      line-height: 0.95;
+      line-height: 1;
       font-weight: 500;
       letter-spacing: -0.025em;
       transition: opacity 0.2s ease, font-size 0.2s ease;
       white-space: nowrap;
-      overflow: visible; /* 잘림 없이 전체 노출 */
-      max-width: 82vw;
+      overflow: visible;
+      max-width: 85vw;
     }
 
     .header h1.fade-out {
@@ -74,7 +75,6 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      padding-top: 2px;
     }
 
     .nav-menu a {
@@ -187,6 +187,9 @@
     }
 
     @media (max-width: 768px) {
+      .header {
+        height: 15vw;
+      }
       .header h1 {
         font-size: 12vw;
         max-width: 75vw;
@@ -367,12 +370,11 @@
       setTimeout(() => {
         headerTitle.textContent = newText;
         
-        // 'Text:'일 때는 8.8vw, 긴 아티클 제목일 때는 한 줄에 다 들어가도록 글자 크기 자동 조절
+        // 'Text:'일 때는 8.8vw, 아티클 제목 시 안 잘리는 최적 최대 크기 6.1vw 적용
         if (newText === "Text:") {
           headerTitle.style.fontSize = window.innerWidth <= 768 ? "12vw" : "8.8vw";
         } else {
-          // 글자 길이에 맞춰 한 줄에 안 잘리고 들어가게 폰트 사이즈 계산
-          headerTitle.style.fontSize = window.innerWidth <= 768 ? "5vw" : "4.2vw";
+          headerTitle.style.fontSize = window.innerWidth <= 768 ? "8vw" : "6.1vw";
         }
 
         headerTitle.classList.remove("fade-out");
