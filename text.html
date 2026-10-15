@@ -41,21 +41,19 @@
       position: relative;
     }
 
-    /* 헤더 고정 높이 및 기본 상단 정렬 */
     .header {
       position: sticky;
       top: 0;
       background-color: #fff;
       padding: 14px 20px;
-      min-height: 10.5vw; /* 라인 위치 고정 */
+      min-height: 10.5vw; 
       border-bottom: 2px solid #000;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start; /* Home 버튼을 위한 기본 상단 정렬 */
+      align-items: flex-start; 
       z-index: 100;
     }
 
-    /* 제목 h1만 상단과 하단 라인 '정중앙'에 위치하도록 독립 설정 */
     .header h1 {
       font-size: 6.0vw;
       line-height: 1;
@@ -64,16 +62,15 @@
       white-space: nowrap;
       overflow: visible;
       max-width: 84vw;
-      align-self: center; /* 헤더 세로 정중앙 배치 */
-      margin-top: 0.5vw;  /* 여백 밸런스 정밀 교정 */
+      align-self: center; 
+      margin-top: 0.5vw;  
     }
 
-    /* Home 버튼 원래 위치 (상단 배치) */
     .nav-menu {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      padding-top: 6px; /* Home만 원래 스크린샷 상단 위치 */
+      padding-top: 6px; 
     }
 
     .nav-menu a {
@@ -89,7 +86,6 @@
       opacity: 0.6;
     }
 
-    /* 메인 콘텐츠 구조 */
     .main-content {
       position: relative;
       flex: 1;
@@ -99,7 +95,6 @@
       flex-direction: column;
     }
 
-    /* 텍스트 세션 (z-index: 10) */
     .text-section {
       max-width: 1100px;
       display: flex;
@@ -115,7 +110,7 @@
       gap: 32px;
     }
 
-    /* 모든 텍스트 1.8rem 통일 (Regular) */
+
     .article-title,
     .article-p,
     .article-author {
@@ -134,13 +129,12 @@
       margin-top: 60px;
     }
 
-    /* 하단 스크롤 여백 공간 (50vh) */
     .scroll-spacer {
       height: 50vh;
       width: 100%;
     }
 
-    /* 피그마 콜라주 스티커 오버레이 레이어 (z-index: 15) */
+
     .collage-layer {
       position: fixed;
       top: 0;
@@ -151,7 +145,7 @@
       z-index: 15;
     }
 
-    /* Figma Make 애니메이션 스타일 */
+   
     .collage-image {
       position: absolute;
       opacity: 0;
@@ -168,7 +162,6 @@
       display: block;
     }
 
-    /* 스크롤 진행에 맞춰 나타날 때 */
     .collage-image.is-visible {
       opacity: 1;
       transform: translateY(0) scale(1) rotate(var(--rot, 0deg));
@@ -217,13 +210,12 @@
       </nav>
     </div>
 
-    <!-- 스크롤 시 스티커들이 콜라주 형태로 생겨나는 픽스드 레이어 -->
     <div class="collage-layer" id="collageLayer"></div>
 
     <div class="main-content">
       <div class="text-section">
 
-        <!-- ARTICLE 1 -->
+     
         <article class="article" data-title="What Does the City Leave Behind?">
           <h2 class="article-title">What Does the City Leave Behind?</h2>
           
@@ -262,7 +254,7 @@
           <p class="article-author">The Streets of New York - Phil Penman</p>
         </article>
 
-        <!-- ARTICLE 2 -->
+
         <article class="article" data-title="Can Ugliness Be Visually Interesting?">
           <h2 class="article-title">Can Ugliness Be Visually Interesting?</h2>
 
@@ -297,7 +289,7 @@
           <p class="article-author">Ugly Made Beautiful - Jay Mallin</p>
         </article>
 
-        <!-- ARTICLE 3 -->
+  
         <article class="article" data-title="Where Does It Go?">
           <h2 class="article-title">Where Does It Go?</h2>
 
@@ -346,7 +338,7 @@
 
       </div>
 
-      <!-- 하단 50vh 여백 공간 -->
+
       <div class="scroll-spacer"></div>
     </div>
 
@@ -354,9 +346,7 @@
   </div>
 
   <script>
-    // ----------------------------------------------------
-    // 1. IntersectionObserver 기반 고성능 제목 전환
-    // ----------------------------------------------------
+
     const headerTitle = document.getElementById("headerTitle");
     const articles = document.querySelectorAll(".article");
 
@@ -380,9 +370,7 @@
     articles.forEach(article => titleObserver.observe(article));
 
 
-    // ----------------------------------------------------
-    // 2. 쓰레기 스티커 콜라주 애니메이션
-    // ----------------------------------------------------
+
     const imageFiles = [
       "threenine_trash.png", "melon_trash.png", "snapple_trash.png", "pigeon_trash.png", 
       "gloves_trash.png", "cone_trash.png", "flour_trash.png", "paperbag_trash.png", 
@@ -449,7 +437,6 @@
     window.addEventListener("scroll", handleStickerScroll, { passive: true });
     window.addEventListener("resize", handleStickerScroll);
 
-    // 초기 실행
     handleStickerScroll();
   </script>
 
