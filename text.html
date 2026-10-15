@@ -41,12 +41,13 @@
       position: relative;
     }
 
-    /* 원래의 상단 헤더 고정 패딩 및 라인 위치 복원 */
+    /* 첫 번째 스크린샷(Urban Mess:)의 선 위치와 100% 일치하는 고정 헤더 */
     .header {
       position: sticky;
       top: 0;
       background-color: #fff;
       padding: 14px 20px;
+      min-height: 10.5vw; /* 8.8vw 글자 높이 기준의 선 위치 완벽 고정 */
       border-bottom: 2px solid #000;
       display: flex;
       justify-content: space-between;
@@ -56,16 +57,17 @@
 
     /* 헤더 타이틀 스타일 */
     .header h1 {
-      font-size: 4.8vw; /* 기본 1번 제목용 크기 */
+      font-size: 4.5vw;
       line-height: 0.92;
       font-weight: 500;
       letter-spacing: -0.025em;
       white-space: nowrap;
       overflow: visible;
       max-width: 82vw;
+      transition: font-size 0.2s ease;
     }
 
-    /* Home 링크 원래 위치 유지 */
+    /* Home 링크 원래 위치 복원 */
     .nav-menu {
       display: flex;
       flex-direction: column;
@@ -183,8 +185,11 @@
     }
 
     @media (max-width: 768px) {
+      .header {
+        min-height: 14vw;
+      }
       .header h1 {
-        font-size: 6.5vw;
+        font-size: 5.8vw;
         max-width: 75vw;
       }
       .nav-menu a {
@@ -218,7 +223,7 @@
       <div class="text-section">
 
         <!-- ARTICLE 1 -->
-        <article class="article" data-title="What Does the City Leave Behind?" data-size="4.8vw">
+        <article class="article" data-title="What Does the City Leave Behind?" data-size="4.5vw">
           <h2 class="article-title">What Does the City Leave Behind?</h2>
           
           <p class="article-p">
@@ -256,8 +261,8 @@
           <p class="article-author">The Streets of New York - Phil Penman</p>
         </article>
 
-        <!-- ARTICLE 2 (가장 긴 제목 - 4.1vw로 한 줄 정렬) -->
-        <article class="article" data-title="Can Ugliness Be Visually Interesting?" data-size="4.1vw">
+        <!-- ARTICLE 2 (긴 제목 - 3.8vw로 설정하여 오른쪽 잘림 완벽 방지) -->
+        <article class="article" data-title="Can Ugliness Be Visually Interesting?" data-size="3.8vw">
           <h2 class="article-title">Can Ugliness Be Visually Interesting?</h2>
 
           <p class="article-p">
@@ -291,8 +296,8 @@
           <p class="article-author">Ugly Made Beautiful - Jay Mallin</p>
         </article>
 
-        <!-- ARTICLE 3 (짧은 제목 - 6.5vw 대형 크기 적용) -->
-        <article class="article" data-title="Where Does It Go?" data-size="6.5vw">
+        <!-- ARTICLE 3 -->
+        <article class="article" data-title="Where Does It Go?" data-size="4.5vw">
           <h2 class="article-title">Where Does It Go?</h2>
 
           <p class="article-p">
@@ -349,14 +354,14 @@
 
   <script>
     // ----------------------------------------------------
-    // 1. IntersectionObserver 기반 제목 및 폰트 크기 동적 전환
+    // 1. 헤더 타이틀 및 폰트 크기 동적 전환 (선 위치 절대 안 흔들림)
     // ----------------------------------------------------
     const headerTitle = document.getElementById("headerTitle");
     const articles = document.querySelectorAll(".article");
 
     const observerOptions = {
       root: null,
-      rootMargin: "-60px 0px -75% 0px", // 헤더 라인을 지나는 순간 감지
+      rootMargin: "-60px 0px -75% 0px",
       threshold: 0
     };
 
@@ -369,7 +374,7 @@
           if (headerTitle.textContent !== newTitle) {
             headerTitle.textContent = newTitle;
             if (window.innerWidth > 768 && newSize) {
-              headerTitle.style.fontSize = newSize; // 제목 길이에 딱 맞는 폰트 크기 적용
+              headerTitle.style.fontSize = newSize; // 안 잘리도록 제목별 사이즈 적용
             }
           }
         }
