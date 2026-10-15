@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text: - Urban Mess</title>
+  <title>What Does the City Leave Behind? - Urban Mess</title>
   <style>
     @font-face {
       font-family: 'Lay Grotesk';
@@ -41,40 +41,41 @@
       position: relative;
     }
 
-    /* 상단 헤더 고정 - 헤더 높이(height)를 명시하여 라인 위치가 고정되도록 설정 */
+    /* 상단 헤더 고정 */
     .header {
       position: sticky;
       top: 0;
       background-color: #fff;
-      padding: 0 20px;
-      height: 11vw; /* 라인 위치가 바뀌지 않는 고정 헤더 높이 */
+      padding: 14px 20px;
       border-bottom: 2px solid #000;
       display: flex;
       justify-content: space-between;
-      align-items: center; /* 라인 안에서 세로 중앙 배치 */
+      align-items: flex-start;
       z-index: 100;
     }
 
-    /* 헤더 타이틀: Text:일 때는 8.8vw, 제목으로 변경 시 안 잘리는 최대 크기 6.1vw 적용 */
+    /* 아티클 제목 표시용 헤더 타이틀 스타일 */
     .header h1 {
-      font-size: 8.8vw;
-      line-height: 1;
+      font-size: 5.4vw;
+      line-height: 0.92;
       font-weight: 500;
       letter-spacing: -0.025em;
-      transition: opacity 0.2s ease, font-size 0.2s ease;
+      transition: opacity 0.2s ease;
       white-space: nowrap;
       overflow: visible;
-      max-width: 85vw;
+      max-width: 82vw;
     }
 
     .header h1.fade-out {
       opacity: 0;
     }
 
+    /* Home 링크 원래 위치 유지 */
     .nav-menu {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
+      padding-top: 6px;
     }
 
     .nav-menu a {
@@ -187,11 +188,8 @@
     }
 
     @media (max-width: 768px) {
-      .header {
-        height: 15vw;
-      }
       .header h1 {
-        font-size: 12vw;
+        font-size: 6.8vw;
         max-width: 75vw;
       }
       .nav-menu a {
@@ -212,7 +210,7 @@
 
   <div class="container">
     <div class="header">
-      <h1 id="headerTitle">Text:</h1>
+      <h1 id="headerTitle">What Does the City Leave Behind?</h1>
       <nav class="nav-menu">
         <a href="index.html">Home</a>
       </nav>
@@ -356,11 +354,12 @@
 
   <script>
     // ----------------------------------------------------
-    // 1. 헤더 타이틀 동적 글자 크기 감지 및 전환 로직
+    // 1. 헤더 타이틀 동적 전환 로직
     // ----------------------------------------------------
     const headerTitle = document.getElementById("headerTitle");
     const articles = document.querySelectorAll(".article");
-    let currentTitleText = "Text:";
+    const defaultTitle = "What Does the City Leave Behind?";
+    let currentTitleText = defaultTitle;
 
     function updateHeaderTitle(newText) {
       if (currentTitleText === newText) return;
@@ -369,14 +368,6 @@
       headerTitle.classList.add("fade-out");
       setTimeout(() => {
         headerTitle.textContent = newText;
-        
-        // 'Text:'일 때는 8.8vw, 아티클 제목 시 안 잘리는 최적 최대 크기 6.1vw 적용
-        if (newText === "Text:") {
-          headerTitle.style.fontSize = window.innerWidth <= 768 ? "12vw" : "8.8vw";
-        } else {
-          headerTitle.style.fontSize = window.innerWidth <= 768 ? "8vw" : "6.1vw";
-        }
-
         headerTitle.classList.remove("fade-out");
       }, 200);
     }
@@ -386,7 +377,7 @@
       const headerHeight = document.querySelector(".header").offsetHeight;
       const triggerPoint = headerHeight + 100;
 
-      let activeArticleTitle = "Text:";
+      let activeArticleTitle = defaultTitle;
 
       articles.forEach(article => {
         const rect = article.getBoundingClientRect();
@@ -396,7 +387,7 @@
       });
 
       if (scrollY < 100) {
-        activeArticleTitle = "Text:";
+        activeArticleTitle = defaultTitle;
       }
 
       updateHeaderTitle(activeArticleTitle);
