@@ -5,10 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catalog - Urban Mess</title>
   <style>
+    @font-face {
+      font-family: 'Lay Grotesk';
+      src: url('LayGrotesk-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Lay Grotesk';
+      src: url('LayGrotesk-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'Lay Grotesk', sans-serif;
     }
 
     body, html {
@@ -17,8 +32,180 @@
       overflow: hidden;
       background-color: #fff;
     }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* 상단 헤더 고정 (기존 디자인 스타일 유지) */
+    .header {
+      position: relative;
+      background-color: #fff;
+      padding: 14px 20px;
+      min-height: 10.5vw;
+      border-bottom: 2px solid #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+
+    .header h1 {
+      font-size: 6.0vw;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      white-space: nowrap;
+      align-self: center;
+      margin-top: 0.5vw;
+    }
+
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      padding-top: 6px;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: #000;
+      font-size: 1.8vw;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-menu a:hover {
+      opacity: 0.6;
+    }
+
+    /* 가로 스크롤 영역 메인 컨테이너 */
+    .catalog-scroll-container {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      /* 부드러운 가로 터치 및 스크롤 */
+      -webkit-overflow-scrolling: touch;
+      cursor: grab;
+    }
+
+    .catalog-scroll-container:active {
+      cursor: grabbing;
+    }
+
+    /* 4개의 이미지가 간격 없이 이어지는 래퍼 */
+    .catalog-track {
+      display: flex;
+      height: 100%;
+      align-items: center;
+    }
+
+    /* 각 이미지 스타일: 여백 없이 딱 붙어 자연스럽게 연결 */
+    .catalog-track img {
+      height: 100%;
+      width: auto;
+      display: block;
+      object-fit: contain;
+      pointer-events: none; /* 드래그 시 이미지 선택 방지 */
+    }
+
+    /* 하단 보더 박스 고정 */
+    .footer-box {
+      height: 5.4vh;
+      border-top: 2px solid #000;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      flex-shrink: 0;
+      z-index: 100;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        min-height: 14vw;
+      }
+      .header h1 {
+        font-size: 7.2vw;
+      }
+      .nav-menu a {
+        font-size: 3.5vw;
+      }
+    }
   </style>
 </head>
 <body>
+
+  <div class="container">
+    <div class="header">
+      <h1>Catalog:</h1>
+      <nav class="nav-menu">
+        <a href="index.html">Home</a>
+      </nav>
+    </div>
+
+    <!-- 좌우 가로 스크롤 영역 -->
+    <main class="catalog-scroll-container" id="scrollContainer">
+      <div class="catalog-track">
+        <img src="urban mess final print3.jpg" alt="Urban Mess Catalog 3">
+        <img src="urban mess final print4.jpg" alt="Urban Mess Catalog 4">
+        <img src="urban mess final print5.jpg" alt="Urban Mess Catalog 5">
+        <img src="urban mess final print6.jpg" alt="Urban Mess Catalog 6">
+      </div>
+    </main>
+
+    <div class="footer-box"></div>
+  </div>
+
+  <script>
+    const scrollContainer = document.getElementById('scrollContainer');
+
+    // 1. 마우스 휠(상하 스크롤) 이벤트를 가로 스크롤로 자동 전환
+    scrollContainer.addEventListener('wheel', (e) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        scrollContainer.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+
+    // 2. 마우스 드래그로 스크롤 가능하게 처리
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    scrollContainer.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX - scrollContainer.offsetLeft;
+      scrollLeft = scrollContainer.scrollLeft;
+    });
+
+    scrollContainer.addEventListener('mouseleave', () => {
+      isDown = false;
+    });
+
+    scrollContainer.addEventListener('mouseup', () => {
+      isDown = false;
+    });
+
+    scrollContainer.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - scrollContainer.offsetLeft;
+      const walk = (x - startX) * 2; // 스크롤 속도 조절
+      scrollContainer.scrollLeft = scrollLeft - walk;
+    });
+  </script>
+
 </body>
 </html>
