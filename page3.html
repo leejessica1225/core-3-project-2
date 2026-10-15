@@ -63,12 +63,12 @@
       transform: translate(-50%, -50%) scale(1.08);
     }
 
-    /* 스티커 정보 카드 팝업 (너비 380px 원복) */
+    /* 스티커 정보 카드 팝업 */
     .info-card-panel {
       position: fixed;
       top: 0;
       right: 0;
-      width: 380px; /* 원래 아까 크기로 복원 */
+      width: 380px; /* 이미지 시원하게 보이도록 박스 가로 폭 확보 */
       background-color: #fff;
       border-left: 2px solid #000;
       border-bottom: 2px solid #000;
@@ -82,7 +82,7 @@
       display: flex;
     }
 
-    /* 1. 타이틀 (Figma 36px 비율 -> 1.8rem) */
+    /* 1. 타이틀 영역 (Figma 36px/1.8rem 유지) */
     .card-title-row {
       padding: 16px 20px;
       border-bottom: 2px solid #000;
@@ -92,44 +92,47 @@
       line-height: 1.1;
     }
 
-    /* 2. 중간 구역 (높이 180px 원복) */
+    /* 2. 중간 구역 (이미지 박스 높이 확보) */
     .card-middle-row {
       display: flex;
       border-bottom: 2px solid #000;
-      min-height: 180px; /* 원래 높이로 복원 */
+      height: 190px;
     }
 
+    /* 이미지 박스: 여백 최소화 및 크게 보이기 */
     .card-image-box {
       flex: 1.2;
-      padding: 14px;
+      padding: 8px; /* 여백 줄여서 이미지 공간 최대화 */
       display: flex;
       align-items: center;
       justify-content: center;
       border-right: 2px solid #000;
       background-color: #fff;
+      overflow: hidden;
     }
 
+    /* 팝업 내 이미지 크기 대폭 확대 (95% 채움) */
     .card-image-box img {
       width: 95%;
       height: 95%;
       object-fit: contain;
     }
 
-    /* Material: 한 줄에 하나씩 표기 (Figma 28px 비율 -> 1.4rem) */
+    /* Material: 한 줄에 하나씩 표기 (Figma 28px/1.4rem 유지) */
     .card-materials-box {
       flex: 0.8;
-      padding: 14px 12px;
+      padding: 16px 14px;
       font-size: 1.4rem;
       font-weight: 400;
-      line-height: 1.3;
+      line-height: 1.35;
       color: #000;
       word-break: break-word;
       letter-spacing: -0.015em;
     }
 
-    /* 3. Description (Figma 28px 비율 -> 1.4rem) */
+    /* 3. Description (Figma 28px/1.4rem 유지) */
     .card-description-row {
-      padding: 18px 20px;
+      padding: 20px;
       font-size: 1.4rem;
       font-weight: 400;
       line-height: 1.35;
@@ -198,6 +201,11 @@
         title: "Discarded Bag",
         materials: "plastic,<br>vinyl,<br>paper",
         description: "Found plastic bag crumpled near Broadway curb."
+      },
+      "gloves_trash.png": {
+        title: "GLOVES",
+        materials: "plastic,<br>paper,<br>mixed waste",
+        description: "An object found on the streets of New York City, capturing a moment of urban decay."
       }
     };
 
